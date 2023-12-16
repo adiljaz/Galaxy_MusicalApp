@@ -3,7 +3,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:galaxy/Screens/pageview.dart';
+import 'package:galaxy/Screens/home.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -36,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Stack(
           children: [
             Container(
-              color: Colors.amber,
+              color: const Color.fromARGB(255, 0, 0, 0),
               width: mediaQuerry.size.width*2,
               height: mediaQuerry.size.height*1,
               child: Image.asset('assets/splash.jpeg',fit: BoxFit.cover),
@@ -56,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   gotohome() async {
    await Timer(Duration(seconds: 2), () { 
-     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Pages( )));
+     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Home( )));
    });
    
   }
