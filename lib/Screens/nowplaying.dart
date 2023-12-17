@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:galaxy/Screens/lyrics.dart';
+import 'package:galaxy/Screens/playlist.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Nowplaying extends StatefulWidget {
@@ -44,29 +46,20 @@ class _NowplayingState extends State<Nowplaying> {
                     padding: const EdgeInsets.only(top:10,left:40,),
                     child: IconButton(onPressed: (){
 
-                      showModalBottomSheet(context: context, builder: (context){
-                        return SizedBox(
-                          height: 350,
-                          child:Container( 
+                      showModalBottomSheet(
+                        shape:RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))) ,
+                        context: context, builder: (context){
+                        
+                        return Container(
+                          height: mediaQuerry.size.height*0.45,
+                          decoration: BoxDecoration(
                             color: Colors.black,
-                            child: Column(
-                            
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40))
+                          ),
+                        )
+                      ;
 
-                              children: [
-                                SizedBox(height: mediaQuerry.size.height*0.01,),
-                                
-                                Center(child: InkWell(child: Icon(Icons.expand_more,size: 30,color: Colors.white,),onTap: ()=>Navigator.of(context).pop(),))
-
-                                 
-
-                              ],
-                            ),
-                            
-
-                          ) ,
-
-                        );
+                        
                         
                       });
 
@@ -111,6 +104,7 @@ class _NowplayingState extends State<Nowplaying> {
             SizedBox(
               height: mediaQuerry.size.height * 0.05,
             ),
+            // items starting   
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15),
               child: ListTile(
@@ -181,9 +175,12 @@ class _NowplayingState extends State<Nowplaying> {
 
             ),
             Row(
+              
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                  Text('PLaylist   ',style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 18),) ,Text('|',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),Text('    Lyrics ',style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 18))
+                  InkWell ( onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Playlist()));},  child: Text('PLaylist   ',style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 18),)) ,Text('|',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
+                    
+                    InkWell(  onTap: (){ Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LyricsScreen()));},  child: Text('    Lyrics ',style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 18))),
 
               ],
             )

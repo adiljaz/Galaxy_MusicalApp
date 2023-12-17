@@ -318,3 +318,10 @@
 
 
 lato
+
+
+// Container(
+//                   height: 150,
+//                   width: 140,
+//                   decoration: BoxDecoration(image: DecorationImage(image:NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOpI0u5Qpj4Yg44ja7yyC8k5F1kkUus6dqvcLL2vaLZg&s',),fit: BoxFit.cover,colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.6 ), BlendMode.dstATop))),
+//                 )

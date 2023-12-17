@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:galaxy/Screens/home.dart';
+import 'package:galaxy/Screens/bodyHome.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
