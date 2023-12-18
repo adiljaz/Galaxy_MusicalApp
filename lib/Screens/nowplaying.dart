@@ -3,72 +3,241 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:galaxy/Screens/lyrics.dart';
 import 'package:galaxy/Screens/playlist.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class Nowplaying extends StatefulWidget {
-  const Nowplaying({super.key});
+  const Nowplaying({super.key, required this.songModel,required this.audioPlayer});
+
+  final SongModel songModel;
+  final AudioPlayer audioPlayer;
+
+
 
   @override
   State<Nowplaying> createState() => _NowplayingState();
 }
 
 class _NowplayingState extends State<Nowplaying> {
+  
+  bool  _isplaying=false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    playSong();
+  }
+
+  playSong(){
+   try{
+     widget.audioPlayer.setAudioSource(
+      AudioSource.uri(Uri.parse(widget.songModel.uri!)),
+    );
+
+    widget.audioPlayer.play();
+  
+      _isplaying=true;
+
+   }on Exception{
+    print('unsupported File ');
+
+   }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuerry = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
         body: Column(
-
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            
             Stack(
               children: [
-
-               
-
                 Container(
                   child: Row(
-                   
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Padding(
-                      padding: const EdgeInsets.only(left: 20,top: 10 ),
-                      child: IconButton(onPressed: (){
-                        Navigator.of(context).pop();
-                      }, icon:  FaIcon(FontAwesomeIcons.circleChevronDown,color: Colors.white,))
-                    ),Padding(
-                      padding: const EdgeInsets.only(left: 70,top: 20 ),
-                      child: Text('Playing Now', style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 20,color: Colors.white),),
-                      
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:10,left:40,),
-                    child: IconButton(onPressed: (){
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.only(left: 20, top: 10),
+                          child: IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              icon: FaIcon(
+                                FontAwesomeIcons.circleChevronDown,
+                                color: Colors.white,
+                              ))),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 70, top: 20),
+                        child: Text(
+                          'Playing Now',
+                          style: GoogleFonts.lato(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.white),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10,
+                          left: 40,
+                        ),
+                        child: IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(40),
+                                          topRight: Radius.circular(40))),
+                                  context: context,
+                                  builder: (context) {
+                                    return Container(
+                                      height: mediaQuerry.size.height * 0.35,
+                                      decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(40),
+                                              topRight: Radius.circular(40))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: mediaQuerry.size.height *
+                                                  0.05,
+                                            ),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width:
+                                                      mediaQuerry.size.width *
+                                                          0.06,
+                                                ),
+                                                Icon(
+                                                  Icons.add_circle,
+                                                  size: 30,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(
+                                                  width:
+                                                      mediaQuerry.size.width *
+                                                          0.05,
+                                                ),
+                                                Text('Add to playlist',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20,
+                                                    ))
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: mediaQuerry.size.height *
+                                                  0.03,
+                                            ),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width:
+                                                      mediaQuerry.size.width *
+                                                          0.06,
+                                                ),
+                                                Icon(
+                                                  Icons.do_not_disturb_on,
+                                                  size: 30,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(
+                                                  width:
+                                                      mediaQuerry.size.width *
+                                                          0.05,
+                                                ),
+                                                Text('Remove From PLaylist',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20,
+                                                    ))
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: mediaQuerry.size.height *
+                                                  0.03,
+                                            ),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width:
+                                                      mediaQuerry.size.width *
+                                                          0.06,
+                                                ),
+                                                FaIcon(
+                                                  FontAwesomeIcons.music,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(
+                                                  width:
+                                                      mediaQuerry.size.width *
+                                                          0.05,
+                                                ),
+                                                Text('Go to Lyrics',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20,
+                                                    ))
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: mediaQuerry.size.height *
+                                                  0.03,
+                                            ),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width:
+                                                      mediaQuerry.size.width *
+                                                          0.06,
+                                                ),
+                                                Icon(
+                                                  Icons.queue_music,
+                                                  size: 35,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(
+                                                  width:
+                                                      mediaQuerry.size.width *
+                                                          0.05,
+                                                ),
+                                                Text('Go to Playlist',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20,
+                                                    ))
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  );
+                            },
 
-                      showModalBottomSheet(
-                        shape:RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))) ,
-                        context: context, builder: (context){
-                        
-                        return Container(
-                          height: mediaQuerry.size.height*0.45,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40))
-                          ),
-                        )
-                      ;
 
-                        
-                        
-                      });
-
-                    }, icon: Icon(Icons.more_horiz ,color: Colors.white,size: 29)),
-                  )
-                  ],
-                    
-                    
-                    ),
+                            icon: Icon(Icons.more_horiz,
+                                color: Colors.white, size: 29)),
+                      )
+                    ],
+                  ),
                   height: mediaQuerry.size.height * 0.37,
                   width: mediaQuerry.size.width * 1,
                   decoration: BoxDecoration(
@@ -104,95 +273,142 @@ class _NowplayingState extends State<Nowplaying> {
             SizedBox(
               height: mediaQuerry.size.height * 0.05,
             ),
-            // items starting   
+            // items starting
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15),
               child: ListTile(
-                title: Text('greedy',style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 20,)),
-                subtitle: Text('One direction',style:GoogleFonts.lato(fontWeight: FontWeight.bold)),
+                title: Text(widget.songModel.displayNameWOExt,
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    )),
+                subtitle: Text(widget.songModel.artist??'no artist found ',
+                    style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
                 trailing: Icon(
                   Icons.favorite,
-                  color: Colors.red,//   favorite butto i need to change 
+                  color: Colors.red, //   favorite butto i need to change
                 ),
               ),
             ),
             Container(
-             
               height: 10,
               child: SliderTheme(
-                data:SliderTheme.of(context).copyWith(
+                data: SliderTheme.of(context).copyWith(
                   activeTrackColor: Colors.black,
                   thumbColor: Colors.black,
-                 thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                 trackHeight:6.0, 
-                     
-                  
-                ) ,
+                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                  trackHeight: 6.0,
+                ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left:8,right: 8),
+                  padding: const EdgeInsets.only(left: 8, right: 8),
                   child: Slider(
                     value: 0.2,
                     onChanged: (context) {},
                     activeColor: Colors.black,
                   ),
                 ),
-            
               ),
             ),
 
             Padding(
-              padding: const EdgeInsets.only(left: 20,right: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                Text('0:01',style: TextStyle(fontWeight: FontWeight.bold ,fontSize: 15),),
-                Text('02:23',style: TextStyle(fontWeight: FontWeight.bold ,fontSize: 15)),
-              ],),
+                  Text(
+                    '0:01',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  Text('02:23',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                ],
+              ),
             ),
             SizedBox(
-              height: mediaQuerry.size.height*0.02 ,
+              height: mediaQuerry.size.height * 0.02,
             ),
 
             Padding(
-              padding: const EdgeInsets.only(left: 20 , right: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  
-                  FaIcon(FontAwesomeIcons.shuffle,size: 20,), 
-                  FaIcon(FontAwesomeIcons.backwardStep,size: 35,),
-                  Icon(Icons.play_circle,size: 65,),
-                  FaIcon(FontAwesomeIcons.forwardStep,size: 35,),
-                  FaIcon(FontAwesomeIcons.rotate,size: 20,)
-                 
+                  FaIcon(
+                    FontAwesomeIcons.shuffle,
+                    size: 20,
+                  ),
+                  FaIcon(
+                    FontAwesomeIcons.backwardStep,
+                    size: 35,
+                  ),
+                  InkWell(
+                    onTap: (){
+                      setState(() {
+
+                            if(_isplaying){
+                              widget.audioPlayer.pause();
+
+                         }else{
+                         widget.audioPlayer.play();
+                           
+                         }
+
+
+                         _isplaying=!_isplaying;
+
+                         
+                      });
+                    },
+                    child: Icon(
+                     _isplaying? Icons.play_circle:Icons.pause_circle,
+                      size: 65,
+                    ),
+                  ),
+                  FaIcon(
+                    FontAwesomeIcons.forwardStep,
+                    size: 35,
+                  ),
+                  FaIcon(
+                    FontAwesomeIcons.rotate,
+                    size: 20,
+                  )
                 ],
-            
               ),
             ),
 
             SizedBox(
-              height:mediaQuerry.size.height*0.05 ,
-
+              height: mediaQuerry.size.height * 0.05,
             ),
             Row(
-              
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                  InkWell ( onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Playlist()));},  child: Text('PLaylist   ',style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 18),)) ,Text('|',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
-                    
-                    InkWell(  onTap: (){ Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LyricsScreen()));},  child: Text('    Lyrics ',style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 18))),
-
+                InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => Playlist()));
+                    },
+                    child: Text(
+                      'PLaylist   ',
+                      style: GoogleFonts.lato(
+                          fontWeight: FontWeight.bold, fontSize: 18),
+                    )),
+                Text(
+                  '|',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                ),
+                InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => LyricsScreen()));
+                    },
+                    child: Text('    Lyrics ',
+                        style: GoogleFonts.lato(
+                            fontWeight: FontWeight.bold, fontSize: 18))),
               ],
             )
-
-          
-
-            
           ],
-
-          
         ),
-        
       ),
     );
   }

@@ -325,3 +325,50 @@ lato
 //                   width: 140,
 //                   decoration: BoxDecoration(image: DecorationImage(image:NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOpI0u5Qpj4Yg44ja7yyC8k5F1kkUus6dqvcLL2vaLZg&s',),fit: BoxFit.cover,colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.6 ), BlendMode.dstATop))),
 //                 )
+
+
+builder: (context, items) {
+              if (items.data == null) {
+                return CircularProgressIndicator();
+              }
+              if (items.data!.isEmpty) {
+                return Center(child: Text('bsd'));
+              }
+
+              return ListView.builder(
+                  itemCount: items.data!.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: ClipOval(
+                        
+                        
+                        clipBehavior: Clip.antiAlias,
+                        child: ClipRect(
+                          
+                          
+                          
+                          child: QueryArtworkWidget(
+                            
+                            id: items.data![index].id,
+                            type: ArtworkType.AUDIO,
+                            artworkFit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      title: Text(items.data![index].displayNameWOExt),
+                      subtitle: Text(''),
+                      trailing: Icon(Icons.abc),
+                      onTap: () {
+
+                          context.read<SongModelprovider>().setid(items.data![index].id);
+
+                        playSong(items.data![index].uri);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => PlayScreen(
+                                  songModel: items.data![index],
+                                  audioPlayer: _audioPlayer,
+                                )));
+                      },
+                    );
+                  });
+            },

@@ -4,8 +4,9 @@ import 'package:galaxy/Screens/audio.dart';
 import 'package:galaxy/Screens/home.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:galaxy/Screens/nowplaying.dart';
+
 import 'package:galaxy/Screens/search.dart';
+
 
 
 
@@ -75,7 +76,15 @@ class _HomeState extends State<Home> {
 
               InkWell(
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Nowplaying()));
+
+//                   void navigateToNowPlaying(SongModel songModel) {
+//   Navigator.of(context).push(
+//     MaterialPageRoute(
+//       builder: (context) => Nowplaying(songModel: songModel),
+//     ),
+//   );
+// }
+
                 }, 
                 child: Container(
                   height: mediaQuerry.size.height * 0.18,

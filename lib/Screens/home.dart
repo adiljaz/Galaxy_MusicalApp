@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/bodyHome.dart';
+import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MainHome extends StatefulWidget {
-  
   MainHome({super.key});
-  
 
   @override
   State<MainHome> createState() => _MainHomeState();
@@ -13,10 +15,34 @@ class MainHome extends StatefulWidget {
 
 class _MainHomeState extends State<MainHome> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    requestPermission();
+  }
+
+  void requestPermission() {
+    Permission.storage.request();
+  }
+
+  final _audioQuery = OnAudioQuery();
+
+  final AudioPlayer _audioplayer = AudioPlayer();
+  
+  playSong(String? uri) {
+    try {
+      _audioplayer.play();
+
+      _audioplayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
+    } on Exception {
+      print('error parsing song ');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuerry = MediaQuery.of(context);
     return Scaffold(
-      
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,8 +59,6 @@ class _MainHomeState extends State<MainHome> {
                   return InkWell(
                       onTap: () {
                         Home.scaffoldKey.currentState?.openDrawer();
-
-
                       },
                       child: Icon(
                         Icons.menu,
@@ -136,8 +160,65 @@ class _MainHomeState extends State<MainHome> {
               ),
             ),
           ),
-
+          // song fetching
           // LIst view for showing swtched screens ...
+
+          FutureBuilder<List<SongModel>>(
+            future: _audioQuery.querySongs(
+              sortType: null,
+              orderType: OrderType.ASC_OR_SMALLER,
+              uriType: UriType.EXTERNAL,
+              ignoreCase: true,
+            ),
+            builder: (context, items) {
+              if (items.data == null) {
+                return CircularProgressIndicator();
+              }
+              if (items.data!.isEmpty) {
+                return Center(child: Text('bsd'));
+              }
+
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 10),
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(7),
+                          child: Image(
+                            image: NetworkImage(
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYT3mrLG-DhwB2SwxOFYNy5kW9siGuPjItdA&usqp=CAU'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        title: Text(
+                          items.data![index].displayName,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          items.data![index].artist ?? 'No Artist',
+                          style: TextStyle(fontWeight: FontWeight.w300),
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.more_horiz,
+                              color: Colors.black,
+                              size: 30,
+                            )),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Nowplaying(songModel: items.data![index],audioPlayer:_audioplayer ,)));
+                           playSong(items.data![index].uri);
+                        },
+                      );
+                    },
+                    itemCount: items.data!.length,
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
