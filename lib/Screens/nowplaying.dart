@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:galaxy/Screens/home.dart';
 import 'package:galaxy/Screens/lyrics.dart';
 import 'package:galaxy/Screens/playlist.dart';
 import 'package:galaxy/Screens/provider.dart';
@@ -9,10 +10,10 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 class Nowplaying extends StatefulWidget {
-  const Nowplaying({super.key, required this.songModel,required this.audioPlayer});
+  const Nowplaying({super.key, required this.songModel});
 
   final SongModel songModel;
-  final AudioPlayer audioPlayer;
+  
 
 
 
@@ -24,6 +25,7 @@ class _NowplayingState extends State<Nowplaying> {
 
   Duration _duration=Duration();
   Duration _position=Duration();
+  
 
   
   bool  _isplaying=false;
@@ -37,11 +39,11 @@ class _NowplayingState extends State<Nowplaying> {
 
   playSong(){
    try{
-     widget.audioPlayer.setAudioSource(
+       audioplayer.setAudioSource(
       AudioSource.uri(Uri.parse(widget.songModel.uri!)),
     );
 
-    widget.audioPlayer.play();
+    audioplayer.play();
   
       _isplaying=true;
 
@@ -50,14 +52,14 @@ class _NowplayingState extends State<Nowplaying> {
 
    }
 
-  widget.audioPlayer.durationStream.listen((d) {
+  audioplayer.durationStream.listen((d) {
     setState(() {
       _duration=d!;
     });
    });
 
   
-     widget.audioPlayer.positionStream.listen((p) {
+     audioplayer.positionStream.listen((p) {
       setState(() {
         _position = p;
       });
@@ -377,10 +379,10 @@ class _NowplayingState extends State<Nowplaying> {
                       setState(() {
 
                             if(_isplaying){
-                              widget.audioPlayer.pause();
+                              audioplayer.pause();
 
                          }else{
-                         widget.audioPlayer.play();
+                         audioplayer.play();
                            
                          }
 
@@ -445,7 +447,7 @@ class _NowplayingState extends State<Nowplaying> {
 
   void changetoseconds(int seconds){
     Duration duration=Duration(seconds: seconds);
-    widget.audioPlayer.seek(duration);
+    audioplayer.seek(duration);
 
 
   }

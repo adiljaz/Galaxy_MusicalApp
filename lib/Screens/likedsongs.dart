@@ -15,6 +15,7 @@ class LikedSongs extends StatelessWidget {
                   children: [
                     Container(
                       height: mediaQuerry.size.height * 0.25,
+                      // ignore: sort_child_properties_last
                       child: Center(
                           child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -27,14 +28,14 @@ class LikedSongs extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    icon: FaIcon(
+                                    icon: const FaIcon(
                                       FontAwesomeIcons.circleChevronLeft,
                                       color: Colors.white,
                                     )),
                                 SizedBox(
                                   width: mediaQuerry.size.width * 0.2,
                                 ),
-                                Center(
+                                const Center(
                                     child: Text(
                                   'Liked Songs',
                                   style: TextStyle(
@@ -55,12 +56,12 @@ class LikedSongs extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   hintText: 'Search..',
-                                  suffixIcon: Icon(Icons.search)),
+                                  suffixIcon: const Icon(Icons.search)),
                             ),
                           ],
                         ),
                       )),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(40),
@@ -76,14 +77,14 @@ class LikedSongs extends StatelessWidget {
                   children: [
                     IconButton(
                         onPressed: () {},
-                        icon: FaIcon(
+                        icon: const FaIcon(
                           FontAwesomeIcons.shuffle,
                           color: Colors.black,
                           size: 30,
                         )),
                     IconButton(
                         onPressed: () {},
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.play_circle,
                           color: Colors.black,
                           size: 40,
@@ -92,12 +93,12 @@ class LikedSongs extends StatelessWidget {
                         onPressed: () {
                           
                             showModalBottomSheet(
-                            shape:RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))) ,
+                            shape:const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))) ,
                             context: context, builder: (context){
                             
                             return Container(
                               height: mediaQuerry.size.height*0.45,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.black,
                                 borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40))
                               ),
@@ -108,7 +109,7 @@ class LikedSongs extends StatelessWidget {
                             
                           });
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.more_horiz,
                           color: Colors.black,
                           size: 40,

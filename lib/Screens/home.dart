@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/bodyHome.dart';
+import 'package:galaxy/Screens/database/db_functions.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/Screens/provider.dart';
 import 'package:galaxy/Screens/visible.dart';
@@ -9,21 +10,16 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+final AudioPlayer audioplayer = AudioPlayer();
+
 class MainHome extends StatefulWidget {
   MainHome({super.key});
-  
 
   @override
   State<MainHome> createState() => _MainHomeState();
 }
 
 class _MainHomeState extends State<MainHome> {
-
-
-  
-
-
-  
   @override
   void initState() {
     // TODO: implement initState
@@ -35,15 +31,24 @@ class _MainHomeState extends State<MainHome> {
     Permission.storage.request();
   }
 
+  Future<List<SongModel>> fetchSongs() async {
+    List<SongModel> songlist = await _audioQuery.querySongs(
+      sortType: null,
+      orderType: OrderType.ASC_OR_SMALLER,
+      uriType: UriType.EXTERNAL,
+      ignoreCase: true,
+    );
+    addSongToDb(songs: songlist);
+    return songlist;
+  }
+
   final _audioQuery = OnAudioQuery();
 
-  final AudioPlayer _audioplayer = AudioPlayer();
-  
   playSong(String? uri) {
     try {
-      _audioplayer.play();
+      audioplayer.play();
 
-      _audioplayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
+      audioplayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
     } on Exception {
       print('error parsing song ');
     }
@@ -70,7 +75,7 @@ class _MainHomeState extends State<MainHome> {
                       onTap: () {
                         Home.scaffoldKey.currentState?.openDrawer();
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.menu,
                         color: Colors.white,
                         size: 30,
@@ -79,7 +84,7 @@ class _MainHomeState extends State<MainHome> {
                 SizedBox(
                   width: mediaQuerry.size.width * 0.28,
                 ),
-                Text(
+                const Text(
                   'Home',
                   style: TextStyle(
                       color: Colors.white,
@@ -95,7 +100,7 @@ class _MainHomeState extends State<MainHome> {
             children: [
               Container(
                 height: mediaQuerry.size.height * 0.2,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(50),
@@ -170,22 +175,18 @@ class _MainHomeState extends State<MainHome> {
               ),
             ),
           ),
+          // SizedBox(height: mediaQuerry.size.height*0.01,),
           // song fetching
           // LIst view for showing swtched screens ...
 
           FutureBuilder<List<SongModel>>(
-            future: _audioQuery.querySongs(
-              sortType: null,
-              orderType: OrderType.ASC_OR_SMALLER,
-              uriType: UriType.EXTERNAL,
-              ignoreCase: true,
-            ),
+            future: fetchSongs(),
             builder: (context, items) {
               if (items.data == null) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
               if (items.data!.isEmpty) {
-                return Center(child: Text('bsd'));
+                return const Center(child: Text('bsd'));
               }
 
               return Expanded(
@@ -195,43 +196,47 @@ class _MainHomeState extends State<MainHome> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(7),
-                          child:QueryArtworkWidget(id: items.data![index].id, type: ArtworkType.AUDIO)
-                        ),
+                            borderRadius: BorderRadius.circular(3),
+                            child: QueryArtworkWidget(
+                              artworkFit: BoxFit.cover,
+                              id: items.data![index].id,
+                              type: ArtworkType.AUDIO,
+                              artworkBorder:
+                                  const BorderRadius.all(Radius.circular(3)),
+                            )),
                         title: Text(
                           items.data![index].displayName,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
                           items.data![index].artist ?? 'No Artist',
-                          style: TextStyle(fontWeight: FontWeight.w300),
+                          style: const TextStyle(fontWeight: FontWeight.w300),
                         ),
                         trailing: IconButton(
                             onPressed: () {},
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.more_horiz,
                               color: Colors.black,
                               size: 30,
                             )),
                         onTap: () {
+                          VisibilityManager.isVisible =
+                              VisibilityManager.isVisible = true;
 
-                           VisibilityManager.isVisible = VisibilityManager.isVisible=true;
+                          // for my song container ,
 
+                          context
+                              .read<SongModelProvider>()
+                              .setId(items.data![index].id);
+                          context
+                              .read<SongModelProvider>()
+                              .updateCurrentSong(items.data![index]);
 
-                         
-                            
-                           
-                            
-                              // for my song container ,
-
-                         context.read<SongModelProvider>().setId(items.data![index].id);
-                         context.read<SongModelProvider>().updateCurrentSong(items.data![index]);
-
-
-
-                        
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Nowplaying(songModel: items.data![index],audioPlayer:_audioplayer ,)));
-                           playSong(items.data![index].uri);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => Nowplaying(
+                                    songModel: items.data![index],
+                                  )));
+                          playSong(items.data![index].uri);
                         },
                       );
                     },

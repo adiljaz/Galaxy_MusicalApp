@@ -2,10 +2,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/Splash.dart';
+import 'package:galaxy/Screens/database/db_model.dart';
 import 'package:galaxy/Screens/provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await  Hive.initFlutter();
+  if(!Hive.isAdapterRegistered(MusicModelAdapter().typeId)){
+    Hive.registerAdapter(MusicModelAdapter());
+
+
+  }
   runApp(
     ChangeNotifierProvider(create:(context)=>SongModelProvider(),child: const MyApp(),)
   );

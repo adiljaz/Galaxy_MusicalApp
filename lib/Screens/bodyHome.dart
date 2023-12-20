@@ -4,6 +4,7 @@ import 'package:galaxy/Screens/audio.dart';
 import 'package:galaxy/Screens/home.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:galaxy/Screens/nowplaying.dart';
 
 import 'package:galaxy/Screens/provider.dart';
 
@@ -83,7 +84,10 @@ class _HomeState extends State<Home> {
                InkWell(
                 
                     onTap: () {
+                      
 
+                      
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx){return Nowplaying(songModel:context.watch<SongModelProvider>().currentSong! ); }));
                       
 
                      
