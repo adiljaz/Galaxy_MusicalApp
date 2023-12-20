@@ -94,7 +94,11 @@ class LyricsScreen extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: mediaQuerry.size.height*0.05,)
+            SizedBox(height: mediaQuerry.size.height*0.05,),
+
+          
+
+
         ],),
 
       ),

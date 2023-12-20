@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:galaxy/Screens/lyrics.dart';
 import 'package:galaxy/Screens/playlist.dart';
+import 'package:galaxy/Screens/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
 class Nowplaying extends StatefulWidget {
   const Nowplaying({super.key, required this.songModel,required this.audioPlayer});
@@ -19,6 +21,10 @@ class Nowplaying extends StatefulWidget {
 }
 
 class _NowplayingState extends State<Nowplaying> {
+
+  Duration _duration=Duration();
+  Duration _position=Duration();
+
   
   bool  _isplaying=false;
 
@@ -43,6 +49,20 @@ class _NowplayingState extends State<Nowplaying> {
     print('unsupported File ');
 
    }
+
+  widget.audioPlayer.durationStream.listen((d) {
+    setState(() {
+      _duration=d!;
+    });
+   });
+
+  
+     widget.audioPlayer.positionStream.listen((p) {
+      setState(() {
+        _position = p;
+      });
+    });
+
   }
 
 
@@ -254,17 +274,14 @@ class _NowplayingState extends State<Nowplaying> {
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.amber,
+                      color: Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     height: mediaQuerry.size.height * 0.4,
                     width: mediaQuerry.size.width * 1.6,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        'https://qph.cf2.quoracdn.net/main-qimg-04c3d4c3fe680ce89f7072aceac11ba3-pjlq',
-                        fit: BoxFit.cover,
-                      ),
+                      child:const  ArtWorkWiget(),
                     ),
                   ),
                 ),
@@ -302,8 +319,21 @@ class _NowplayingState extends State<Nowplaying> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   child: Slider(
-                    value: 0.2,
-                    onChanged: (context) {},
+                    value: _position.inSeconds.toDouble(),
+                    max: _duration.inSeconds.toDouble(),
+                    min: Duration(microseconds: 0).inSeconds.toDouble(),
+                    onChanged: (value) {
+
+                      setState(() {
+                        changetoseconds(value.toInt());
+                        
+                        value=value ;
+
+                        
+                      });
+
+
+                    },
                     activeColor: Colors.black,
                   ),
                 ),
@@ -316,10 +346,10 @@ class _NowplayingState extends State<Nowplaying> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '0:01',
+                    _position.toString().split('.')[0],
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
-                  Text('02:23',
+                  Text(_duration.toString().split('.')[0],
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                 ],
@@ -361,7 +391,7 @@ class _NowplayingState extends State<Nowplaying> {
                       });
                     },
                     child: Icon(
-                     _isplaying? Icons.play_circle:Icons.pause_circle,
+                     _isplaying? Icons.pause_circle:Icons.play_circle,
                       size: 65,
                     ),
                   ),
@@ -411,5 +441,25 @@ class _NowplayingState extends State<Nowplaying> {
         ),
       ),
     );
+  }
+
+  void changetoseconds(int seconds){
+    Duration duration=Duration(seconds: seconds);
+    widget.audioPlayer.seek(duration);
+
+
+  }
+}
+
+class ArtWorkWiget extends StatelessWidget {
+  const ArtWorkWiget({
+    super.key,
+    
+  });
+
+
+  @override
+  Widget build(BuildContext context) {
+    return QueryArtworkWidget( id: context.watch<SongModelProvider>().id, type: ArtworkType.AUDIO, artworkFit: BoxFit.cover,);
   }
 }

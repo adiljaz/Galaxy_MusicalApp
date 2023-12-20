@@ -7,17 +7,29 @@ import 'package:galaxy/Screens/bodyHome.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
+
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  
+
+  
+    
+
+  const SplashScreen({super.key,});
+ 
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  
 
   @override
   void initState() {
+
+   
+
+
     gotohome();
 
     // TODO: implement initState
@@ -57,8 +69,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   gotohome() async {
    await Timer(Duration(seconds: 2), () { 
-     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Home( )));
+     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Home()));
    });
    
   }
 }
+
+  // final SongModel songModel;
+  // final AudioPlayer audioPlayer;

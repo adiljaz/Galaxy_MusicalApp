@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/bodyHome.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
+import 'package:galaxy/Screens/provider.dart';
+import 'package:galaxy/Screens/visible.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 class MainHome extends StatefulWidget {
   MainHome({super.key});
+  
 
   @override
   State<MainHome> createState() => _MainHomeState();
 }
 
 class _MainHomeState extends State<MainHome> {
+
+
+  
+
+
+  
   @override
   void initState() {
     // TODO: implement initState
@@ -186,11 +196,7 @@ class _MainHomeState extends State<MainHome> {
                       return ListTile(
                         leading: ClipRRect(
                           borderRadius: BorderRadius.circular(7),
-                          child: Image(
-                            image: NetworkImage(
-                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYT3mrLG-DhwB2SwxOFYNy5kW9siGuPjItdA&usqp=CAU'),
-                            fit: BoxFit.cover,
-                          ),
+                          child:QueryArtworkWidget(id: items.data![index].id, type: ArtworkType.AUDIO)
                         ),
                         title: Text(
                           items.data![index].displayName,
@@ -208,6 +214,22 @@ class _MainHomeState extends State<MainHome> {
                               size: 30,
                             )),
                         onTap: () {
+
+                           VisibilityManager.isVisible = VisibilityManager.isVisible=true;
+
+
+                         
+                            
+                           
+                            
+                              // for my song container ,
+
+                         context.read<SongModelProvider>().setId(items.data![index].id);
+                         context.read<SongModelProvider>().updateCurrentSong(items.data![index]);
+
+
+
+                        
                           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Nowplaying(songModel: items.data![index],audioPlayer:_audioplayer ,)));
                            playSong(items.data![index].uri);
                         },

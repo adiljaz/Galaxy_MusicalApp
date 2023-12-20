@@ -1,8 +1,14 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/Splash.dart';
+import 'package:galaxy/Screens/provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create:(context)=>SongModelProvider(),child: const MyApp(),)
+  );
 }
 
 class MyApp extends StatelessWidget {
