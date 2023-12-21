@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:galaxy/Screens/bodyHome.dart';
 import 'package:galaxy/Screens/home.dart';
 import 'package:galaxy/Screens/lyrics.dart';
 import 'package:galaxy/Screens/playlist.dart';
@@ -283,7 +284,7 @@ class _NowplayingState extends State<Nowplaying> {
                     width: mediaQuerry.size.width * 1.6,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child:const  ArtWorkWiget(),
+                      child: const  ArtWorkWiget( ),
                     ),
                   ),
                 ),
@@ -370,9 +371,14 @@ class _NowplayingState extends State<Nowplaying> {
                     FontAwesomeIcons.shuffle,
                     size: 20,
                   ),
-                  FaIcon(
-                    FontAwesomeIcons.backwardStep,
-                    size: 35,
+                 InkWell(
+                  onTap: (){
+                    audioplayer.hasPrevious?audioplayer.seekToPrevious:null; 
+                  },
+                    child: FaIcon(
+                      FontAwesomeIcons.backwardStep,
+                      size: 35,
+                    ),
                   ),
                   InkWell(
                     onTap: (){
@@ -397,10 +403,33 @@ class _NowplayingState extends State<Nowplaying> {
                       size: 65,
                     ),
                   ),
-                  FaIcon(
-                    FontAwesomeIcons.forwardStep,
-                    size: 35,
-                  ),
+
+                  //////// next 
+           
+                      StreamBuilder<SequenceState?>(
+  stream: audioplayer.sequenceStateStream,
+  builder: (context, snapshot) {
+    print('Has Next: ${audioplayer.hasNext}');
+    return InkWell(
+      onTap: () {
+        print('Tapped Forward Button');
+        if (audioplayer.hasNext) {
+          print('Seeking to Next');
+          audioplayer.seekToNext();
+        } else {
+          print('No Next Song Available');
+        }
+      },
+      child: FaIcon(
+        FontAwesomeIcons.forwardStep,
+        size: 35,
+      ),
+    );
+  },
+),
+
+
+
                   FaIcon(
                     FontAwesomeIcons.rotate,
                     size: 20,
@@ -420,10 +449,16 @@ class _NowplayingState extends State<Nowplaying> {
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => Playlist()));
                     },
-                    child: Text(
-                      'PLaylist   ',
-                      style: GoogleFonts.lato(
-                          fontWeight: FontWeight.bold, fontSize: 18),
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Home()));
+                        
+                      },
+                      child: Text(
+                        'Home  ',
+                        style: GoogleFonts.lato(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
                     )),
                 Text(
                   '|',

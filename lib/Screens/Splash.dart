@@ -42,27 +42,28 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuerry=MediaQuery.of(context);
 
-    return Scaffold(
-
+    return SafeArea (
+      child: Scaffold(
+    
+        
+        body: Stack(
+            children: [
+              Container(
+                color: const Color.fromARGB(255, 0, 0, 0),
+                width: mediaQuerry.size.width*2,
+                height: mediaQuerry.size.height*1,
+                child: Image.asset('assets/splash.jpeg',fit: BoxFit.cover),
+                
+        
+              ),
+               Positioned(
+                top: 280 ,
+                left: 110,
+    
+                child: Text('Galaxy',style:GoogleFonts.josefinSans( color: Color.fromARGB(255, 190, 188, 188) ,fontSize: 35 ,fontWeight: FontWeight.bold ),))
+            ],
+          ),
       
-      body:SafeArea(
-        child: Stack(
-          children: [
-            Container(
-              color: const Color.fromARGB(255, 0, 0, 0),
-              width: mediaQuerry.size.width*2,
-              height: mediaQuerry.size.height*1,
-              child: Image.asset('assets/splash.jpeg',fit: BoxFit.cover),
-              
-      
-            ),
-             Positioned(
-              top: 280 ,
-              left: 110,
-
-              child: Text('Galaxy',style:GoogleFonts.josefinSans( color: Color.fromARGB(255, 190, 188, 188) ,fontSize: 35 ,fontWeight: FontWeight.bold ),))
-          ],
-        ),
       ),
     );
   }
@@ -74,6 +75,3 @@ class _SplashScreenState extends State<SplashScreen> {
    
   }
 }
-
-  // final SongModel songModel;
-  // final AudioPlayer audioPlayer;
