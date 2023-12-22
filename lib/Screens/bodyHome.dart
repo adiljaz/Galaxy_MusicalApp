@@ -9,6 +9,8 @@ import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/Screens/provider.dart';
 
 import 'package:galaxy/Screens/search.dart';
+import 'package:galaxy/Screens/visible.dart';
+
 import 'package:lottie/lottie.dart';
 
 
@@ -42,11 +44,10 @@ final pages = [
 class _HomeState extends State<Home> {
   bool _isplaying = true;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +85,8 @@ class _HomeState extends State<Home> {
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                    return Nowplaying(
+                    return Nowplaying( 
+                      playlist: [],
                         songModel:
                             context.watch<SongModelProvider>().currentSong!);
                   }));
@@ -166,7 +168,10 @@ class _HomeState extends State<Home> {
                                 width: mediaQuerry.size.width * 0.02,
                               ),
                               InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                       
+                                  _isplaying!=_isplaying;
+                                },
                                 child: Icon(
                                   _isplaying
                                       ? Icons.pause_circle

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 
 class AudioScreen extends StatefulWidget {
+
+  
 
 
   const AudioScreen({super.key});
@@ -12,6 +15,8 @@ class AudioScreen extends StatefulWidget {
 
 class _AudioScreenState extends State<AudioScreen> {
 
+  bool hey=true;
+
 
 
   @override
@@ -19,16 +24,31 @@ class _AudioScreenState extends State<AudioScreen> {
 
 
     
-    return Scaffold(
-      body:Column(
-        children: [ 
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('Recorder',style: TextStyle(color: Colors.white),),
+          backgroundColor: Colors.black,
+        ),
+        body:Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [ 
+            InkWell(
+              
+              onTap: (){
+                  setState(() {
 
-        ],
-      ));
+                    hey=!hey; 
+                  });
+
+              },
+              child: Center(child: hey?Lottie.asset('assets/an1.json',width: 300,height:300):Lottie.asset('assets/mc.json'))),
+    
+          ],
+        )),
+    );
     
   }
 }
 
-class VisibilityManager {
-  static bool isVisible =false;
-}

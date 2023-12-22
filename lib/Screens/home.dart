@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:galaxy/Screens/audio.dart';
+
 import 'package:galaxy/Screens/bodyHome.dart';
 import 'package:galaxy/Screens/database/db_functions.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
+
 import 'package:galaxy/Screens/provider.dart';
+import 'package:galaxy/Screens/visible.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
@@ -14,8 +16,11 @@ import 'package:provider/provider.dart';
 
 final AudioPlayer audioplayer = AudioPlayer();
 
+
+
 class MainHome extends StatefulWidget {
   MainHome({super.key});
+  
 
   @override
   State<MainHome> createState() => _MainHomeState();
@@ -112,7 +117,7 @@ class _MainHomeState extends State<MainHome> {
                 padding: const EdgeInsets.only(top: 30, left: 35),
                 child: Container(
                   decoration: BoxDecoration(
-                      color:Colors.transparent,
+                      color: Colors.transparent,
                       borderRadius: BorderRadius.circular(20)),
                   height: mediaQuerry.size.height * 0.3,
                   width: mediaQuerry.size.width * 0.6,
@@ -130,7 +135,7 @@ class _MainHomeState extends State<MainHome> {
                   padding: const EdgeInsets.only(top: 30, left: 35),
                   child: Container(
                     decoration: BoxDecoration(
-                        color:Colors.transparent,
+                        color: Colors.transparent,
                         borderRadius: BorderRadius.circular(20)),
                     height: mediaQuerry.size.height * 0.3,
                     width: mediaQuerry.size.width * 0.6,
@@ -185,24 +190,24 @@ class _MainHomeState extends State<MainHome> {
             future: fetchSongs(),
             builder: (context, items) {
               if (items.data == null) {
-                return const CircularProgressIndicator();
+                return Center(child: const CircularProgressIndicator());
               }
               if (items.data!.isEmpty) {
-                return const Center(child: Text('bsd'));
+                return const Center(child: Text('item not found'));
               }
 
               return Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20 ),
+                  padding: const EdgeInsets.only(left: 20, right: 20),
                   child: ListView.builder(
                     itemBuilder: (context, index) {
                       return Padding(
-                        
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Color.fromARGB(255, 238, 238, 238) ,),
-                          
-                      
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Color.fromARGB(255, 238, 238, 238),
+                          ),
                           child: ListTile(
                             leading: ClipRRect(
                                 borderRadius: BorderRadius.circular(3),
@@ -210,23 +215,22 @@ class _MainHomeState extends State<MainHome> {
                                   artworkFit: BoxFit.cover,
                                   id: items.data![index].id,
                                   type: ArtworkType.AUDIO,
-                                  artworkBorder:
-                                      const BorderRadius.all(Radius.circular(5)),
+                                  artworkBorder: const BorderRadius.all(
+                                      Radius.circular(5)),
                                 )),
                             title: Text(
                               items.data![index].displayName,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text(
                               items.data![index].artist ?? 'No Artist',
-                              style: const TextStyle(fontWeight: FontWeight.w300),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w300),
                             ),
-                            trailing:InkWell(   onTap: (){
-                        
-                        
-                        
-                        
-                               showModalBottomSheet(
+                            trailing: InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -234,26 +238,29 @@ class _MainHomeState extends State<MainHome> {
                                       context: context,
                                       builder: (context) {
                                         return Container(
-                                          height: mediaQuerry.size.height * 0.40 ,
+                                          height:
+                                              mediaQuerry.size.height * 0.40,
                                           decoration: BoxDecoration(
                                               color: Colors.black,
                                               borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(40),
-                                                  topRight: Radius.circular(40))),
+                                                  topRight:
+                                                      Radius.circular(40))),
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Column(
                                               children: [
                                                 SizedBox(
-                                                  height: mediaQuerry.size.height *
-                                                      0.05,
+                                                  height:
+                                                      mediaQuerry.size.height *
+                                                          0.05,
                                                 ),
                                                 Row(
                                                   children: [
                                                     SizedBox(
-                                                      width:
-                                                          mediaQuerry.size.width *
-                                                              0.06,
+                                                      width: mediaQuerry
+                                                              .size.width *
+                                                          0.06,
                                                     ),
                                                     Icon(
                                                       Icons.add_circle,
@@ -261,9 +268,9 @@ class _MainHomeState extends State<MainHome> {
                                                       color: Colors.white,
                                                     ),
                                                     SizedBox(
-                                                      width:
-                                                          mediaQuerry.size.width *
-                                                              0.05,
+                                                      width: mediaQuerry
+                                                              .size.width *
+                                                          0.05,
                                                     ),
                                                     Text('Add to playlist',
                                                         style: TextStyle(
@@ -275,15 +282,16 @@ class _MainHomeState extends State<MainHome> {
                                                   ],
                                                 ),
                                                 SizedBox(
-                                                  height: mediaQuerry.size.height *
-                                                      0.03,
+                                                  height:
+                                                      mediaQuerry.size.height *
+                                                          0.03,
                                                 ),
                                                 Row(
                                                   children: [
                                                     SizedBox(
-                                                      width:
-                                                          mediaQuerry.size.width *
-                                                              0.06,
+                                                      width: mediaQuerry
+                                                              .size.width *
+                                                          0.06,
                                                     ),
                                                     Icon(
                                                       Icons.do_not_disturb_on,
@@ -291,9 +299,9 @@ class _MainHomeState extends State<MainHome> {
                                                       color: Colors.white,
                                                     ),
                                                     SizedBox(
-                                                      width:
-                                                          mediaQuerry.size.width *
-                                                              0.05,
+                                                      width: mediaQuerry
+                                                              .size.width *
+                                                          0.05,
                                                     ),
                                                     Text('Remove From PLaylist',
                                                         style: TextStyle(
@@ -305,24 +313,25 @@ class _MainHomeState extends State<MainHome> {
                                                   ],
                                                 ),
                                                 SizedBox(
-                                                  height: mediaQuerry.size.height *
-                                                      0.03,
+                                                  height:
+                                                      mediaQuerry.size.height *
+                                                          0.03,
                                                 ),
                                                 Row(
                                                   children: [
                                                     SizedBox(
-                                                      width:
-                                                          mediaQuerry.size.width *
-                                                              0.06,
+                                                      width: mediaQuerry
+                                                              .size.width *
+                                                          0.06,
                                                     ),
                                                     FaIcon(
                                                       FontAwesomeIcons.music,
                                                       color: Colors.white,
                                                     ),
                                                     SizedBox(
-                                                      width:
-                                                          mediaQuerry.size.width *
-                                                              0.05,
+                                                      width: mediaQuerry
+                                                              .size.width *
+                                                          0.05,
                                                     ),
                                                     Text('Go to Lyrics',
                                                         style: TextStyle(
@@ -334,15 +343,16 @@ class _MainHomeState extends State<MainHome> {
                                                   ],
                                                 ),
                                                 SizedBox(
-                                                  height: mediaQuerry.size.height *
-                                                      0.03,
+                                                  height:
+                                                      mediaQuerry.size.height *
+                                                          0.03,
                                                 ),
                                                 Row(
                                                   children: [
                                                     SizedBox(
-                                                      width:
-                                                          mediaQuerry.size.width *
-                                                              0.06,
+                                                      width: mediaQuerry
+                                                              .size.width *
+                                                          0.06,
                                                     ),
                                                     Icon(
                                                       Icons.queue_music,
@@ -350,9 +360,9 @@ class _MainHomeState extends State<MainHome> {
                                                       color: Colors.white,
                                                     ),
                                                     SizedBox(
-                                                      width:
-                                                          mediaQuerry.size.width *
-                                                              0.05,
+                                                      width: mediaQuerry
+                                                              .size.width *
+                                                          0.05,
                                                     ),
                                                     Text('Go to Playlist',
                                                         style: TextStyle(
@@ -363,16 +373,17 @@ class _MainHomeState extends State<MainHome> {
                                                         ))
                                                   ],
                                                 ),
-                                                 SizedBox(
-                                                  height: mediaQuerry.size.height *
-                                                      0.03,
-                                                ), 
+                                                SizedBox(
+                                                  height:
+                                                      mediaQuerry.size.height *
+                                                          0.03,
+                                                ),
                                                 Row(
                                                   children: [
                                                     SizedBox(
-                                                      width:
-                                                          mediaQuerry.size.width *
-                                                              0.06,
+                                                      width: mediaQuerry
+                                                              .size.width *
+                                                          0.06,
                                                     ),
                                                     Icon(
                                                       Icons.favorite,
@@ -380,9 +391,9 @@ class _MainHomeState extends State<MainHome> {
                                                       color: Colors.white,
                                                     ),
                                                     SizedBox(
-                                                      width:
-                                                          mediaQuerry.size.width *
-                                                              0.05,
+                                                      width: mediaQuerry
+                                                              .size.width *
+                                                          0.05,
                                                     ),
                                                     Text('Add to Favorite',
                                                         style: TextStyle(
@@ -397,42 +408,30 @@ class _MainHomeState extends State<MainHome> {
                                             ),
                                           ),
                                         );
-                                      }
-                                      );
-                                
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                            },    child: Image.asset('assets/more.png',height: 25, width: 25,)),
-                        
+                                      });
+                                },
+                                child: Image.asset(
+                                  'assets/more.png',
+                                  height: 25,
+                                  width: 25,
+                                )),
                             onTap: () {
-                              
-                                  VisibilityManager.isVisible = true;
-                        
+                              VisibilityManager.isVisible = true;
+
                               // for my song container ,
-                        
+
                               context
                                   .read<SongModelProvider>()
                                   .setId(items.data![index].id);
                               context
                                   .read<SongModelProvider>()
                                   .updateCurrentSong(items.data![index]);
-                        
+
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => Nowplaying(
                                         songModel: items.data![index],
+                                        playlist: items.data!,
+                                      
                                       )));
                               playSong(items.data![index].uri);
                             },

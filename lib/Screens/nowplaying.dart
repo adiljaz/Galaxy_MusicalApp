@@ -7,13 +7,16 @@ import 'package:galaxy/Screens/playlist.dart';
 import 'package:galaxy/Screens/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
+
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 class Nowplaying extends StatefulWidget {
-  const Nowplaying({super.key, required this.songModel});
+  const Nowplaying({super.key, required this.songModel,required this.playlist});
 
   final SongModel songModel;
+
+  final List<SongModel> playlist;
   
 
 
@@ -38,35 +41,43 @@ class _NowplayingState extends State<Nowplaying> {
     playSong();
   }
 
-  playSong(){
-   try{
-       audioplayer.setAudioSource(
-      AudioSource.uri(Uri.parse(widget.songModel.uri!)),
+  
+  //  try{
+  //      audioplayer.setAudioSource(
+  //     AudioSource.uri(Uri.parse(widget.songModel.uri!)),
+  //   );
+
+
+  playSong() {
+  try {
+    // Set up the audio player with the playlist
+    audioplayer.setAudioSource(
+      ConcatenatingAudioSource(
+        children: widget.playlist.map((song) => AudioSource.uri(Uri.parse(song.uri!))).toList(),
+      ),
     );
 
     audioplayer.play();
-  
-      _isplaying=true;
 
-   }on Exception{
+    setState(() {
+      _isplaying = true;
+    });
+  } on Exception {
     print('unsupported File ');
-
-   }
+  }
 
   audioplayer.durationStream.listen((d) {
     setState(() {
-      _duration=d!;
+      _duration = d!;
     });
-   });
+  });
 
-  
-     audioplayer.positionStream.listen((p) {
-      setState(() {
-        _position = p;
-      });
+  audioplayer.positionStream.listen((p) {
+    setState(() {
+      _position = p;
     });
-
-  }
+  });
+}
 
 
   @override
@@ -284,7 +295,8 @@ class _NowplayingState extends State<Nowplaying> {
                     width: mediaQuerry.size.width * 1.6,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: const  ArtWorkWiget( ),
+                      child: const ArtWorkWiget( ),
+
                     ),
                   ),
                 ),
@@ -297,6 +309,10 @@ class _NowplayingState extends State<Nowplaying> {
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15),
               child: ListTile(
+
+
+
+
                 title: Text(widget.songModel.displayNameWOExt,
                     style: GoogleFonts.lato(
                       fontWeight: FontWeight.bold,
@@ -406,27 +422,19 @@ class _NowplayingState extends State<Nowplaying> {
 
                   //////// next 
            
-                      StreamBuilder<SequenceState?>(
-  stream: audioplayer.sequenceStateStream,
-  builder: (context, snapshot) {
-    print('Has Next: ${audioplayer.hasNext}');
-    return InkWell(
+                   InkWell(
       onTap: () {
-        print('Tapped Forward Button');
-        if (audioplayer.hasNext) {
-          print('Seeking to Next');
-          audioplayer.seekToNext();
-        } else {
-          print('No Next Song Available');
-        }
-      },
+    if (audioplayer.hasNext == true) {
+      audioplayer.seekToNext();
+    } else {
+      print('No next track available.');
+    }
+  },
       child: FaIcon(
         FontAwesomeIcons.forwardStep,
         size: 35,
       ),
-    );
-  },
-),
+    ),
 
 
 
