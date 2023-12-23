@@ -327,48 +327,98 @@ lato
 //                 )
 
 
-builder: (context, items) {
-              if (items.data == null) {
-                return CircularProgressIndicator();
-              }
-              if (items.data!.isEmpty) {
-                return Center(child: Text('bsd'));
-              }
+// builder: (context, items) {
+//               if (items.data == null) {
+//                 return CircularProgressIndicator();
+//               }
+//               if (items.data!.isEmpty) {
+//                 return Center(child: Text('bsd'));
+//               }
 
-              return ListView.builder(
-                  itemCount: items.data!.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: ClipOval(
+//               return ListView.builder(
+//                   itemCount: items.data!.length,
+//                   itemBuilder: (context, index) {
+//                     return ListTile(
+//                       leading: ClipOval(
                         
                         
-                        clipBehavior: Clip.antiAlias,
-                        child: ClipRect(
+//                         clipBehavior: Clip.antiAlias,
+//                         child: ClipRect(
                           
                           
                           
-                          child: QueryArtworkWidget(
+//                           child: QueryArtworkWidget(
                             
-                            id: items.data![index].id,
-                            type: ArtworkType.AUDIO,
-                            artworkFit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      title: Text(items.data![index].displayNameWOExt),
-                      subtitle: Text(''),
-                      trailing: Icon(Icons.abc),
-                      onTap: () {
+//                             id: items.data![index].id,
+//                             type: ArtworkType.AUDIO,
+//                             artworkFit: BoxFit.cover,
+//                           ),
+//                         ),
+//                       ),
+//                       title: Text(items.data![index].displayNameWOExt),
+//                       subtitle: Text(''),
+//                       trailing: Icon(Icons.abc),
+//                       onTap: () {
 
-                          context.read<SongModelprovider>().setid(items.data![index].id);
+//                           context.read<SongModelprovider>().setid(items.data![index].id);
 
-                        playSong(items.data![index].uri);
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PlayScreen(
-                                  songModel: items.data![index],
-                                  audioPlayer: _audioPlayer,
-                                )));
-                      },
-                    );
-                  });
-            },
+//                         playSong(items.data![index].uri);
+//                         Navigator.of(context).push(MaterialPageRoute(
+//                             builder: (context) => PlayScreen(
+//                                   songModel: items.data![index],
+//                                   audioPlayer: _audioPlayer,
+//                                 )));
+//                       },
+//                     );
+//                   });
+//             },
+
+
+db db_functions
+
+
+
+
+
+ValueNotifier<List<Cameramodel>> cameranotifier = ValueNotifier([]);
+
+Future<void>addcamera(Cameramodel value) async {
+ 
+
+ 
+ 
+
+  final cameraDb = await Hive.openBox<Cameramodel>('camera');
+
+   cameranotifier.value.add(value);
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    cameranotifier.notifyListeners();
+
+    print('misstion completed//////////////////////');
+
+  cameraDb.add(value);
+}
+
+getallcamera() async{
+
+  cameranotifier.value.clear();
+
+  
+  final cameraDb = await Hive.openBox<Cameramodel>('camera');
+
+
+  cameranotifier.value.addAll(cameraDb.values);
+
+  // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+  cameranotifier.notifyListeners();
+
+
+
+}
+
+
+ Text(widget.songModel.displayNameWOExt,
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    )),

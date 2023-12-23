@@ -12,11 +12,11 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 class Nowplaying extends StatefulWidget {
-  const Nowplaying({super.key, required this.songModel,required this.playlist});
+  const Nowplaying({super.key, required this.songModel});
 
   final SongModel songModel;
 
-  final List<SongModel> playlist;
+  
   
 
 
@@ -43,19 +43,18 @@ class _NowplayingState extends State<Nowplaying> {
 
   
   //  try{
-  //      audioplayer.setAudioSource(
-  //     AudioSource.uri(Uri.parse(widget.songModel.uri!)),
-  //   );
+  //      
 
 
   playSong() {
   try {
-    // Set up the audio player with the playlist
+
+
     audioplayer.setAudioSource(
-      ConcatenatingAudioSource(
-        children: widget.playlist.map((song) => AudioSource.uri(Uri.parse(song.uri!))).toList(),
-      ),
+      AudioSource.uri(Uri.parse(widget.songModel.uri!)),
     );
+    
+   
 
     audioplayer.play();
 
@@ -313,11 +312,12 @@ class _NowplayingState extends State<Nowplaying> {
 
 
 
-                title: Text(widget.songModel.displayNameWOExt,
+                title: 
+                Text(widget.songModel.displayNameWOExt,
                     style: GoogleFonts.lato(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                    )),
+                    )), 
                 subtitle: Text(widget.songModel.artist??'no artist found ',
                     style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
                 trailing: Icon(
@@ -424,11 +424,7 @@ class _NowplayingState extends State<Nowplaying> {
            
                    InkWell(
       onTap: () {
-    if (audioplayer.hasNext == true) {
-      audioplayer.seekToNext();
-    } else {
-      print('No next track available.');
-    }
+   
   },
       child: FaIcon(
         FontAwesomeIcons.forwardStep,

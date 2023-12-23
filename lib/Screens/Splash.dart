@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/bodyHome.dart';
 
@@ -59,8 +60,25 @@ class _SplashScreenState extends State<SplashScreen> {
                Positioned(
                 top: 280 ,
                 left: 110,
+                
+
     
-                child: Text('Galaxy',style:GoogleFonts.josefinSans( color: Color.fromARGB(255, 190, 188, 188) ,fontSize: 35 ,fontWeight: FontWeight.bold ),))
+                child:AnimatedTextKit(
+                  repeatForever: true,
+
+                  isRepeatingAnimation: true,
+
+                  
+                  animatedTexts:[ColorizeAnimatedText(' Galaxy ', textStyle: GoogleFonts.josefinSans( color: Color.fromARGB(255, 190, 188, 188) ,fontSize: 35 ,fontWeight: FontWeight.bold ), colors: [
+                  Colors.white,
+                  const Color.fromARGB(255, 65, 162, 242) ,
+                  
+
+                ])]),
+                
+                ),
+
+                // Text('Galaxy',style:GoogleFonts.josefinSans( color: Color.fromARGB(255, 190, 188, 188) ,fontSize: 35 ,fontWeight: FontWeight.bold ),)
             ],
           ),
       
@@ -74,4 +92,7 @@ class _SplashScreenState extends State<SplashScreen> {
    });
    
   }
+
+
+
 }

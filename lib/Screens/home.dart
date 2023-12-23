@@ -6,6 +6,7 @@ import 'package:galaxy/Screens/database/db_functions.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
 
 import 'package:galaxy/Screens/provider.dart';
+
 import 'package:galaxy/Screens/visible.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -173,10 +174,18 @@ class _MainHomeState extends State<MainHome> {
             child: Expanded(
               child: Column(
                 children: [
-                  Text(
-                    'Your songs',
-                    style: GoogleFonts.lato(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Your songs',
+                        style: GoogleFonts.lato(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: mediaQuerry.size.width*0.1),
+
+                        Icon(Icons.remove_red_eye),
+                    ],
                   ),
                 ],
               ),
@@ -219,8 +228,12 @@ class _MainHomeState extends State<MainHome> {
                                       Radius.circular(5)),
                                 )),
                             title: Text(
+                              
                               items.data![index].displayName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style:
+                              
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text(
@@ -430,7 +443,7 @@ class _MainHomeState extends State<MainHome> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => Nowplaying(
                                         songModel: items.data![index],
-                                        playlist: items.data!,
+                                        
                                       
                                       )));
                               playSong(items.data![index].uri);

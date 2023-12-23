@@ -21,3 +21,15 @@ addSongToDb({required List<SongModel>songs}) async{
  
 
 }
+
+// Future<List<MusicModel>> getallsongs() async{
+
+//   final songDb.=await Hive.openBox<MusicModel>(nam)
+
+//   // final songDb= await Hive.openBox<MusicModel>('song_model');
+
+
+
+//   return 
+  
+// }

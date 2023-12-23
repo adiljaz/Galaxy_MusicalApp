@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
                     return Nowplaying( 
-                      playlist: [],
+                      
                         songModel:
                             context.watch<SongModelProvider>().currentSong!);
                   }));
