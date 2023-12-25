@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:on_audio_query/on_audio_query.dart';
+import 'package:galaxy/database/db_model.dart';
 
 class SongModelProvider with ChangeNotifier {
   int _id = 0;
@@ -12,17 +12,17 @@ class SongModelProvider with ChangeNotifier {
 
 
     // String? _currentSongId;
-     SongModel? _currentSong;
+     MusicModel? _currentSong;
 
 
       // String? get currentSongId => _currentSongId;
-        SongModel? get currentSong => _currentSong;
+        MusicModel? get currentSong => _currentSong;
 
   //        void setId(String id) {
   //   _currentSongId = id;
   //   notifyListeners();
   // }
-    void updateCurrentSong(SongModel song) {
+    void updateCurrentSong(MusicModel song) {
     _currentSong = song;
     notifyListeners();
   }

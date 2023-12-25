@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:galaxy/Screens/bodyHome.dart';
-import 'package:galaxy/Screens/home.dart';
+
+import 'package:galaxy/Screens/mianscreens/bodyHome.dart';
+import 'package:galaxy/Screens/mianscreens/home.dart';
 import 'package:galaxy/Screens/lyrics.dart';
 import 'package:galaxy/Screens/playlist.dart';
-import 'package:galaxy/Screens/provider.dart';
+import 'package:galaxy/database/db_model.dart';
+import 'package:galaxy/provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -12,27 +14,19 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 class Nowplaying extends StatefulWidget {
-  const Nowplaying({super.key, required this.songModel});
+  const Nowplaying({super.key, required this.musicModel});
 
-  final SongModel songModel;
-
-  
-  
-
-
+  final MusicModel musicModel;
 
   @override
   State<Nowplaying> createState() => _NowplayingState();
 }
 
 class _NowplayingState extends State<Nowplaying> {
+  Duration _duration = Duration();
+  Duration _position = Duration();
 
-  Duration _duration=Duration();
-  Duration _position=Duration();
-  
-
-  
-  bool  _isplaying=false;
+  bool _isplaying = false;
 
   @override
   void initState() {
@@ -41,43 +35,37 @@ class _NowplayingState extends State<Nowplaying> {
     playSong();
   }
 
-  
   //  try{
-  //      
-
+  //
 
   playSong() {
-  try {
+    try {
+      audioplayer.setAudioSource(
+        AudioSource.uri(Uri.parse(widget.musicModel.uri!)),
+      );
 
+      audioplayer.play();
 
-    audioplayer.setAudioSource(
-      AudioSource.uri(Uri.parse(widget.songModel.uri!)),
-    );
-    
-   
+      setState(() {
+        _isplaying = true;
+      });
+    } on Exception {
+      print('unsupported File ');
 
-    audioplayer.play();
+    }
 
-    setState(() {
-      _isplaying = true;
+    audioplayer.durationStream.listen((d) {
+      setState(() {
+        _duration = d!;
+      });
     });
-  } on Exception {
-    print('unsupported File ');
+
+    audioplayer.positionStream.listen((p) {
+      setState(() {
+        _position = p;
+      });
+    });
   }
-
-  audioplayer.durationStream.listen((d) {
-    setState(() {
-      _duration = d!;
-    });
-  });
-
-  audioplayer.positionStream.listen((p) {
-    setState(() {
-      _position = p;
-    });
-  });
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -261,11 +249,8 @@ class _NowplayingState extends State<Nowplaying> {
                                         ),
                                       ),
                                     );
-                                  }
-                                  );
+                                  });
                             },
-
-
                             icon: Icon(Icons.more_horiz,
                                 color: Colors.white, size: 29)),
                       )
@@ -294,8 +279,7 @@ class _NowplayingState extends State<Nowplaying> {
                     width: mediaQuerry.size.width * 1.6,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: const ArtWorkWiget( ),
-
+                      child: const ArtWorkWiget(),
                     ),
                   ),
                 ),
@@ -308,17 +292,13 @@ class _NowplayingState extends State<Nowplaying> {
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15),
               child: ListTile(
-
-
-
-
-                title: 
-                Text(widget.songModel.displayNameWOExt,
+                
+                title: Text(widget.musicModel.songname,
                     style: GoogleFonts.lato(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                    )), 
-                subtitle: Text(widget.songModel.artist??'no artist found ',
+                    )),
+                subtitle: Text(widget.musicModel.artistname??'no artist found',
                     style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
                 trailing: Icon(
                   Icons.favorite,
@@ -342,16 +322,11 @@ class _NowplayingState extends State<Nowplaying> {
                     max: _duration.inSeconds.toDouble(),
                     min: Duration(microseconds: 0).inSeconds.toDouble(),
                     onChanged: (value) {
-
                       setState(() {
                         changetoseconds(value.toInt());
-                        
-                        value=value ;
 
-                        
+                        value = value;
                       });
-
-
                     },
                     activeColor: Colors.black,
                   ),
@@ -387,52 +362,44 @@ class _NowplayingState extends State<Nowplaying> {
                     FontAwesomeIcons.shuffle,
                     size: 20,
                   ),
-                 InkWell(
-                  onTap: (){
-                    audioplayer.hasPrevious?audioplayer.seekToPrevious:null; 
-                  },
+                  InkWell(
+                    onTap: () {
+                      audioplayer.hasPrevious
+                          ? audioplayer.seekToPrevious
+                          : null;
+                    },
                     child: FaIcon(
                       FontAwesomeIcons.backwardStep,
                       size: 35,
                     ),
                   ),
                   InkWell(
-                    onTap: (){
+                    onTap: () {
                       setState(() {
+                        if (_isplaying) {
+                          audioplayer.pause();
+                        } else {
+                          audioplayer.play();
+                        }
 
-                            if(_isplaying){
-                              audioplayer.pause();
-
-                         }else{
-                         audioplayer.play();
-                           
-                         }
-
-
-                         _isplaying=!_isplaying;
-
-                         
+                        _isplaying = !_isplaying;
                       });
                     },
                     child: Icon(
-                     _isplaying? Icons.pause_circle:Icons.play_circle,
+                      _isplaying ? Icons.pause_circle : Icons.play_circle,
                       size: 65,
                     ),
                   ),
 
-                  //////// next 
-           
-                   InkWell(
-      onTap: () {
-   
-  },
-      child: FaIcon(
-        FontAwesomeIcons.forwardStep,
-        size: 35,
-      ),
-    ),
+                  //////// next
 
-
+                  InkWell(
+                    onTap: () {},
+                    child: FaIcon(
+                      FontAwesomeIcons.forwardStep,
+                      size: 35,
+                    ),
+                  ),
 
                   FaIcon(
                     FontAwesomeIcons.rotate,
@@ -454,9 +421,9 @@ class _NowplayingState extends State<Nowplaying> {
                           MaterialPageRoute(builder: (context) => Playlist()));
                     },
                     child: InkWell(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Home()));
-                        
+                      onTap: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => Home()));
                       },
                       child: Text(
                         'Home  ',
@@ -484,23 +451,23 @@ class _NowplayingState extends State<Nowplaying> {
     );
   }
 
-  void changetoseconds(int seconds){
-    Duration duration=Duration(seconds: seconds);
+  void changetoseconds(int seconds) {
+    Duration duration = Duration(seconds: seconds);
     audioplayer.seek(duration);
-
-
   }
 }
 
 class ArtWorkWiget extends StatelessWidget {
   const ArtWorkWiget({
     super.key,
-    
   });
-
 
   @override
   Widget build(BuildContext context) {
-    return QueryArtworkWidget( id: context.watch<SongModelProvider>().id, type: ArtworkType.AUDIO, artworkFit: BoxFit.cover,);
+    return QueryArtworkWidget(
+      id: context.watch<SongModelProvider>().id,
+      type: ArtworkType.AUDIO,
+      artworkFit: BoxFit.cover,
+    );
   }
 }

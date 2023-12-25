@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:galaxy/Screens/Allsongs.dart';
 
-import 'package:galaxy/Screens/bodyHome.dart';
-import 'package:galaxy/Screens/database/db_functions.dart';
+
+import 'package:galaxy/Screens/mianscreens/bodyHome.dart';
+
 import 'package:galaxy/Screens/nowplaying.dart';
+import 'package:galaxy/database/db_model.dart';
 
-import 'package:galaxy/Screens/provider.dart';
+import 'package:galaxy/provider/provider.dart';
+
 
 import 'package:galaxy/Screens/visible.dart';
+import 'package:galaxy/database/db_functions.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
@@ -30,16 +35,26 @@ class MainHome extends StatefulWidget {
 class _MainHomeState extends State<MainHome> {
   @override
   void initState() {
+
+
+    
+
+    
     // TODO: implement initState
     super.initState();
     requestPermission();
+
+   
+   
+
+    
   }
 
   void requestPermission() {
     Permission.storage.request();
   }
 
-  Future<List<SongModel>> fetchSongs() async {
+  Future<List<  MusicModel  >> fetchSongsfromDb() async {
     List<SongModel> songlist = await _audioQuery.querySongs(
       sortType: null,
       orderType: OrderType.ASC_OR_SMALLER,
@@ -47,8 +62,13 @@ class _MainHomeState extends State<MainHome> {
       ignoreCase: true,
     );
     addSongToDb(songs: songlist);
-    return songlist;
+
+
+    
+    return getAllSongs();
   }
+
+
 
   final _audioQuery = OnAudioQuery();
 
@@ -64,6 +84,7 @@ class _MainHomeState extends State<MainHome> {
 
   @override
   Widget build(BuildContext context) {
+    
     MediaQueryData mediaQuerry = MediaQuery.of(context);
     return Scaffold(
       body: Column(
@@ -180,11 +201,14 @@ class _MainHomeState extends State<MainHome> {
                       Text(
                         'Your songs',
                         style: GoogleFonts.lato(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: 20, fontWeight: FontWeight.bold,color: Colors.black),
+                            
                       ),
                       SizedBox(width: mediaQuerry.size.width*0.1),
 
-                        Icon(Icons.remove_red_eye),
+                        InkWell  (   onTap: (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Allsongs( )));
+                        }, child: Icon(Icons.remove_red_eye)),
                     ],
                   ),
                 ],
@@ -195,17 +219,19 @@ class _MainHomeState extends State<MainHome> {
           // song fetching
           // LIst view for showing swtched screens ...
 
-          FutureBuilder<List<SongModel>>(
-            future: fetchSongs(),
+          FutureBuilder<List<MusicModel>>(
+            future: fetchSongsfromDb(),
             builder: (context, items) {
               if (items.data == null) {
+                
                 return Center(child: const CircularProgressIndicator());
               }
-              if (items.data!.isEmpty) {
+              else if  (items.data!.isEmpty) {
                 return const Center(child: Text('item not found'));
-              }
+              }else{
+               
 
-              return Expanded(
+                return Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: ListView.builder(
@@ -222,14 +248,14 @@ class _MainHomeState extends State<MainHome> {
                                 borderRadius: BorderRadius.circular(3),
                                 child: QueryArtworkWidget(
                                   artworkFit: BoxFit.cover,
-                                  id: items.data![index].id,
+                                  id: items.data![index].songid,
                                   type: ArtworkType.AUDIO,
                                   artworkBorder: const BorderRadius.all(
                                       Radius.circular(5)),
                                 )),
                             title: Text(
                               
-                              items.data![index].displayName,
+                              items.data![index].songname,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style:
@@ -237,7 +263,7 @@ class _MainHomeState extends State<MainHome> {
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text(
-                              items.data![index].artist ?? 'No Artist',
+                              items.data![index].artistname ?? 'No Artist',
                               style:
                                   const TextStyle(fontWeight: FontWeight.w300),
                             ),
@@ -435,14 +461,14 @@ class _MainHomeState extends State<MainHome> {
 
                               context
                                   .read<SongModelProvider>()
-                                  .setId(items.data![index].id);
+                                  .setId(items.data![index].songid);
                               context
                                   .read<SongModelProvider>()
                                   .updateCurrentSong(items.data![index]);
 
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => Nowplaying(
-                                        songModel: items.data![index],
+                                        musicModel: items.data![index],
                                         
                                       
                                       )));
@@ -456,6 +482,12 @@ class _MainHomeState extends State<MainHome> {
                   ),
                 ),
               );
+
+                
+                
+              }
+
+              
             },
           ),
         ],

@@ -1,5 +1,5 @@
 
-import 'package:galaxy/Screens/database/db_model.dart';
+import 'package:galaxy/database/db_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -16,20 +16,15 @@ addSongToDb({required List<SongModel>songs}) async{
 
  for(MusicModel  s in songDb.values  ){
   print(s.artistname);
-
  }
  
 
 }
 
-// Future<List<MusicModel>> getallsongs() async{
-
-//   final songDb.=await Hive.openBox<MusicModel>(nam)
-
-//   // final songDb= await Hive.openBox<MusicModel>('song_model');
 
 
 
-//   return 
-  
-// }
+List<MusicModel> getAllSongs(){
+  final songDb=Hive.box<MusicModel>('song_model');
+  return songDb.values.toList();
+}

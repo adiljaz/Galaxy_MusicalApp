@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:galaxy/Screens/Library.dart';
-import 'package:galaxy/Screens/audio.dart';
-import 'package:galaxy/Screens/home.dart';
+import 'package:galaxy/Screens/mianscreens/Library.dart';
+import 'package:galaxy/Screens/mianscreens/audio.dart';
+import 'package:galaxy/Screens/mianscreens/home.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
 
-import 'package:galaxy/Screens/provider.dart';
+import 'package:galaxy/provider/provider.dart';
 
-import 'package:galaxy/Screens/search.dart';
+import 'package:galaxy/Screens/mianscreens/search.dart';
 import 'package:galaxy/Screens/visible.dart';
 
 import 'package:lottie/lottie.dart';
-
 
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -32,22 +31,11 @@ final pages = [
   MainHome(),
   Search(),
   LibraryScreen(),
-  AudioScreen(
-     
-  
-    
-
-
-  ),
+  AudioScreen(),
 ];
 
 class _HomeState extends State<Home> {
   bool _isplaying = true;
-
-  
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -85,14 +73,14 @@ class _HomeState extends State<Home> {
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                    return Nowplaying( 
-                      
-                        songModel:
+                    return Nowplaying(
+                        musicModel:
                             context.watch<SongModelProvider>().currentSong!);
                   }));
                 },
                 child: Visibility(
-                  visible: VisibilityManager.isVisible && _selectedindex != pages.length - 1,
+                  visible: VisibilityManager.isVisible &&
+                      _selectedindex != pages.length - 1,
                   child: Container(
                     height: mediaQuerry.size.height * 0.18,
                     width: mediaQuerry.size.width * 1,
@@ -130,7 +118,7 @@ class _HomeState extends State<Home> {
                                       context
                                               .watch<SongModelProvider>()
                                               .currentSong
-                                              ?.displayNameWOExt ??
+                                              ?.songname ??
                                           'No Song',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -148,7 +136,7 @@ class _HomeState extends State<Home> {
                                       context
                                               .watch<SongModelProvider>()
                                               .currentSong
-                                              ?.artist ??
+                                              ?.artistname ??
                                           'No Artist',
                                       style: TextStyle(
                                           fontSize: 12,
@@ -169,8 +157,7 @@ class _HomeState extends State<Home> {
                               ),
                               InkWell(
                                 onTap: () {
-                                       
-                                  _isplaying!=_isplaying;
+                                  _isplaying != _isplaying;
                                 },
                                 child: Icon(
                                   _isplaying
@@ -178,7 +165,7 @@ class _HomeState extends State<Home> {
                                       : Icons.play_circle,
                                   color: Colors.white,
                                   size: 42,
-                                ), 
+                                ),
                               ),
                               SizedBox(
                                 width: mediaQuerry.size.width * 0.02,
@@ -195,41 +182,44 @@ class _HomeState extends State<Home> {
                 ),
               ),
 
-               ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                  child: BottomNavigationBar(
-                    backgroundColor: Colors.white,
-                    currentIndex: _selectedindex,
-                    onTap: (value) {
-                      setState(() {
-                        _selectedindex = value;
-                      });
-                    },
-                    selectedItemColor: Color.fromARGB(255, 105, 105, 105),
-                    unselectedItemColor: Colors.black,
-                    showUnselectedLabels: true,
-                    items:  [
-                      BottomNavigationBarItem(
-                          icon: Icon(
-                            Icons.home,
-                            size: 25,
-                          ),
-                          label: 'Home'),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.search, size: 25), label: 'Search'),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.library_music, size: 25),
-                          label: 'Library'),
-                      BottomNavigationBarItem(
-                          icon:Lottie.asset( 'assets/an1.json',width: 45,height:30,),
-                          label: 'Record'),
-                    ],
-                  ),
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
                 ),
-              
+                child: BottomNavigationBar(
+                  backgroundColor: Colors.white,
+                  currentIndex: _selectedindex,
+                  onTap: (value) {
+                    setState(() {
+                      _selectedindex = value;
+                    });
+                  },
+                  selectedItemColor: Color.fromARGB(255, 105, 105, 105),
+                  unselectedItemColor: Colors.black,
+                  showUnselectedLabels: true,
+                  items: [
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.home,
+                          size: 25,
+                        ),
+                        label: 'Home'),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.search, size: 25), label: 'Search'),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.library_music, size: 25),
+                        label: 'Library'),
+                    BottomNavigationBarItem(
+                        icon: Lottie.asset(
+                          'assets/an1.json',
+                          width: 45,
+                          height: 30,
+                        ),
+                        label: 'Record'),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
