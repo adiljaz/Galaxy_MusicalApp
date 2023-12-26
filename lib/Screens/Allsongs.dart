@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
+import 'package:galaxy/Screens/visible.dart';
 import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/database/db_model.dart';
+import 'package:galaxy/provider/provider.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
 class Allsongs extends StatefulWidget {
   const Allsongs({super.key});
@@ -44,7 +47,7 @@ class _AllsongsState extends State<Allsongs> {
                   
                     padding: const EdgeInsets.all(8.0),
                     child: Container( 
-                      decoration: BoxDecoration(color: Colors.black  , borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(color: Color.fromARGB(255, 0, 0, 0)  , borderRadius: BorderRadius.circular(10)),
                       
                       child: ListTile(
                         
@@ -56,10 +59,20 @@ class _AllsongsState extends State<Allsongs> {
                                   const TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
                         
                         onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Nowplaying(musicModel: Allsongs[index] )));
+
+                           context
+                                  .read<SongModelProvider>()
+                                  .setId(Allsongs[index].songid);
+                                    context
+                                  .read<SongModelProvider>()
+                                  .updateCurrentSong(Allsongs[index]); 
+
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Nowplaying(musicModel: Allsongs[index])));
+                           VisibilityManager.isVisible = true;
+  
 
                           // to now play screen
-                        },trailing: Icon(Icons.play_circle ,color: Colors.white,size:30,),
+                        },trailing: Icon(Icons.play_circle ,color:Colors.white,size:30,),
                       ),
                     ),
                   );

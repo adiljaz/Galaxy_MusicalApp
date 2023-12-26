@@ -1,5 +1,6 @@
 
 
 class VisibilityManager {
-  static bool isVisible =false;
+  static  bool isVisible =false;
+  
 }

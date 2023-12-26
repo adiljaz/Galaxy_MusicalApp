@@ -61,6 +61,9 @@ class _HomeState extends State<Home> {
         ),
         body: pages[_selectedindex],
         bottomNavigationBar: ClipRRect(
+        
+          
+           
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),

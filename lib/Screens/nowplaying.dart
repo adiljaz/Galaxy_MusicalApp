@@ -265,7 +265,7 @@ class _NowplayingState extends State<Nowplaying> {
                           bottomRight: Radius.circular(40))),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
+                  padding: const EdgeInsets.only( 
                     top: 80,
                     left: 38,
                     right: 38,

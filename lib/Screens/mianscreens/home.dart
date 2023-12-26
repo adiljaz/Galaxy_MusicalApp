@@ -78,7 +78,7 @@ class _MainHomeState extends State<MainHome> {
 
       audioplayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
     } on Exception {
-      print('error parsing song ');
+      
     }
   }
 
@@ -241,12 +241,14 @@ class _MainHomeState extends State<MainHome> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Color.fromARGB(255, 238, 238, 238),
+                            color: Color.fromARGB(255, 101, 100, 100),
                           ),
                           child: ListTile(
                             leading: ClipRRect(
                                 borderRadius: BorderRadius.circular(3),
-                                child: QueryArtworkWidget(
+                                child: QueryArtworkWidget(artworkQuality: FilterQuality.high,
+                                quality:100,
+
                                   artworkFit: BoxFit.cover,
                                   id: items.data![index].songid,
                                   type: ArtworkType.AUDIO,
@@ -260,12 +262,12 @@ class _MainHomeState extends State<MainHome> {
                               overflow: TextOverflow.ellipsis,
                               style:
                               
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                                  const TextStyle( color: Colors.white,  fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text(
                               items.data![index].artistname ?? 'No Artist',
                               style:
-                                  const TextStyle(fontWeight: FontWeight.w300),
+                                  const TextStyle( color: Colors.white,  fontWeight: FontWeight.w300),
                             ),
                             trailing: InkWell(
                                 onTap: () {
@@ -450,12 +452,13 @@ class _MainHomeState extends State<MainHome> {
                                       });
                                 },
                                 child: Image.asset(
-                                  'assets/more.png',
+                                  'assets/more.png',color: Colors.white,
                                   height: 25,
                                   width: 25,
                                 )),
                             onTap: () {
-                              VisibilityManager.isVisible = true;
+                              
+                              VisibilityManager.isVisible =true;
 
                               // for my song container ,
 
