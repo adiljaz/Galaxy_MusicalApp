@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/likedsongs.dart';
-import 'package:galaxy/Screens/playlist.dart';
+
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({super.key});
@@ -63,21 +64,24 @@ class _LibraryScreenState extends State<LibraryScreen> {
                           builder: (context) {
                             return AlertDialog(
                               backgroundColor: Colors.black,
-                              title: Text('Add new playlist',style: TextStyle(color:Colors.white),),
+                              title: Text(
+                                'Add new playlist',
+                                style: TextStyle(color: Colors.white),
+                              ),
                               actions: [
                                 TextFormField(
-                                  
-                                  
-                                  style: GoogleFonts.lato(color: Colors.black,fontWeight: FontWeight.bold,),
-                                  decoration: InputDecoration(fillColor: Colors.white,
-                                  filled: true,
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(40))
-                                
+                                  style: GoogleFonts.lato(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  
+                                  decoration: InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(40))),
                                 ),
                                 Row(
-                                 
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     TextButton(
@@ -111,82 +115,79 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
             // grid view builder for playlist and mostplayed and liked songs
             Expanded(
-              
               child: Padding(
                 padding: const EdgeInsets.only(left: 25, right: 25),
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  children: [
-                    InkWell( 
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LikedSongs()));
-                      },
-                      child: Container(
-                      
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 14,
+                    mainAxisSpacing: 20,
+                  ),
+                  itemBuilder: (context, index) {
+                    if(index==0){
+                      return InkWell(
+                        onTap: (){ Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LikedSongs()));
+                        
+                        },
+                        child: Container(
+                          
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromARGB(255, 246, 205, 205),
+                        ),
+                        height: 130,
+                        width: 130,
+                        child: Icon(Icons.favorite ,color: Color.fromARGB(255, 255, 153, 146),size: 70,),
+
+                                          ),
+                      );
+                    } else if(index==1){
+
+                      return  InkWell(
+                        onTap: (){},
+                        child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                        height: 130,
+                        width: 130,
+                        child: Column(
+                          
+                          children: [
+                            SizedBox(height: mediaQuerry.size.width*0.02 ,),
+                            Text('Recently played ',style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255),fontWeight: FontWeight.bold ),),
+                            Lottie.asset('assets/rc.json'),
+                          ],
+                        ),
+                                          ),
+                      );
+                    }else if(index==2){
+                      return   InkWell(
+                        onTap: (){},
+                        child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                        height: 130,
+                        width: 130,
+                        child: Lottie.asset('assets/an1.json',) ,
+                                          ),
+                      );
+
+                    }
+
+                    return Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.black,
                         ),
                         height: 130,
                         width: 130,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Playlist()));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.black,
-                        ),
-                        height: 130,
-                        width: 130,
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black,
-                      ),
-                      height: 130,
-                      width: 130,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black,
-                      ),
-                      height: 130,
-                      width: 130,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black,
-                      ),
-                      height: 130,
-                      width: 130,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black,
-                      ),
-                      height: 130,
-                      width: 130,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black,
-                      ),
-                      height: 130,
-                      width: 130,
-                    ),
-                  ],
+                                          );
+                  },
+                  itemCount: 4,
                 ),
               ),
             )
@@ -196,3 +197,5 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 }
+
+

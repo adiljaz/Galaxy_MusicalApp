@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:galaxy/database/fav_function.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class LikedSongs extends StatelessWidget {
   const LikedSongs({super.key});
@@ -239,6 +241,29 @@ class LikedSongs extends StatelessWidget {
                     ))
               ],
             ),
+
+
+            Expanded (child: FutureBuilder(    future:showLike() , builder:(context, snapshot) {
+           return   ListView.builder(
+            itemCount:snapshot.data!.length ,
+            itemBuilder: (context, index) {
+                return 
+                 
+                   Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                       decoration: BoxDecoration(color: Color.fromARGB(255, 112, 112, 112,),borderRadius: BorderRadius.circular(10)),
+                      child: ListTile(
+                        leading:QueryArtworkWidget(  artworkBorder: BorderRadius.circular(4),   id:snapshot.data![index].songid ,type:ArtworkType.AUDIO, ),
+                        title:Text(snapshot.data![index].songname) , subtitle: Text(snapshot.data![index].artistname), trailing: Icon(Icons.favorite),),
+                    ),
+                  );
+                
+
+              },);
+            }, ))
+
+
           ],
         ),
       ),

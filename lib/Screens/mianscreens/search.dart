@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:galaxy/Screens/Allsongs.dart';
+
 import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/Screens/visible.dart';
 import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/database/db_model.dart';
+import 'package:galaxy/database/fav_function.dart';
 import 'package:galaxy/provider/provider.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class _SearchState extends State<Search> {
   void initState() {
     super.initState();
     initializeSongs();
+    ifLickd();
   }
 
   Future<void> initializeSongs() async {
@@ -106,6 +108,7 @@ class _SearchState extends State<Search> {
                       child: ListTile(
                         
                         leading: QueryArtworkWidget(
+                          artworkBorder: BorderRadius.circular(5),
                           id: music.songid,
                           type: ArtworkType.AUDIO,
                           artworkQuality:FilterQuality.high,
@@ -117,8 +120,22 @@ class _SearchState extends State<Search> {
                                       const TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
                     
                         ),
-                        subtitle: Text(music.artistname),
-                        trailing:Row( mainAxisSize: MainAxisSize.min,            children: [  Icon(Icons.favorite,color: Colors.red,), Text('  '),   Icon(Icons.play_circle,color: Colors.white,)],),
+                        subtitle: Text(music.artistname,style: TextStyle(color: Colors.white ),),
+                        trailing:Row( mainAxisSize: MainAxisSize.min,            children: [ favSongs.contains(music.songid)?  InkWell( onTap: (){
+                          removeLikedSong(music.songid);
+                          ifLickd();
+                          setState(() {
+                            
+                          });
+
+                        }, child: Icon( Icons.favorite,color: Colors.red,)):InkWell( onTap: () async{
+                          addlikedSong(music.songid);
+                        await  ifLickd();
+                        setState(() {
+                          
+                        });
+                         
+                        },  child: Icon(Icons.favorite,color: Colors.white,)), Text('  '),   Icon(Icons.play_circle,color: Colors.white,)],),
                         onTap: () {
 
                           
@@ -153,7 +170,7 @@ class _SearchState extends State<Search> {
     final suggestion = allSongs.where((music) {
       final songname = music.songname.toLowerCase();
       final input = query.toLowerCase();
-
+  
       return songname.contains(input);
     }).toList();
 
@@ -162,4 +179,4 @@ class _SearchState extends State<Search> {
       
     });
   }
-}
+}  

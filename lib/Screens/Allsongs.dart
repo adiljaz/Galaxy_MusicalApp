@@ -17,8 +17,8 @@ class Allsongs extends StatefulWidget {
 class _AllsongsState extends State<Allsongs> {
   late List<MusicModel> Allsongs;
   @override
-  void initState() {
-    Allsongs = getAllSongs();
+  void initState() async {
+    Allsongs = await getAllSongs();
 
     // TODO: implement initState
     super.initState();

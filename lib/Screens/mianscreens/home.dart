@@ -54,7 +54,7 @@ class _MainHomeState extends State<MainHome> {
     Permission.storage.request();
   }
 
-  Future<List<  MusicModel  >> fetchSongsfromDb() async {
+  Future<List<MusicModel>> fetchSongsfromDb() async {
     List<SongModel> songlist = await _audioQuery.querySongs(
       sortType: null,
       orderType: OrderType.ASC_OR_SMALLER,
