@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/Screens/visible.dart';
 import 'package:galaxy/database/db_functions.dart';
-import 'package:galaxy/database/db_model.dart';
+
 import 'package:galaxy/provider/provider.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -15,10 +15,10 @@ class Allsongs extends StatefulWidget {
 }
 
 class _AllsongsState extends State<Allsongs> {
-  late List<MusicModel> Allsongs;
+    
   @override
-  void initState() async {
-    Allsongs = await getAllSongs();
+  void initState() {  
+ getAllSongs() ;
 
     // TODO: implement initState
     super.initState();
@@ -31,7 +31,7 @@ class _AllsongsState extends State<Allsongs> {
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         
-        body: Column(
+        body:Column(
           children: [
             Container(
               child: Center(child: Text('All songs',  style: TextStyle(  color: Colors.white,  fontWeight: FontWeight.bold,fontSize: 25),),),
@@ -41,7 +41,8 @@ class _AllsongsState extends State<Allsongs> {
 
             ),
             Expanded(
-              child: ListView.builder(
+              child: FutureBuilder(future: getAllSongs(), builder: (context,item){
+                return  ListView.builder(
                 itemBuilder: (context, index) {
                   return Padding(
                   
@@ -51,23 +52,23 @@ class _AllsongsState extends State<Allsongs> {
                       
                       child: ListTile(
                         
-                        leading: ClipRRect(child: QueryArtworkWidget(id:Allsongs[index].songid, type: ArtworkType.AUDIO,artworkFit: BoxFit.cover,artworkBorder: BorderRadius.circular(5),)),
-                        title: Text(Allsongs[index].songname, maxLines: 1, style:
+                        leading: ClipRRect(child: QueryArtworkWidget( id:  item.data![index].songid, type: ArtworkType.AUDIO,artworkFit: BoxFit.cover,artworkBorder: BorderRadius.circular(5),)),
+                        title: Text(item.data![index].songname, maxLines: 1, style:
                               
                                   const TextStyle(fontWeight: FontWeight.bold,color: Colors.white), ),
-                        subtitle: Text(Allsongs[index].artistname,style:
+                        subtitle: Text(item.data![index].artistname,style:
                                   const TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
                         
                         onTap: (){
 
                            context
-                                  .read<SongModelProvider>()
-                                  .setId(Allsongs[index].songid);
+                                  .read<SongModelProvider>() 
+                                  .setId(item.data![index].songid);
                                     context
                                   .read<SongModelProvider>()
-                                  .updateCurrentSong(Allsongs[index]); 
+                                  .updateCurrentSong(item.data![index]); 
 
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Nowplaying(musicModel: Allsongs[index])));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Nowplaying(musicModel: item.data![index])));
                            VisibilityManager.isVisible = true;
   
 
@@ -77,8 +78,9 @@ class _AllsongsState extends State<Allsongs> {
                     ),
                   );
                 },
-                itemCount: Allsongs.length,
-              ),
+                itemCount:item.data!.length,
+              );
+              })
             ),
           ],
         ),

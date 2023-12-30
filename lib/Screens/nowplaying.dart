@@ -13,10 +13,13 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
+
+
 class Nowplaying extends StatefulWidget {
-  const Nowplaying({super.key, required this.musicModel});
+   Nowplaying({super.key, required this.musicModel,int? index});
 
   final MusicModel musicModel;
+  int? index;
 
   @override
   State<Nowplaying> createState() => _NowplayingState();
@@ -394,7 +397,10 @@ class _NowplayingState extends State<Nowplaying> {
                   //////// next
 
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      // _playNextSong();
+                   
+                    },
                     child: FaIcon(
                       FontAwesomeIcons.forwardStep,
                       size: 35,
@@ -450,6 +456,16 @@ class _NowplayingState extends State<Nowplaying> {
       ),
     );
   }
+
+//   Future<void> _playNextSong() async {
+//  List<MusicModel> songs = await _fetchSongs(); // Replace with your actual logic to fetch songs
+//  int currentSongIndex = songs.indexWhere((song) => song.id == currentSongId);
+//  if (currentSongIndex == -1 || currentSongIndex >= songs.length - 1) {
+//     return; // No next song or already at the last song
+//  }
+//  Song nextSong = songs[currentSongIndex + 1];
+//  // Update your player to play the next song
+// }
 
   void changetoseconds(int seconds) {
     Duration duration = Duration(seconds: seconds);

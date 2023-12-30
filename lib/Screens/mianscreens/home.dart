@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:galaxy/Screens/Allsongs.dart';
 
-
 import 'package:galaxy/Screens/mianscreens/bodyHome.dart';
 
 import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/database/db_model.dart';
 
 import 'package:galaxy/provider/provider.dart';
-
 
 import 'package:galaxy/Screens/visible.dart';
 import 'package:galaxy/database/db_functions.dart';
@@ -20,13 +18,10 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-final AudioPlayer audioplayer = AudioPlayer();
-
-
+final audioplayer = AudioPlayer();
 
 class MainHome extends StatefulWidget {
   MainHome({super.key});
-  
 
   @override
   State<MainHome> createState() => _MainHomeState();
@@ -35,19 +30,9 @@ class MainHome extends StatefulWidget {
 class _MainHomeState extends State<MainHome> {
   @override
   void initState() {
-
-
-    
-
-    
     // TODO: implement initState
     super.initState();
     requestPermission();
-
-   
-   
-
-    
   }
 
   void requestPermission() {
@@ -63,12 +48,8 @@ class _MainHomeState extends State<MainHome> {
     );
     addSongToDb(songs: songlist);
 
-
-    
     return getAllSongs();
   }
-
-
 
   final _audioQuery = OnAudioQuery();
 
@@ -77,14 +58,11 @@ class _MainHomeState extends State<MainHome> {
       audioplayer.play();
 
       audioplayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
-    } on Exception {
-      
-    }
+    } on Exception {}
   }
 
   @override
   Widget build(BuildContext context) {
-    
     MediaQueryData mediaQuerry = MediaQuery.of(context);
     return Scaffold(
       body: Column(
@@ -201,14 +179,17 @@ class _MainHomeState extends State<MainHome> {
                       Text(
                         'Your songs',
                         style: GoogleFonts.lato(
-                            fontSize: 20, fontWeight: FontWeight.bold,color: Colors.black),
-                            
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                       ),
-                      SizedBox(width: mediaQuerry.size.width*0.1),
-
-                        InkWell  (   onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Allsongs( )));
-                        }, child: Icon(Icons.remove_red_eye)),
+                      SizedBox(width: mediaQuerry.size.width * 0.1),
+                      InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Allsongs()));
+                          },
+                          child: Icon(Icons.remove_red_eye)),
                     ],
                   ),
                 ],
@@ -223,274 +204,266 @@ class _MainHomeState extends State<MainHome> {
             future: fetchSongsfromDb(),
             builder: (context, items) {
               if (items.data == null) {
-                
                 return Center(child: const CircularProgressIndicator());
-              }
-              else if  (items.data!.isEmpty) {
+              } else if (items.data!.isEmpty) {
                 return const Center(child: Text('item not found'));
-              }else{
-               
-
+              } else {
                 return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color.fromARGB(255, 101, 100, 100),
-                          ),
-                          child: ListTile(
-                            leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(3),
-                                child: QueryArtworkWidget(artworkQuality: FilterQuality.high,
-                                quality:100,
-
-                                  artworkFit: BoxFit.cover,
-                                  id: items.data![index].songid,
-                                  type: ArtworkType.AUDIO,
-                                  artworkBorder: const BorderRadius.all(
-                                      Radius.circular(5)),
-                                )),
-                            title: Text(
-                              
-                              items.data![index].songname,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                              
-                                  const TextStyle( color: Colors.white,  fontWeight: FontWeight.bold),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color.fromARGB(255, 101, 100, 100),
                             ),
-                            subtitle: Text(
-                              items.data![index].artistname ?? 'No Artist',
-                              style:
-                                  const TextStyle( color: Colors.white,  fontWeight: FontWeight.w300),
-                            ),
-                            trailing: InkWell(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(40),
-                                              topRight: Radius.circular(40))),
-                                      context: context,
-                                      builder: (context) {
-                                        return Container(
-                                          height:
-                                              mediaQuerry.size.height * 0.40,
-                                          decoration: BoxDecoration(
-                                              color: Colors.black,
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(40),
-                                                  topRight:
-                                                      Radius.circular(40))),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10),
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height:
-                                                      mediaQuerry.size.height *
-                                                          0.05,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: mediaQuerry
-                                                              .size.width *
-                                                          0.06,
-                                                    ),
-                                                    Icon(
-                                                      Icons.add_circle,
-                                                      size: 30,
-                                                      color: Colors.white,
-                                                    ),
-                                                    SizedBox(
-                                                      width: mediaQuerry
-                                                              .size.width *
-                                                          0.05,
-                                                    ),
-                                                    Text('Add to playlist',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 20,
-                                                        ))
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height:
-                                                      mediaQuerry.size.height *
-                                                          0.03,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: mediaQuerry
-                                                              .size.width *
-                                                          0.06,
-                                                    ),
-                                                    Icon(
-                                                      Icons.do_not_disturb_on,
-                                                      size: 30,
-                                                      color: Colors.white,
-                                                    ),
-                                                    SizedBox(
-                                                      width: mediaQuerry
-                                                              .size.width *
-                                                          0.05,
-                                                    ),
-                                                    Text('Remove From PLaylist',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 20,
-                                                        ))
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height:
-                                                      mediaQuerry.size.height *
-                                                          0.03,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: mediaQuerry
-                                                              .size.width *
-                                                          0.06,
-                                                    ),
-                                                    FaIcon(
-                                                      FontAwesomeIcons.music,
-                                                      color: Colors.white,
-                                                    ),
-                                                    SizedBox(
-                                                      width: mediaQuerry
-                                                              .size.width *
-                                                          0.05,
-                                                    ),
-                                                    Text('Go to Lyrics',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 20,
-                                                        ))
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height:
-                                                      mediaQuerry.size.height *
-                                                          0.03,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: mediaQuerry
-                                                              .size.width *
-                                                          0.06,
-                                                    ),
-                                                    Icon(
-                                                      Icons.queue_music,
-                                                      size: 35,
-                                                      color: Colors.white,
-                                                    ),
-                                                    SizedBox(
-                                                      width: mediaQuerry
-                                                              .size.width *
-                                                          0.05,
-                                                    ),
-                                                    Text('Go to Playlist',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 20,
-                                                        ))
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height:
-                                                      mediaQuerry.size.height *
-                                                          0.03,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: mediaQuerry
-                                                              .size.width *
-                                                          0.06,
-                                                    ),
-                                                    Icon(
-                                                      Icons.favorite,
-                                                      size: 30,
-                                                      color: Colors.white,
-                                                    ),
-                                                    SizedBox(
-                                                      width: mediaQuerry
-                                                              .size.width *
-                                                          0.05,
-                                                    ),
-                                                    Text('Add to Favorite',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 20,
-                                                        ))
-                                                  ],
-                                                ),
-                                              ],
+                            child: ListTile(
+                              leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(3),
+                                  child: QueryArtworkWidget(
+                                    artworkQuality: FilterQuality.high,
+                                    quality: 100,
+                                    artworkFit: BoxFit.cover,
+                                    id: items.data![index].songid,
+                                    type: ArtworkType.AUDIO,
+                                    artworkBorder: const BorderRadius.all(
+                                        Radius.circular(5)),
+                                  )),
+                              title: Text(
+                                items.data![index].songname,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                items.data![index].artistname ?? 'No Artist',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              trailing: InkWell(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(40),
+                                                topRight: Radius.circular(40))),
+                                        context: context,
+                                        builder: (context) {
+                                          return Container(
+                                            height:
+                                                mediaQuerry.size.height * 0.40,
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(40),
+                                                    topRight:
+                                                        Radius.circular(40))),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(10),
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: mediaQuerry
+                                                            .size.height *
+                                                        0.05,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.06,
+                                                      ),
+                                                      Icon(
+                                                        Icons.add_circle,
+                                                        size: 30,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.05,
+                                                      ),
+                                                      Text('Add to playlist',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: mediaQuerry
+                                                            .size.height *
+                                                        0.03,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.06,
+                                                      ),
+                                                      Icon(
+                                                        Icons.do_not_disturb_on,
+                                                        size: 30,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.05,
+                                                      ),
+                                                      Text(
+                                                          'Remove From PLaylist',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: mediaQuerry
+                                                            .size.height *
+                                                        0.03,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.06,
+                                                      ),
+                                                      FaIcon(
+                                                        FontAwesomeIcons.music,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.05,
+                                                      ),
+                                                      Text('Go to Lyrics',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: mediaQuerry
+                                                            .size.height *
+                                                        0.03,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.06,
+                                                      ),
+                                                      Icon(
+                                                        Icons.queue_music,
+                                                        size: 35,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.05,
+                                                      ),
+                                                      Text('Go to Playlist',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: mediaQuerry
+                                                            .size.height *
+                                                        0.03,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.06,
+                                                      ),
+                                                      Icon(
+                                                        Icons.favorite,
+                                                        size: 30,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.05,
+                                                      ),
+                                                      Text('Add to Favorite',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      });
-                                },
-                                child: Image.asset(
-                                  'assets/more.png',color: Colors.white,
-                                  height: 25,
-                                  width: 25,
-                                )),
-                            onTap: () {
-                              
-                              VisibilityManager.isVisible =true;
+                                          );
+                                        });
+                                  },
+                                  child: Image.asset(
+                                    'assets/more.png',
+                                    color: Colors.white,
+                                    height: 25,
+                                    width: 25,
+                                  )),
+                              onTap: () {
+                                VisibilityManager.isVisible = true;
 
-                              // for my song container ,
+                                // for my song container ,
 
-                              context
-                                  .read<SongModelProvider>()
-                                  .setId(items.data![index].songid);
-                              context
-                                  .read<SongModelProvider>()
-                                  .updateCurrentSong(items.data![index]);
+                                context
+                                    .read<SongModelProvider>()
+                                    .setId(items.data![index].songid);
+                                context
+                                    .read<SongModelProvider>()
+                                    .updateCurrentSong(items.data![index]);
 
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => Nowplaying(
-                                        musicModel: items.data![index],
-                                        
-                                      
-                                      )));
-                              playSong(items.data![index].uri);
-                            },
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => Nowplaying(
+                                          musicModel: items.data![index],
+                                          index: index,
+                                        )));
+                                playSong(items.data![index].uri);
+                              },
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    itemCount: items.data!.length,
+                        );
+                      },
+                      itemCount: items.data!.length,
+                    ),
                   ),
-                ),
-              );
-
-                
-                
+                );
               }
-
-              
             },
           ),
         ],

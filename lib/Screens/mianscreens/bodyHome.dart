@@ -69,16 +69,18 @@ class _HomeState extends State<Home> {
             topRight: Radius.circular(40),
           ),
           child: Stack(
+            
             alignment: Alignment.bottomCenter,
             children: [
               // visible container
-
+        
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
                     return Nowplaying(
                         musicModel:
                             context.watch<SongModelProvider>().currentSong!);
+                            
                   }));
                 },
                 child: Visibility(
@@ -184,7 +186,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-
+        
               ClipRRect(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),

@@ -103,56 +103,69 @@ class _SearchState extends State<Search> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      decoration: BoxDecoration( color:  Color.fromARGB(255, 101, 100, 100) ,   borderRadius: BorderRadius.circular(10 )),
-                      
+                      decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 101, 100, 100),
+                          borderRadius: BorderRadius.circular(10)),
                       child: ListTile(
-                        
                         leading: QueryArtworkWidget(
                           artworkBorder: BorderRadius.circular(5),
                           id: music.songid,
                           type: ArtworkType.AUDIO,
-                          artworkQuality:FilterQuality.high,
+                          artworkQuality: FilterQuality.high,
                         ),
-                        title: Text(music.songname ,  maxLines: 1,
-                        
-                        style:
-                                  
-                                      const TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
-                    
+                        title: Text(
+                          music.songname,
+                          maxLines: 1,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
                         ),
-                        subtitle: Text(music.artistname,style: TextStyle(color: Colors.white ),),
-                        trailing:Row( mainAxisSize: MainAxisSize.min,            children: [ favSongs.contains(music.songid)?  InkWell( onTap: (){
-                          removeLikedSong(music.songid);
-                          ifLickd();
-                          setState(() {
-                            
-                          });
-
-                        }, child: Icon( Icons.favorite,color: Colors.red,)):InkWell( onTap: () async{
-                          addlikedSong(music.songid);
-                        await  ifLickd();
-                        setState(() {
-                          
-                        });
-                         
-                        },  child: Icon(Icons.favorite,color: Colors.white,)), Text('  '),   Icon(Icons.play_circle,color: Colors.white,)],),
+                        subtitle: Text(
+                          music.artistname,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            favSongs.contains(music.songid)
+                                ? InkWell(
+                                    onTap: () {
+                                      removeLikedSong(music.songid);
+                                      ifLickd();
+                                      setState(() {});
+                                    },
+                                    child: Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                    ))
+                                : InkWell(
+                                    onTap: () async {
+                                      addlikedSong(music.songid);
+                                      await ifLickd();
+                                      setState(() {});
+                                    },
+                                    child: Icon(
+                                      Icons.favorite,
+                                      color: Colors.white,
+                                    )),
+                            Text('  '),
+                            Icon(
+                              Icons.play_circle,
+                              color: Colors.white,
+                            )
+                          ],
+                        ),
                         onTap: () {
-
-                          
-                                   context
-                                  .read<SongModelProvider>()
-                                  .setId(findmusic[index].songid);
-                                    context
-                                  .read<SongModelProvider>()
-                                  .updateCurrentSong(findmusic[index]); 
-
-                          
+                          context
+                              .read<SongModelProvider>()
+                              .setId(findmusic[index].songid);
+                          context
+                              .read<SongModelProvider>()
+                              .updateCurrentSong(findmusic[index]);
 
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Nowplaying(musicModel: music),
+                            builder: (context) => Nowplaying(musicModel: music, ),
                           ));
-                           VisibilityManager.isVisible = true;
- 
+                          VisibilityManager.isVisible = true;
                         },
                       ),
                     ),
@@ -170,13 +183,12 @@ class _SearchState extends State<Search> {
     final suggestion = allSongs.where((music) {
       final songname = music.songname.toLowerCase();
       final input = query.toLowerCase();
-  
+
       return songname.contains(input);
     }).toList();
 
     setState(() {
       findmusic = suggestion;
-      
     });
   }
-}  
+}
