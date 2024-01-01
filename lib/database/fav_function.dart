@@ -15,36 +15,24 @@ Future<void> addlikedSong(int songId) async {
   print(box.length);
 }
 
-List<int>favSongs=[];
-ifLickd()async{
+List<int> favSongs = [];
+ifLickd() async {
   favSongs.clear();
   final box = await Hive.openBox<LikedSongModel>(_boxName);
-  List<LikedSongModel>lsong=box.values.toList();
-  for(LikedSongModel s in lsong){
-  
+  List<LikedSongModel> lsong = box.values.toList();
+  for (LikedSongModel s in lsong) {
     favSongs.add(s.songid);
-   
   }
-  
-  
-
 }
-
-
 
 Future<void> removeLikedSong(int songId) async {
   final box = await Hive.openBox<LikedSongModel>(_boxName);
 
-  for( LikedSongModel s in box.values.toList()){
-  
-      if(songId==s.songid){
-        box.delete(s.key);
-      
-      }
-
-   
+  for (LikedSongModel s in box.values.toList()) {
+    if (songId == s.songid) {
+      box.delete(s.key);
+    }
   }
-
 }
 
 Future<List<LikedSongModel>> getLikedSongs() async {
@@ -52,26 +40,20 @@ Future<List<LikedSongModel>> getLikedSongs() async {
 
   return box.values.toList();
 }
-Future<List<MusicModel>> showLike()async{
-    final box = await Hive.openBox<LikedSongModel>(_boxName);
-    List<MusicModel> likedsongs=[];
-    
 
-    List<MusicModel> sng=  await getAllSongs();
+Future<List<MusicModel>> showLike() async {
+  final box = await Hive.openBox<LikedSongModel>(_boxName);
+  List<MusicModel> likedsongs = [];
 
-    for(int i =0;i<sng.length;i++){
-      for( int j=0;j<box.length;j++){
-        if(box.values.toList()[j].songid==sng[i].songid){
+  List<MusicModel> sng = await getAllSongs();
+
+  for (int i = 0; i < sng.length; i++) {
+    for (int j = 0; j < box.length; j++) {
+      if (box.values.toList()[j].songid == sng[i].songid) {
         likedsongs.add(sng[i]);
-        }
-
       }
     }
+  }
 
-
-
-
-
-
-  return  likedsongs;
+  return likedsongs;
 }

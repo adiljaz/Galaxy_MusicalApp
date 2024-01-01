@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:galaxy/Screens/mianscreens/bodyHome.dart';
-import 'package:galaxy/Screens/mianscreens/home.dart';
+import 'package:galaxy/Screens/home/home.dart';
 import 'package:galaxy/Screens/lyrics.dart';
 import 'package:galaxy/Screens/playlist.dart';
+import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_model.dart';
+import 'package:galaxy/database/fav_function.dart';
 import 'package:galaxy/provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
@@ -13,13 +15,17 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-
-
+// ignore: must_be_immutable
 class Nowplaying extends StatefulWidget {
-   Nowplaying({super.key, required this.musicModel,int? index});
+  Nowplaying(
+      {super.key,
+      required this.musicModel,
+      required this.index,
+      required this.songmodel});
 
-  final MusicModel musicModel;
-  int? index;
+  MusicModel musicModel;
+  int index;
+  List<MusicModel> songmodel;
 
   @override
   State<Nowplaying> createState() => _NowplayingState();
@@ -54,7 +60,6 @@ class _NowplayingState extends State<Nowplaying> {
       });
     } on Exception {
       print('unsupported File ');
-
     }
 
     audioplayer.durationStream.listen((d) {
@@ -66,7 +71,9 @@ class _NowplayingState extends State<Nowplaying> {
     audioplayer.positionStream.listen((p) {
       setState(() {
         _position = p;
+           
       });
+       
     });
   }
 
@@ -92,7 +99,7 @@ class _NowplayingState extends State<Nowplaying> {
                               },
                               icon: FaIcon(
                                 FontAwesomeIcons.circleChevronDown,
-                                color: Colors.white,
+                                color: Colormanager.icons,
                               ))),
                       Padding(
                         padding: const EdgeInsets.only(left: 70, top: 20),
@@ -101,7 +108,7 @@ class _NowplayingState extends State<Nowplaying> {
                           style: GoogleFonts.lato(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
-                              color: Colors.white),
+                              color: Colormanager.titleText),
                         ),
                       ),
                       Padding(
@@ -110,152 +117,149 @@ class _NowplayingState extends State<Nowplaying> {
                           left: 40,
                         ),
                         child: IconButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(40),
-                                          topRight: Radius.circular(40))),
-                                  context: context,
-                                  builder: (context) {
-                                    return Container(
-                                      height: mediaQuerry.size.height * 0.35,
-                                      decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(40),
-                                              topRight: Radius.circular(40))),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: mediaQuerry.size.height *
-                                                  0.05,
-                                            ),
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  width:
-                                                      mediaQuerry.size.width *
-                                                          0.06,
-                                                ),
-                                                Icon(
-                                                  Icons.add_circle,
-                                                  size: 30,
-                                                  color: Colors.white,
-                                                ),
-                                                SizedBox(
-                                                  width:
-                                                      mediaQuerry.size.width *
-                                                          0.05,
-                                                ),
-                                                Text('Add to playlist',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20,
-                                                    ))
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: mediaQuerry.size.height *
-                                                  0.03,
-                                            ),
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  width:
-                                                      mediaQuerry.size.width *
-                                                          0.06,
-                                                ),
-                                                Icon(
-                                                  Icons.do_not_disturb_on,
-                                                  size: 30,
-                                                  color: Colors.white,
-                                                ),
-                                                SizedBox(
-                                                  width:
-                                                      mediaQuerry.size.width *
-                                                          0.05,
-                                                ),
-                                                Text('Remove From PLaylist',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20,
-                                                    ))
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: mediaQuerry.size.height *
-                                                  0.03,
-                                            ),
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  width:
-                                                      mediaQuerry.size.width *
-                                                          0.06,
-                                                ),
-                                                FaIcon(
-                                                  FontAwesomeIcons.music,
-                                                  color: Colors.white,
-                                                ),
-                                                SizedBox(
-                                                  width:
-                                                      mediaQuerry.size.width *
-                                                          0.05,
-                                                ),
-                                                Text('Go to Lyrics',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20,
-                                                    ))
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: mediaQuerry.size.height *
-                                                  0.03,
-                                            ),
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  width:
-                                                      mediaQuerry.size.width *
-                                                          0.06,
-                                                ),
-                                                Icon(
-                                                  Icons.queue_music,
-                                                  size: 35,
-                                                  color: Colors.white,
-                                                ),
-                                                SizedBox(
-                                                  width:
-                                                      mediaQuerry.size.width *
-                                                          0.05,
-                                                ),
-                                                Text('Go to Playlist',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20,
-                                                    ))
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(40),
+                                        topRight: Radius.circular(40))),
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    height: mediaQuerry.size.height * 0.35,
+                                    decoration: BoxDecoration(
+                                        color: Colormanager.sheetcolor,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(40),
+                                            topRight: Radius.circular(40))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height:
+                                                mediaQuerry.size.height * 0.05,
+                                          ),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: mediaQuerry.size.width *
+                                                    0.06,
+                                              ),
+                                              Icon(
+                                                Icons.add_circle,
+                                                size: 30,
+                                                color: Colormanager.sheeticon,
+                                              ),
+                                              SizedBox(
+                                                width: mediaQuerry.size.width *
+                                                    0.05,
+                                              ),
+                                              Text('Add to playlist',
+                                                  style: TextStyle(
+                                                    color:
+                                                        Colormanager.sheetText,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                  ))
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height:
+                                                mediaQuerry.size.height * 0.03,
+                                          ),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: mediaQuerry.size.width *
+                                                    0.06,
+                                              ),
+                                              Icon(
+                                                Icons.do_not_disturb_on,
+                                                size: 30,
+                                                color: Colormanager.sheeticon,
+                                              ),
+                                              SizedBox(
+                                                width: mediaQuerry.size.width *
+                                                    0.05,
+                                              ),
+                                              Text('Remove From PLaylist',
+                                                  style: TextStyle(
+                                                    color:
+                                                        Colormanager.sheetText,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                  ))
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height:
+                                                mediaQuerry.size.height * 0.03,
+                                          ),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: mediaQuerry.size.width *
+                                                    0.06,
+                                              ),
+                                              FaIcon(
+                                                FontAwesomeIcons.music,
+                                                color: Colormanager.sheeticon,
+                                              ),
+                                              SizedBox(
+                                                width: mediaQuerry.size.width *
+                                                    0.05,
+                                              ),
+                                              Text('Go to Lyrics',
+                                                  style: TextStyle(
+                                                    color:
+                                                        Colormanager.sheetText,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                  ))
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height:
+                                                mediaQuerry.size.height * 0.03,
+                                          ),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: mediaQuerry.size.width *
+                                                    0.06,
+                                              ),
+                                              Icon(
+                                                Icons.queue_music,
+                                                size: 35,
+                                                color: Colormanager.sheeticon,
+                                              ),
+                                              SizedBox(
+                                                width: mediaQuerry.size.width *
+                                                    0.05,
+                                              ),
+                                              Text('Add to Playlist',
+                                                  style: TextStyle(
+                                                    color:
+                                                        Colormanager.sheetText,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                  ))
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  });
-                            },
-                            icon: Icon(Icons.more_horiz,
-                                color: Colors.white, size: 29)),
+                                    ),
+                                  );
+                                });
+                          },
+                          icon: Icon(
+                            Icons.more_horiz,
+                            color: Colormanager.sheetText,
+                            size: 29,
+                          ),
+                          color: Colormanager.icons,
+                        ),
                       )
                     ],
                   ),
@@ -268,7 +272,7 @@ class _NowplayingState extends State<Nowplaying> {
                           bottomRight: Radius.circular(40))),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only( 
+                  padding: const EdgeInsets.only(
                     top: 80,
                     left: 38,
                     right: 38,
@@ -295,19 +299,42 @@ class _NowplayingState extends State<Nowplaying> {
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15),
               child: ListTile(
-                
-                title: Text(widget.musicModel.songname,
-                    style: GoogleFonts.lato(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    )),
-                subtitle: Text(widget.musicModel.artistname??'no artist found',
-                    style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
-                trailing: Icon(
-                  Icons.favorite,
-                  color: Colors.red, //   favorite butto i need to change
-                ),
-              ),
+                  title: Text(widget.musicModel.songname,
+                      maxLines: 1,
+                      style: GoogleFonts.lato(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colormanager.BalckText,
+                      )),
+                  subtitle: Text(
+                      widget.musicModel.artistname ?? 'no artist found',
+                      maxLines: 1,
+                      style: GoogleFonts.lato(
+                          fontWeight: FontWeight.bold,
+                          color: Colormanager.BalckText)),
+                  trailing: favSongs.contains(widget.musicModel.songid)
+                      ? InkWell(
+                          onTap: () {
+                            removeLikedSong(widget.musicModel.songid);
+                            ifLickd();
+                            setState(() {});
+                          },
+                          child: Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            addlikedSong(widget.musicModel.songid);
+                            ifLickd();
+                            setState(() {});
+                          },
+                          child: Icon(
+                            Icons.favorite_border,
+                            color: Colors.red,
+                          ),
+                        )),
             ),
             Container(
               height: 10,
@@ -344,11 +371,16 @@ class _NowplayingState extends State<Nowplaying> {
                 children: [
                   Text(
                     _position.toString().split('.')[0],
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colormanager.BalckText),
                   ),
                   Text(_duration.toString().split('.')[0],
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colormanager.BalckText)),
                 ],
               ),
             ),
@@ -361,18 +393,27 @@ class _NowplayingState extends State<Nowplaying> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  FaIcon(
-                    FontAwesomeIcons.shuffle,
-                    size: 20,
-                  ),
+                  // suffle
                   InkWell(
                     onTap: () {
-                      audioplayer.hasPrevious
-                          ? audioplayer.seekToPrevious
-                          : null;
+                      shuffleSongs();
+                    },
+                    child: FaIcon(
+                      FontAwesomeIcons.shuffle,
+                      size: 20,
+                      color: audioplayer.shuffleModeEnabled
+                          ? Colors.blueGrey
+                          : Colors.black,
+                    ),
+                  ),
+
+                  InkWell(
+                    onTap: () {
+                      playPrevious();
                     },
                     child: FaIcon(
                       FontAwesomeIcons.backwardStep,
+                      color: Colormanager.blackicon,
                       size: 35,
                     ),
                   ),
@@ -398,19 +439,26 @@ class _NowplayingState extends State<Nowplaying> {
 
                   InkWell(
                     onTap: () {
-                      // _playNextSong();
-                   
+                      playnext();
                     },
-                    child: FaIcon(
-                      FontAwesomeIcons.forwardStep,
-                      size: 35,
-                    ),
+                    child: FaIcon(FontAwesomeIcons.forwardStep,
+                        size: 35, color: Colormanager.blackicon),
                   ),
 
-                  FaIcon(
-                    FontAwesomeIcons.rotate,
-                    size: 20,
-                  )
+                  // rotate ..
+
+                  InkWell(
+                    onTap: () {
+                      loopmode();
+                    },
+                    child: FaIcon(
+                      FontAwesomeIcons.rotate,
+                      size: 20,
+                      color: audioplayer.loopMode == LoopMode.off
+                          ? Colors.black
+                          : Colors.blueGrey,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -434,12 +482,17 @@ class _NowplayingState extends State<Nowplaying> {
                       child: Text(
                         'Home  ',
                         style: GoogleFonts.lato(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colormanager.BalckText),
                       ),
                     )),
                 Text(
                   '|',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      color: Colormanager.BalckText),
                 ),
                 InkWell(
                     onTap: () {
@@ -448,7 +501,9 @@ class _NowplayingState extends State<Nowplaying> {
                     },
                     child: Text('    Lyrics ',
                         style: GoogleFonts.lato(
-                            fontWeight: FontWeight.bold, fontSize: 18))),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colormanager.BalckText))),
               ],
             )
           ],
@@ -457,15 +512,67 @@ class _NowplayingState extends State<Nowplaying> {
     );
   }
 
-//   Future<void> _playNextSong() async {
-//  List<MusicModel> songs = await _fetchSongs(); // Replace with your actual logic to fetch songs
-//  int currentSongIndex = songs.indexWhere((song) => song.id == currentSongId);
-//  if (currentSongIndex == -1 || currentSongIndex >= songs.length - 1) {
-//     return; // No next song or already at the last song
-//  }
-//  Song nextSong = songs[currentSongIndex + 1];
-//  // Update your player to play the next song
-// }
+  void shuffleSongs() {
+    setState(() {
+      audioplayer.setShuffleModeEnabled(!audioplayer.shuffleModeEnabled);
+      if (audioplayer.shuffleModeEnabled) {
+        // If shuffle mode is enabled, shuffle the playlist
+        List<MusicModel> shuffledSongs = List.from(widget.songmodel);
+        shuffledSongs.shuffle();
+        widget.songmodel = shuffledSongs;
+        widget.index = 0;
+        widget.musicModel = widget.songmodel[widget.index];
+        playSong();
+      } else {
+        // If shuffle mode is disabled, revert to the original playlist order
+        widget.songmodel = List.from(widget.songmodel);
+        widget.index = widget.songmodel.indexOf(widget.musicModel);
+        playSong();
+      }
+    });
+  }
+
+  void loopmode() {
+    setState(() {
+      if (audioplayer.loopMode == LoopMode.off) {
+        audioplayer.setLoopMode(LoopMode.one);
+      } else {
+        audioplayer.setLoopMode(LoopMode.off);
+      }
+    });
+  }
+
+  void playnext() {
+    if (widget.index < widget.songmodel.length - 1) {
+      setState(() {
+        widget.index++;
+        widget.musicModel = widget.songmodel[widget.index];
+        playSong();
+      });
+    } else {
+      setState(() {
+        widget.index = 0;
+        widget.musicModel = widget.songmodel[widget.index];
+        playSong();
+      });
+    }
+  }
+
+  playPrevious() {
+    if (widget.index > 0) {
+      setState(() {
+        widget.index--;
+        widget.musicModel = widget.songmodel[widget.index];
+        playSong();
+      });
+    } else {
+      setState(() {
+        widget.index = widget.songmodel.length - 1;
+        widget.musicModel = widget.songmodel[widget.index];
+        playSong();
+      });
+    }
+  }
 
   void changetoseconds(int seconds) {
     Duration duration = Duration(seconds: seconds);

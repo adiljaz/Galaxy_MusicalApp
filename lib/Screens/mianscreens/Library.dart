@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/likedsongs.dart';
+import 'package:galaxy/colors/colors.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -17,6 +18,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     MediaQueryData mediaQuerry = MediaQuery.of(context);
 
     return Scaffold(
+      backgroundColor: Colormanager.scaffoldcolor,                                  
       body: SafeArea(
         child: Column(
           children: [
@@ -24,7 +26,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               height: mediaQuerry.size.height * 0.2,
               width: mediaQuerry.size.width * 1,
               decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: Colormanager.container,
                   borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(40),
                     bottomLeft: Radius.circular(40),
@@ -34,7 +36,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 child: Text(
                   'Library',
                   style: GoogleFonts.lato(
-                      color: Colors.white,
+                      color: Colormanager.titleText,
                       fontWeight: FontWeight.bold,
                       fontSize: 20),
                 ),
@@ -50,7 +52,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 Text(
                   'Your Library',
                   style: GoogleFonts.lato(
-                      color: Colors.black,
+                      color:Colormanager.maintext,
                       fontWeight: FontWeight.bold,
                       fontSize: 20),
                 ),
@@ -63,10 +65,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              backgroundColor: Colors.black,
+                              backgroundColor: Colormanager.sheetcolor,
                               title: Text(
                                 'Add new playlist',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color:Colormanager.text),
                               ),
                               actions: [
                                 TextFormField(
@@ -90,14 +92,14 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                       },
                                       child: Text(
                                         'Cancel',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color:Colormanager.text),
                                       ),
                                     ),
                                     TextButton(
                                         onPressed: () {},
                                         child: Text(
                                           'Add',
-                                          style: TextStyle(color: Colors.white),
+                                          style: TextStyle(color:Colormanager.text),
                                         ))
                                   ],
                                 )
@@ -148,7 +150,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                         child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Colormanager.container,
                         ),
                         height: 130,
                         width: 130,
@@ -168,7 +170,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                         child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Colormanager.container,
                         ),
                         height: 130,
                         width: 130,
@@ -181,7 +183,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     return Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.black,
+                          color:Colormanager.container,
                         ),
                         height: 130,
                         width: 130,

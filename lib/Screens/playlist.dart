@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:galaxy/colors/colors.dart';
 
 class Playlist extends StatelessWidget {
   const Playlist({super.key});
@@ -9,7 +10,9 @@ class Playlist extends StatelessWidget {
       MediaQueryData mediaQuerry = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colormanager.scaffoldcolor,
         body: Column(
+          
             children: [
               Stack(
                 children: [

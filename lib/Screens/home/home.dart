@@ -5,6 +5,7 @@ import 'package:galaxy/Screens/Allsongs.dart';
 import 'package:galaxy/Screens/mianscreens/bodyHome.dart';
 
 import 'package:galaxy/Screens/nowplaying.dart';
+import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_model.dart';
 
 import 'package:galaxy/provider/provider.dart';
@@ -21,6 +22,7 @@ import 'package:provider/provider.dart';
 final audioplayer = AudioPlayer();
 
 class MainHome extends StatefulWidget {
+
   MainHome({super.key});
 
   @override
@@ -65,12 +67,13 @@ class _MainHomeState extends State<MainHome> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuerry = MediaQuery.of(context);
     return Scaffold(
+      backgroundColor: Colormanager.scaffoldcolor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             decoration: BoxDecoration(
-                color: Colors.black, border: Border.all(color: Colors.black)),
+                color:Colormanager.container, border: Border.all(color: Colors.black)),
             height: mediaQuerry.size.height * 0.07,
             child: Row(
               children: [
@@ -82,19 +85,19 @@ class _MainHomeState extends State<MainHome> {
                       onTap: () {
                         Home.scaffoldKey.currentState?.openDrawer();
                       },
-                      child: const Icon(
+                      child:  Icon(
                         Icons.menu,
-                        color: Colors.white,
+                        color:Colormanager.icons ,
                         size: 30,
                       ));
                 }),
                 SizedBox(
                   width: mediaQuerry.size.width * 0.28,
                 ),
-                const Text(
+                Text(
                   'Home',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Colormanager.titleText,
                       fontWeight: FontWeight.w500,
                       fontSize: 20),
                 ),
@@ -107,8 +110,8 @@ class _MainHomeState extends State<MainHome> {
             children: [
               Container(
                 height: mediaQuerry.size.height * 0.2,
-                decoration: const BoxDecoration(
-                    color: Colors.black,
+                decoration: BoxDecoration(
+                    color:Colormanager.container,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(50),
                         bottomRight: Radius.circular(50))),
@@ -181,7 +184,7 @@ class _MainHomeState extends State<MainHome> {
                         style: GoogleFonts.lato(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black),
+                            color:Colormanager.maintext),
                       ),
                       SizedBox(width: mediaQuerry.size.width * 0.1),
                       InkWell(
@@ -218,7 +221,7 @@ class _MainHomeState extends State<MainHome> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Color.fromARGB(255, 101, 100, 100),
+                              color:Colormanager.listtile,
                             ),
                             child: ListTile(
                               leading: ClipRRect(
@@ -236,14 +239,14 @@ class _MainHomeState extends State<MainHome> {
                                 items.data![index].songname,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    color: Colors.white,
+                                style:  TextStyle(
+                                    color: Colormanager.text,
                                     fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
                                 items.data![index].artistname ?? 'No Artist',
-                                style: const TextStyle(
-                                    color: Colors.white,
+                                style:  TextStyle(
+                                    color: Colormanager.text,
                                     fontWeight: FontWeight.w300),
                               ),
                               trailing: InkWell(
@@ -284,7 +287,7 @@ class _MainHomeState extends State<MainHome> {
                                                       Icon(
                                                         Icons.add_circle,
                                                         size: 30,
-                                                        color: Colors.white,
+                                                        color: Colormanager.sheeticon,
                                                       ),
                                                       SizedBox(
                                                         width: mediaQuerry
@@ -293,7 +296,7 @@ class _MainHomeState extends State<MainHome> {
                                                       ),
                                                       Text('Add to playlist',
                                                           style: TextStyle(
-                                                            color: Colors.white,
+                                                            color:Colormanager.sheetText,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 20,
@@ -315,7 +318,7 @@ class _MainHomeState extends State<MainHome> {
                                                       Icon(
                                                         Icons.do_not_disturb_on,
                                                         size: 30,
-                                                        color: Colors.white,
+                                                        color: Colormanager.sheeticon,
                                                       ),
                                                       SizedBox(
                                                         width: mediaQuerry
@@ -325,7 +328,7 @@ class _MainHomeState extends State<MainHome> {
                                                       Text(
                                                           'Remove From PLaylist',
                                                           style: TextStyle(
-                                                            color: Colors.white,
+                                                            color: Colormanager.sheetText,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 20,
@@ -346,7 +349,7 @@ class _MainHomeState extends State<MainHome> {
                                                       ),
                                                       FaIcon(
                                                         FontAwesomeIcons.music,
-                                                        color: Colors.white,
+                                                        color: Colormanager.sheeticon,
                                                       ),
                                                       SizedBox(
                                                         width: mediaQuerry
@@ -355,7 +358,7 @@ class _MainHomeState extends State<MainHome> {
                                                       ),
                                                       Text('Go to Lyrics',
                                                           style: TextStyle(
-                                                            color: Colors.white,
+                                                            color: Colormanager.sheetText,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 20,
@@ -377,7 +380,7 @@ class _MainHomeState extends State<MainHome> {
                                                       Icon(
                                                         Icons.queue_music,
                                                         size: 35,
-                                                        color: Colors.white,
+                                                        color: Colormanager.sheeticon,
                                                       ),
                                                       SizedBox(
                                                         width: mediaQuerry
@@ -386,7 +389,7 @@ class _MainHomeState extends State<MainHome> {
                                                       ),
                                                       Text('Go to Playlist',
                                                           style: TextStyle(
-                                                            color: Colors.white,
+                                                            color: Colormanager.sheetText,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 20,
@@ -408,7 +411,7 @@ class _MainHomeState extends State<MainHome> {
                                                       Icon(
                                                         Icons.favorite,
                                                         size: 30,
-                                                        color: Colors.white,
+                                                        color: Colormanager.sheeticon,
                                                       ),
                                                       SizedBox(
                                                         width: mediaQuerry
@@ -417,7 +420,7 @@ class _MainHomeState extends State<MainHome> {
                                                       ),
                                                       Text('Add to Favorite',
                                                           style: TextStyle(
-                                                            color: Colors.white,
+                                                            color: Colormanager.sheetText,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 20,
@@ -448,10 +451,17 @@ class _MainHomeState extends State<MainHome> {
                                     .read<SongModelProvider>()
                                     .updateCurrentSong(items.data![index]);
 
+                                    MusicModel selectedsong=items.data![index];
+                                    int selectedIndex=index;
+                                    List<MusicModel>songlist=items.data!;
+
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => Nowplaying(
                                           musicModel: items.data![index],
                                           index: index,
+                                          songmodel: items.data!,
+                                          
+                                          
                                         )));
                                 playSong(items.data![index].uri);
                               },

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:galaxy/Screens/Allsongs.dart';
 
 import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/Screens/visible.dart';
+import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/database/db_model.dart';
 import 'package:galaxy/database/fav_function.dart';
@@ -39,6 +41,7 @@ class _SearchState extends State<Search> {
     MediaQueryData mediaQuerry = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colormanager.scaffoldcolor,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -58,7 +61,7 @@ class _SearchState extends State<Search> {
                                 child: Text(
                                   'Search  ',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colormanager.titleText,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -86,7 +89,7 @@ class _SearchState extends State<Search> {
                     ),
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: Colormanager.container,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(40),
                       bottomRight: Radius.circular(40),
@@ -104,9 +107,10 @@ class _SearchState extends State<Search> {
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 101, 100, 100),
+                          color: Colormanager.listtile,
                           borderRadius: BorderRadius.circular(10)),
                       child: ListTile(
+                        
                         leading: QueryArtworkWidget(
                           artworkBorder: BorderRadius.circular(5),
                           id: music.songid,
@@ -116,12 +120,12 @@ class _SearchState extends State<Search> {
                         title: Text(
                           music.songname,
                           maxLines: 1,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
+                          style:  TextStyle(
+                              fontWeight: FontWeight.bold, color: Colormanager.text),
                         ),
                         subtitle: Text(
                           music.artistname,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color:Colormanager.text ),
                         ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -150,7 +154,7 @@ class _SearchState extends State<Search> {
                             Text('  '),
                             Icon(
                               Icons.play_circle,
-                              color: Colors.white,
+                              color: Colormanager.icons,
                             )
                           ],
                         ),
@@ -163,7 +167,13 @@ class _SearchState extends State<Search> {
                               .updateCurrentSong(findmusic[index]);
 
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Nowplaying(musicModel: music, ),
+                            builder: (context) => Nowplaying(
+                              musicModel:findmusic[index],
+                                          index: index,
+                                          songmodel: allSongs,
+                                          
+                                          
+                             ),
                           ));
                           VisibilityManager.isVisible = true;
                         },

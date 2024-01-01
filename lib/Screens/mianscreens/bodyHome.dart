@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/mianscreens/Library.dart';
 import 'package:galaxy/Screens/mianscreens/audio.dart';
-import 'package:galaxy/Screens/mianscreens/home.dart';
+import 'package:galaxy/Screens/home/home.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
+import 'package:galaxy/colors/colors.dart';
+import 'package:galaxy/database/db_model.dart';
 
 import 'package:galaxy/provider/provider.dart';
 
@@ -43,9 +45,12 @@ class _HomeState extends State<Home> {
 
     return SafeArea(
       child: Scaffold(
+        
+        
         key: Home.scaffoldKey,
         drawer: Drawer(
           child: ListView(
+            
             children: [
               ListTile(
                 leading: Text('kjankjfnwekj '),
@@ -61,35 +66,46 @@ class _HomeState extends State<Home> {
         ),
         body: pages[_selectedindex],
         bottomNavigationBar: ClipRRect(
-        
           
-           
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
           ),
           child: Stack(
             
+            
             alignment: Alignment.bottomCenter,
             children: [
               // visible container
-        
+
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+
+                   MusicModel currentSong = context.watch<SongModelProvider>().currentSong!;
+                   int currentIndex=context.watch<SongModelProvider>().id;
+                    List<MusicModel> songList = context.watch<SongModelProvider>().songList;
+
                     return Nowplaying(
-                        musicModel:
-                            context.watch<SongModelProvider>().currentSong!);
-                            
+                        index:currentIndex ,
+                        musicModel:currentSong ,
+                        songmodel:songList,
+
+                        
+                        
+                           );
+                          
                   }));
                 },
                 child: Visibility(
+                  
                   visible: VisibilityManager.isVisible &&
                       _selectedindex != pages.length - 1,
                   child: Container(
+                    
                     height: mediaQuerry.size.height * 0.18,
                     width: mediaQuerry.size.width * 1,
-                    color: const Color.fromARGB(255, 0, 0, 0),
+                    color: Colormanager.container,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -127,8 +143,7 @@ class _HomeState extends State<Home> {
                                           'No Song',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: const Color.fromARGB(
-                                              255, 255, 255, 255)),
+                                          color:Colormanager.text),
                                     ),
                                   ),
                                   SizedBox(
@@ -145,8 +160,7 @@ class _HomeState extends State<Home> {
                                           'No Artist',
                                       style: TextStyle(
                                           fontSize: 12,
-                                          color: const Color.fromARGB(
-                                              255, 255, 255, 255)),
+                                          color: Colormanager.text),
                                     ),
                                   ),
                                 ],
@@ -156,7 +170,7 @@ class _HomeState extends State<Home> {
                               ),
                               InkWell(
                                   child: FaIcon(FontAwesomeIcons.backwardStep,
-                                      color: Colors.white)),
+                                      color:Colormanager.icons)),
                               SizedBox(
                                 width: mediaQuerry.size.width * 0.02,
                               ),
@@ -168,7 +182,7 @@ class _HomeState extends State<Home> {
                                   _isplaying
                                       ? Icons.pause_circle
                                       : Icons.play_circle,
-                                  color: Colors.white,
+                                  color: Colormanager.icons,
                                   size: 42,
                                 ),
                               ),
@@ -177,7 +191,7 @@ class _HomeState extends State<Home> {
                               ),
                               InkWell(
                                   child: FaIcon(FontAwesomeIcons.forwardStep,
-                                      color: Colors.white)),
+                                      color: Colormanager.icons)),
                             ],
                           ),
                         ),
@@ -186,7 +200,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-        
+
               ClipRRect(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),

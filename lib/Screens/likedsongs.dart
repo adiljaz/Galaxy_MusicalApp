@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/fav_function.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -11,6 +12,7 @@ class LikedSongs extends StatelessWidget {
     MediaQueryData mediaQuerry = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colormanager.scaffoldcolor,
         body: Column(
           children: [
             Stack(
@@ -37,11 +39,11 @@ class LikedSongs extends StatelessWidget {
                             SizedBox(
                               width: mediaQuerry.size.width * 0.2,
                             ),
-                            const Center(
+                            Center(
                                 child: Text(
                               'Liked Songs',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colormanager.titleText,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold),
                             ))
@@ -58,13 +60,16 @@ class LikedSongs extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               hintText: 'Search..',
-                              suffixIcon: const Icon(Icons.search)),
+                              suffixIcon: const Icon(
+                                Icons.search,
+                                color: Colors.black,
+                              )),
                         ),
                       ],
                     ),
                   )),
-                  decoration: const BoxDecoration(
-                      color: Colors.black,
+                  decoration: BoxDecoration(
+                      color: Colormanager.container,
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(40),
                           bottomRight: Radius.circular(40))),
@@ -74,30 +79,35 @@ class LikedSongs extends StatelessWidget {
             SizedBox(
               height: mediaQuerry.size.height * 0.03,
             ),
-            
-
-
-            Expanded (child: FutureBuilder(    future:showLike() , builder:(context, snapshot) {
-           return   ListView.builder(
-            itemCount:snapshot.data!.length ,
-            itemBuilder: (context, index) {
-                return 
-                 
-                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                       decoration: BoxDecoration(color: Color.fromARGB(255, 112, 112, 112,),borderRadius: BorderRadius.circular(10)),
-                      child: ListTile(
-                        leading:QueryArtworkWidget(  artworkBorder: BorderRadius.circular(4),   id:snapshot.data![index].songid ,type:ArtworkType.AUDIO, ),
-                        title:Text(snapshot.data![index].songname) , subtitle: Text(snapshot.data![index].artistname), trailing: Icon(Icons.favorite),),
-                    ),
-                  );
-                
-
-              },);
-            }, ))
-
-
+            Expanded(
+                child: FutureBuilder(
+              future: showLike(),
+              builder: (context, snapshot) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color:Colormanager.listtile, 
+                            borderRadius: BorderRadius.circular(10)),
+                        child: ListTile(
+                          leading: QueryArtworkWidget(
+                            artworkBorder: BorderRadius.circular(4),
+                            id: snapshot.data![index].songid,
+                            type: ArtworkType.AUDIO,
+                          ),
+                          title: Text(snapshot.data![index].songname,style: TextStyle(color: Colormanager.text),),
+                          subtitle: Text(snapshot.data![index].artistname, style: TextStyle(color: Colormanager.text)),
+                          trailing: Icon(Icons.favorite),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ))
           ],
         ),
       ),
