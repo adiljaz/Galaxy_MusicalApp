@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:galaxy/Screens/home/home.dart';
 import 'package:galaxy/database/db_model.dart';
 
 class SongModelProvider with ChangeNotifier {
@@ -26,4 +27,34 @@ class SongModelProvider with ChangeNotifier {
     _currentSong = song;
     notifyListeners();
   }
+
+ void setCurrentSong(int index, int i) {
+    if (index >= 0 && index < _songList.length) {
+      _id = index;
+      _currentSong = _songList[index];
+      notifyListeners();
+    }
+  }
+
+
+  bool _isPlaying = false;
+
+  bool get isPlaying => _isPlaying;
+
+  void togglePlayPause() {
+    if (_isPlaying) {
+     
+      audioplayer.play();
+    } else {
+       audioplayer.pause();
+      
+    }
+    _isPlaying = !_isPlaying;
+    notifyListeners();
+  }
+
+  
+
+  
+  
 }

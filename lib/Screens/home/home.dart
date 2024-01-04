@@ -7,6 +7,7 @@ import 'package:galaxy/Screens/mianscreens/bodyHome.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_model.dart';
+import 'package:galaxy/favorite/fav_function.dart';
 
 import 'package:galaxy/provider/provider.dart';
 
@@ -16,6 +17,7 @@ import 'package:galaxy/database/db_functions.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +32,9 @@ class MainHome extends StatefulWidget {
 }
 
 class _MainHomeState extends State<MainHome> {
+
+
+  
   @override
   void initState() {
     // TODO: implement initState
@@ -62,6 +67,11 @@ class _MainHomeState extends State<MainHome> {
       audioplayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
     } on Exception {}
   }
+
+
+
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -106,70 +116,103 @@ class _MainHomeState extends State<MainHome> {
           ),
 
           // stack starting
-          Stack(
-            children: [
-              Container(
-                height: mediaQuerry.size.height * 0.2,
-                decoration: BoxDecoration(
-                    color:Colormanager.container,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(50),
-                        bottomRight: Radius.circular(50))),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30, left: 35),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(20)),
-                  height: mediaQuerry.size.height * 0.3,
-                  width: mediaQuerry.size.width * 0.6,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9DzpVGpCf2UMKt0ERDjTekp0bXkayaC0uzA&usqp=CAU',
-                        fit: BoxFit.cover,
-                      )),
-                ),
-              ),
-              Positioned(
-                left: 40,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 35),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(20)),
-                    height: mediaQuerry.size.height * 0.3,
-                    width: mediaQuerry.size.width * 0.6,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: Image.network(
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRskycHBe40Fu0JO58uFs8F0_CwzhP6R5w3w&usqp=CAU',
-                          fit: BoxFit.cover,
-                        )),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 80,
-                child: Padding(
-                    padding: const EdgeInsets.only(top: 30, left: 35),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(50)),
-                      height: mediaQuerry.size.height * 0.3,
-                      width: mediaQuerry.size.width * 0.6,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(30),
-                          child: Image.network(
-                            'https://e1.pxfuel.com/desktop-wallpaper/433/147/desktop-wallpaper-steam-workshop-xxxtentacion-animated-backgrounds-red-led-xxxtentacion-animated.jpg',
-                            fit: BoxFit.cover,
-                          )),
-                    )),
-              ),
-            ],
+          FutureBuilder(
+            future: fetchSongsfromDb(),
+            builder: (context,items){
+              return  Stack(
+  children: [
+    Container(
+      height: mediaQuerry.size.height * 0.2,
+      decoration: BoxDecoration(
+        color: Colormanager.container,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(50),
+          bottomRight: Radius.circular(50),
+        ),
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.only(top: 30, left: 35),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        height: mediaQuerry.size.height * 0.3,
+        width: mediaQuerry.size.width * 0.6,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: items.data != null && items.data!.isNotEmpty
+              ? QueryArtworkWidget(
+                  artworkQuality: FilterQuality.high,
+                  quality: 100,
+                  artworkFit: BoxFit.cover,
+                  id: items.data![0].songid,
+                  type: ArtworkType.AUDIO,
+                  artworkBorder: const BorderRadius.all(Radius.circular(5)),
+                )
+              : Placeholder(), // Placeholder or some default widget
+        ),
+      ),
+    ),
+    Positioned(
+      left: 40,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 30, left: 35),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          height: mediaQuerry.size.height * 0.3,
+          width: mediaQuerry.size.width * 0.6,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: items.data != null && items.data!.length > 1
+                ? QueryArtworkWidget(
+                    artworkQuality: FilterQuality.high,
+                    quality: 100,
+                    artworkFit: BoxFit.cover,
+                    id: items.data![1].songid,
+                    type: ArtworkType.AUDIO,
+                    artworkBorder: const BorderRadius.all(Radius.circular(5)),
+                  )
+                : Placeholder(), // Placeholder or some default widget
+          ),
+        ),
+      ),
+    ),
+    Positioned(
+      left: 80,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 30, left: 35),
+        child: Container(
+          decoration: BoxDecoration(    
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(50),
+          ),
+          height: mediaQuerry.size.height * 0.3,
+          width: mediaQuerry.size.width * 0.6,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: items.data != null && items.data!.length > 2
+                ? QueryArtworkWidget(
+                    artworkQuality: FilterQuality.high,
+                    quality: 100,
+                    artworkFit: BoxFit.cover,
+                    id: items.data![2].songid,
+                    type: ArtworkType.AUDIO,
+                    artworkBorder: const BorderRadius.all(Radius.circular(5)),
+                  )
+                : Placeholder(), // Placeholder or some default widget
+          ),
+        ),
+      ),
+    ),
+  ],
+);
+
+            },
           ),
           Padding(
             padding: const EdgeInsets.only(left: 43, right: 40, top: 20),
@@ -215,6 +258,7 @@ class _MainHomeState extends State<MainHome> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: ListView.builder(
+                      physics:BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -401,31 +445,84 @@ class _MainHomeState extends State<MainHome> {
                                                             .size.height *
                                                         0.03,
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: mediaQuerry
-                                                                .size.width *
-                                                            0.06,
-                                                      ),
-                                                      Icon(
-                                                        Icons.favorite,
-                                                        size: 30,
-                                                        color: Colormanager.sheeticon,
-                                                      ),
-                                                      SizedBox(
-                                                        width: mediaQuerry
-                                                                .size.width *
-                                                            0.05,
-                                                      ),
-                                                      Text('Add to Favorite',
-                                                          style: TextStyle(
-                                                            color: Colormanager.sheetText,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 20,
-                                                          ))
-                                                    ],
+                                                  favSongs.contains(items.data![index].songid)?
+                                                  InkWell(
+                                                    onTap: (){
+                                                      removeLikedSong(items.data![index].songid);
+                                                      ifLickd();
+
+                                                      
+
+
+                                                      setState(() {
+                                                        
+                                                      });
+                                                      Navigator.of(context).pop();
+                                                      
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: mediaQuerry
+                                                                  .size.width *
+                                                              0.06,
+                                                        ),
+                                                        Icon(
+                                                          Icons.favorite,
+                                                          size: 30,
+                                                          color: Colors.red,
+                                                        ),
+                                                        SizedBox(
+                                                          width: mediaQuerry
+                                                                  .size.width *
+                                                              0.05,
+                                                        ),
+                                                        Text('remove from favorite',
+                                                            style: TextStyle(
+                                                              color: Colormanager.sheetText,
+                                                              fontWeight:
+                                                                  FontWeight.bold,
+                                                              fontSize: 20,
+                                                            ))
+                                                      ],
+                                                    ),
+                                                  ):InkWell(
+                                                    onTap: (){
+                                                      addlikedSong(items.data![index].songid);
+                                                      ifLickd();
+                                                      setState(() {
+                                                        
+                                                      });
+                                                      Navigator.of(context).pop();
+                                                      
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: mediaQuerry
+                                                                  .size.width *
+                                                              0.06,
+                                                        ),
+                                                        Icon(
+                                                          Icons.favorite_border,
+                                                          size: 30,
+                                                          color: Colors.red, 
+                                                          
+                                                        ),
+                                                        SizedBox(
+                                                          width: mediaQuerry
+                                                                  .size.width *
+                                                              0.05,
+                                                        ),
+                                                        Text('Add to favorite',
+                                                            style: TextStyle(
+                                                              color: Colormanager.sheetText,
+                                                              fontWeight:
+                                                                  FontWeight.bold,
+                                                              fontSize: 20,
+                                                            ))
+                                                      ],
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -440,7 +537,7 @@ class _MainHomeState extends State<MainHome> {
                                     width: 25,
                                   )),
                               onTap: () {
-                                VisibilityManager.isVisible = true;
+                                VisibilityManager.isVisible =true;
 
                                 // for my song container ,
 
@@ -455,8 +552,12 @@ class _MainHomeState extends State<MainHome> {
                                     int selectedIndex=index;
                                     List<MusicModel>songlist=items.data!;
 
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => Nowplaying(
+                                Navigator.of(context).push(PageTransition(
+                                  type: PageTransitionType.bottomToTop,
+                                  childCurrent: widget,
+                                  duration:Duration(milliseconds: 200),
+
+                                   child:  Nowplaying(
                                           musicModel: items.data![index],
                                           index: index,
                                           songmodel: items.data!,
@@ -481,3 +582,6 @@ class _MainHomeState extends State<MainHome> {
     );
   }
 }
+
+
+    

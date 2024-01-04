@@ -44,9 +44,12 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   lottie: ^2.7.0
-  marquee: ^2.2.3
-  marquee_widget: ^1.2.0
+
+  
   animated_text_kit: ^4.2.2
+  
+  page_transition: ^2.1.0
+  marquee_text: ^2.5.0+1
 
 dev_dependencies:
   flutter_test:

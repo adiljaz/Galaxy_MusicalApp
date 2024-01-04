@@ -7,7 +7,7 @@ import 'package:galaxy/Screens/lyrics.dart';
 import 'package:galaxy/Screens/playlist.dart';
 import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_model.dart';
-import 'package:galaxy/database/fav_function.dart';
+import 'package:galaxy/favorite/fav_function.dart';
 import 'package:galaxy/provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
@@ -41,6 +41,13 @@ class _NowplayingState extends State<Nowplaying> {
   void initState() {
     // TODO: implement initState
     super.initState();
+      audioplayer.playerStateStream.listen((State) {
+      if(State.processingState==ProcessingState.completed){
+        playnext(); 
+
+
+      }
+    });
     playSong();
   }
 
@@ -49,6 +56,8 @@ class _NowplayingState extends State<Nowplaying> {
 
   playSong() {
     try {
+     
+
       audioplayer.setAudioSource(
         AudioSource.uri(Uri.parse(widget.musicModel.uri!)),
       );
@@ -71,9 +80,7 @@ class _NowplayingState extends State<Nowplaying> {
     audioplayer.positionStream.listen((p) {
       setState(() {
         _position = p;
-           
       });
-       
     });
   }
 
@@ -497,7 +504,7 @@ class _NowplayingState extends State<Nowplaying> {
                 InkWell(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => LyricsScreen()));
+                          builder: (context) => LyricsScreen(  index:widget.index ,songmodel:widget.songmodel , )));
                     },
                     child: Text('    Lyrics ',
                         style: GoogleFonts.lato(
@@ -514,20 +521,25 @@ class _NowplayingState extends State<Nowplaying> {
 
   void shuffleSongs() {
     setState(() {
-      audioplayer.setShuffleModeEnabled(!audioplayer.shuffleModeEnabled);
+      List<MusicModel> originalSongs = List.from(widget.songmodel);
+
       if (audioplayer.shuffleModeEnabled) {
-        // If shuffle mode is enabled, shuffle the playlist
-        List<MusicModel> shuffledSongs = List.from(widget.songmodel);
-        shuffledSongs.shuffle();
-        widget.songmodel = shuffledSongs;
-        widget.index = 0;
-        widget.musicModel = widget.songmodel[widget.index];
-        playSong();
+        // If shuffle mode is already enabled, disable it and revert to the original playlist order
+        audioplayer.setShuffleModeEnabled(false);
+        widget.songmodel = originalSongs;
       } else {
-        // If shuffle mode is disabled, revert to the original playlist order
-        widget.songmodel = List.from(widget.songmodel);
-        widget.index = widget.songmodel.indexOf(widget.musicModel);
-        playSong();
+        // If shuffle mode is disabled, enable it and shuffle the playlist starting from the current song
+        audioplayer.setShuffleModeEnabled(true);
+        List<MusicModel> shuffledSongs = List.from(originalSongs);
+        shuffledSongs
+            .removeAt(widget.index); // Remove the currently playing song
+        shuffledSongs.shuffle();
+        widget.songmodel = [widget.musicModel, ...shuffledSongs];
+
+        // Only call playSong if the song is not currently playing
+        if (!_isplaying) {
+          playSong();
+        }
       }
     });
   }

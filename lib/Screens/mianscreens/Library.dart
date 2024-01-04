@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/likedsongs.dart';
+import 'package:galaxy/Screens/recently.dart';
 import 'package:galaxy/colors/colors.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -120,6 +121,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 25, right: 25),
                 child: GridView.builder(
+                    physics:BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 14,
@@ -146,7 +148,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     } else if(index==1){
 
                       return  InkWell(
-                        onTap: (){},
+                        onTap: (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>RecentlyPlayed()));
+                        },
                         child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),

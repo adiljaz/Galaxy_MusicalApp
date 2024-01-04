@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/Splash.dart';
 import 'package:galaxy/database/db_model.dart';
-import 'package:galaxy/database/fav_model.dart';
+import 'package:galaxy/favorite/fav_model.dart';
 import 'package:galaxy/provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';

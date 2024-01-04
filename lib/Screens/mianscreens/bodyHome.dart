@@ -6,7 +6,9 @@ import 'package:galaxy/Screens/home/home.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/colors/colors.dart';
+import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/database/db_model.dart';
+import 'package:galaxy/favorite/fav_function.dart';
 
 import 'package:galaxy/provider/provider.dart';
 
@@ -14,6 +16,7 @@ import 'package:galaxy/Screens/mianscreens/search.dart';
 import 'package:galaxy/Screens/visible.dart';
 
 import 'package:lottie/lottie.dart';
+import 'package:marquee_text/marquee_text.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -37,20 +40,38 @@ final pages = [
 ];
 
 class _HomeState extends State<Home> {
-  bool _isplaying = true;
 
   @override
+  void initState() {
+  
+  
+
+  
+    // TODO: implement initState
+    super.initState();
+  }
+
+
+     
+     
+  @override
   Widget build(BuildContext context) {
+
+
+      
+
+
+    getAllSongs();
     MediaQueryData mediaQuerry = MediaQuery.of(context);
 
     return SafeArea(
       child: Scaffold(
-        
-        
+        extendBody: true, 
+
+ backgroundColor: Colors.transparent,
         key: Home.scaffoldKey,
         drawer: Drawer(
           child: ListView(
-            
             children: [
               ListTile(
                 leading: Text('kjankjfnwekj '),
@@ -66,14 +87,11 @@ class _HomeState extends State<Home> {
         ),
         body: pages[_selectedindex],
         bottomNavigationBar: ClipRRect(
-          
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
           ),
           child: Stack(
-            
-            
             alignment: Alignment.bottomCenter,
             children: [
               // visible container
@@ -81,28 +99,23 @@ class _HomeState extends State<Home> {
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-
-                   MusicModel currentSong = context.watch<SongModelProvider>().currentSong!;
-                   int currentIndex=context.watch<SongModelProvider>().id;
-                    List<MusicModel> songList = context.watch<SongModelProvider>().songList;
+                    MusicModel currentSong =
+                        context.watch<SongModelProvider>().currentSong!;
+                    int currentIndex = context.watch<SongModelProvider>().id;
+                    List<MusicModel> songList =
+                        context.watch<SongModelProvider>().songList;
 
                     return Nowplaying(
-                        index:currentIndex ,
-                        musicModel:currentSong ,
-                        songmodel:songList,
-
-                        
-                        
-                           );
-                          
+                      index: currentIndex,
+                      musicModel: currentSong,
+                      songmodel: songList,
+                    );
                   }));
                 },
                 child: Visibility(
-                  
                   visible: VisibilityManager.isVisible &&
                       _selectedindex != pages.length - 1,
                   child: Container(
-                    
                     height: mediaQuerry.size.height * 0.18,
                     width: mediaQuerry.size.width * 1,
                     color: Colormanager.container,
@@ -135,15 +148,19 @@ class _HomeState extends State<Home> {
                                   Container(
                                     width: mediaQuerry.size.width * 0.35,
                                     height: 15,
-                                    child: Text(
-                                      context
-                                              .watch<SongModelProvider>()
-                                              .currentSong
-                                              ?.songname ??
-                                          'No Song',
+                                    child: MarqueeText(
+                                      speed: 15,
+                                      alwaysScroll: true,
+                                      text: TextSpan(
+                                        text: context
+                                                .watch<SongModelProvider>()
+                                                .currentSong
+                                                ?.songname ??
+                                            'No Song',
+                                      ),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color:Colormanager.text),
+                                          color: Colormanager.text),
                                     ),
                                   ),
                                   SizedBox(
@@ -170,26 +187,27 @@ class _HomeState extends State<Home> {
                               ),
                               InkWell(
                                   child: FaIcon(FontAwesomeIcons.backwardStep,
-                                      color:Colormanager.icons)),
+                                      color: Colormanager.icons)),
                               SizedBox(
                                 width: mediaQuerry.size.width * 0.02,
                               ),
                               InkWell(
                                 onTap: () {
-                                  _isplaying != _isplaying;
+                                  context.read<SongModelProvider>().togglePlayPause();
                                 },
                                 child: Icon(
-                                  _isplaying
-                                      ? Icons.pause_circle
-                                      : Icons.play_circle,
-                                  color: Colormanager.icons,
-                                  size: 42,
+                                  
+                                  context.read<SongModelProvider>().isPlaying?Icons.play_circle  :Icons.pause_circle ,size: 42, color: Colors.white, 
+
                                 ),
                               ),
                               SizedBox(
                                 width: mediaQuerry.size.width * 0.02,
                               ),
                               InkWell(
+                                  onTap: () {
+                                    // next song
+                                  },
                                   child: FaIcon(FontAwesomeIcons.forwardStep,
                                       color: Colormanager.icons)),
                             ],
@@ -203,8 +221,8 @@ class _HomeState extends State<Home> {
 
               ClipRRect(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
                 ),
                 child: BottomNavigationBar(
                   backgroundColor: Colors.white,
@@ -219,6 +237,7 @@ class _HomeState extends State<Home> {
                   showUnselectedLabels: true,
                   items: [
                     BottomNavigationBarItem(
+                        backgroundColor: Color.fromARGB(255, 236, 236, 236),
                         icon: Icon(
                           Icons.home,
                           size: 25,

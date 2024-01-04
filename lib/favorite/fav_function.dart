@@ -1,9 +1,7 @@
-import 'dart:ffi';
 
-import 'package:galaxy/Screens/likedsongs.dart';
 import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/database/db_model.dart';
-import 'package:galaxy/database/fav_model.dart';
+import 'package:galaxy/favorite/fav_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 const _boxName = 'liked songs';
@@ -33,6 +31,7 @@ Future<void> removeLikedSong(int songId) async {
       box.delete(s.key);
     }
   }
+  
 }
 
 Future<List<LikedSongModel>> getLikedSongs() async {

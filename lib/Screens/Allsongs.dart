@@ -45,6 +45,7 @@ class _AllsongsState extends State<Allsongs> {
             Expanded(
               child: FutureBuilder(future: getAllSongs(), builder: (context,item){
                 return  ListView.builder(
+                   physics:BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()), 
                 itemBuilder: (context, index) {
                   return Padding(
                   
