@@ -32,13 +32,16 @@ class Nowplaying extends StatefulWidget {
 }
 
 class _NowplayingState extends State<Nowplaying> {
-  Duration _duration = Duration();
-  Duration _position = Duration();
+  Duration _duration = const Duration();
+  Duration _position = const Duration();
+  
 
   bool _isplaying = false;
 
   @override
   void initState() {
+
+
     // TODO: implement initState
     super.initState();
       audioplayer.playerStateStream.listen((State) {
@@ -126,7 +129,7 @@ class _NowplayingState extends State<Nowplaying> {
                         child: IconButton(
                           onPressed: () {
                             showModalBottomSheet(
-                                shape: RoundedRectangleBorder(
+                                shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(40),
                                         topRight: Radius.circular(40))),
@@ -136,7 +139,7 @@ class _NowplayingState extends State<Nowplaying> {
                                     height: mediaQuerry.size.height * 0.35,
                                     decoration: BoxDecoration(
                                         color: Colormanager.sheetcolor,
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(40),
                                             topRight: Radius.circular(40))),
                                     child: Padding(
@@ -272,7 +275,7 @@ class _NowplayingState extends State<Nowplaying> {
                   ),
                   height: mediaQuerry.size.height * 0.37,
                   width: mediaQuerry.size.width * 1,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(40),
@@ -326,7 +329,7 @@ class _NowplayingState extends State<Nowplaying> {
                             ifLickd();
                             setState(() {});
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.favorite,
                             color: Colors.red,
                           ),
@@ -337,7 +340,7 @@ class _NowplayingState extends State<Nowplaying> {
                             ifLickd();
                             setState(() {});
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.favorite_border,
                             color: Colors.red,
                           ),
@@ -349,7 +352,7 @@ class _NowplayingState extends State<Nowplaying> {
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: Colors.black,
                   thumbColor: Colors.black,
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
                   trackHeight: 6.0,
                 ),
                 child: Padding(
@@ -357,7 +360,7 @@ class _NowplayingState extends State<Nowplaying> {
                   child: Slider(
                     value: _position.inSeconds.toDouble(),
                     max: _duration.inSeconds.toDouble(),
-                    min: Duration(microseconds: 0).inSeconds.toDouble(),
+                    min: const Duration(microseconds: 0).inSeconds.toDouble(),
                     onChanged: (value) {
                       setState(() {
                         changetoseconds(value.toInt());
@@ -479,7 +482,7 @@ class _NowplayingState extends State<Nowplaying> {
                 InkWell(
                     onTap: () {
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Playlist()));
+                          MaterialPageRoute(builder: (context) => const Playlist()));
                     },
                     child: InkWell(
                       onTap: () {
@@ -559,12 +562,17 @@ class _NowplayingState extends State<Nowplaying> {
       setState(() {
         widget.index++;
         widget.musicModel = widget.songmodel[widget.index];
+
+        context.read<SongModelProvider>().setId(widget.musicModel.songid);
+       
         playSong();
       });
     } else {
       setState(() {
         widget.index = 0;
         widget.musicModel = widget.songmodel[widget.index];
+           context.read<SongModelProvider>().setId(widget.musicModel.songid);
+        
         playSong();
       });
     }
@@ -575,12 +583,14 @@ class _NowplayingState extends State<Nowplaying> {
       setState(() {
         widget.index--;
         widget.musicModel = widget.songmodel[widget.index];
+         context.read<SongModelProvider>().setId(widget.musicModel.songid);
         playSong();
       });
     } else {
       setState(() {
         widget.index = widget.songmodel.length - 1;
         widget.musicModel = widget.songmodel[widget.index];
+         context.read<SongModelProvider>().setId(widget.musicModel.songid); 
         playSong();
       });
     }
@@ -600,9 +610,11 @@ class ArtWorkWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return QueryArtworkWidget(
+      
       id: context.watch<SongModelProvider>().id,
       type: ArtworkType.AUDIO,
       artworkFit: BoxFit.cover,
+
     );
   }
 }

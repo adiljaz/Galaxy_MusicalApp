@@ -106,6 +106,7 @@ class _HomeState extends State<Home> {
                         context.watch<SongModelProvider>().songList;
 
                     return Nowplaying(
+                      
                       index: currentIndex,
                       musicModel: currentSong,
                       songmodel: songList,

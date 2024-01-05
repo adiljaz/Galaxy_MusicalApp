@@ -52,9 +52,6 @@ class SongModelProvider with ChangeNotifier {
     _isPlaying = !_isPlaying;
     notifyListeners();
   }
-
   
 
-  
-  
 }

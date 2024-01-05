@@ -3,6 +3,7 @@ import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/database/db_model.dart';
 import 'package:galaxy/favorite/fav_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 const _boxName = 'liked songs';
 
@@ -13,15 +14,22 @@ Future<void> addlikedSong(int songId) async {
   print(box.length);
 }
 
+
+
+
+
 List<int> favSongs = [];
 ifLickd() async {
   favSongs.clear();
   final box = await Hive.openBox<LikedSongModel>(_boxName);
-  List<LikedSongModel> lsong = box.values.toList();
-  for (LikedSongModel s in lsong) {
+  List<LikedSongModel> song = box.values.toList();
+  for (LikedSongModel s in song) {
     favSongs.add(s.songid);
   }
 }
+
+
+
 
 Future<void> removeLikedSong(int songId) async {
   final box = await Hive.openBox<LikedSongModel>(_boxName);
@@ -56,3 +64,9 @@ Future<List<MusicModel>> showLike() async {
 
   return likedsongs;
 }
+
+
+List<int> a= [];
+
+
+ 

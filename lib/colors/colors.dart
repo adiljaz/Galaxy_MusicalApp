@@ -7,7 +7,7 @@ class Colormanager {
     static Color text=Colors.white; 
     static Color listtile=const Color.fromARGB(255, 193, 193, 193); 
     static Color sheetText=Colors.white ; 
-    static Color titleText=const Color.fromARGB(255, 180, 180, 180);
+    static Color titleText=Colors.white;
     static Color icons=Colors.white;
     static Color sheeticon=Colors.white; 
     static Color sheetcolor=Colors.black;

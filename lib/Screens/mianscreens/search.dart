@@ -107,7 +107,8 @@ class _SearchState extends State<Search> {
               ],
             ),
             Expanded(
-              child: ListView.builder(
+              child:FutureBuilder(future:getAllSongs(), builder: (context,items){
+                return    ListView.builder(
                   physics:BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()), 
                 itemCount: findmusic.length,
                 itemBuilder: (context, index) {
@@ -172,7 +173,7 @@ class _SearchState extends State<Search> {
                                         builder: (context) {
                                           return Container(
                                             height:
-                                                mediaQuerry.size.height * 0.35,
+                                                mediaQuerry.size.height * 0.40,
                                             decoration: BoxDecoration(
                                                 color: Colors.black,
                                                 borderRadius: BorderRadius.only(
@@ -313,12 +314,90 @@ class _SearchState extends State<Search> {
                                                             .size.height *
                                                         0.03,
                                                   ),
-                                                  
+                                                  favSongs.contains(items.data![index].songid)?
+                                                  InkWell(
+                                                    onTap: (){
+                                                      removeLikedSong(items.data![index].songid);
+                                                      ifLickd();
+
+                                                      
+
+
+                                                      setState(() {
+                                                        
+                                                      });
+                                                      Navigator.of(context).pop();
+                                                      
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: mediaQuerry
+                                                                  .size.width *
+                                                              0.06,
+                                                        ),
+                                                        Icon(
+                                                          Icons.favorite,
+                                                          size: 30,
+                                                          color: Colors.red,
+                                                        ),
+                                                        SizedBox(
+                                                          width: mediaQuerry
+                                                                  .size.width *
+                                                              0.05,
+                                                        ),
+                                                        Text('remove from favorite',
+                                                            style: TextStyle(
+                                                              color: Colormanager.sheetText,
+                                                              fontWeight:
+                                                                  FontWeight.bold,
+                                                              fontSize: 20,
+                                                            ))
+                                                      ],
+                                                    ),
+                                                  ):InkWell(
+                                                    onTap: (){
+                                                      addlikedSong(items.data![index].songid);
+                                                      ifLickd();
+                                                      setState(() {
+                                                        
+                                                      });
+                                                      Navigator.of(context).pop();
+                                                      
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: mediaQuerry
+                                                                  .size.width *
+                                                              0.06,
+                                                        ),
+                                                        Icon(
+                                                          Icons.favorite_border,
+                                                          size: 30,
+                                                          color: Colors.red, 
+                                                          
+                                                        ),
+                                                        SizedBox(
+                                                          width: mediaQuerry
+                                                                  .size.width *
+                                                              0.05,
+                                                        ),
+                                                        Text('Add to favorite',
+                                                            style: TextStyle(
+                                                              color: Colormanager.sheetText,
+                                                              fontWeight:
+                                                                  FontWeight.bold,
+                                                              fontSize: 20,
+                                                            ))
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
                                           );
-                                        });
+                                        }); 
                               },
                                child: Image.asset(
                                       'assets/more.png',
@@ -352,7 +431,8 @@ class _SearchState extends State<Search> {
                     ),
                   );
                 },
-              ),
+              );
+              })
             ),
           ],
         ),

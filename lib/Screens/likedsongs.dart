@@ -162,7 +162,11 @@ class _LikedSongsState extends State<LikedSongs> {
                                                 musicModel:
                                                     snapshot.data![index],
                                                 index: index,
-                                                songmodel: snapshot.data!)));
+                                                songmodel: snapshot.data!)))..then((value) {
+                                                  setState(() {
+                                                    
+                                                  });
+                                                });
                                   },
                                 ),
                               ),
