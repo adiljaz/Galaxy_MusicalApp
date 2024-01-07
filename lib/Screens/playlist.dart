@@ -30,14 +30,14 @@ class Playlist extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  icon: FaIcon(
+                                  icon: const FaIcon(
                                     FontAwesomeIcons.circleChevronLeft,
                                     color: Colors.white,
                                   )),
                               SizedBox(
                                 width: mediaQuerry.size.width * 0.25 ,
                               ),
-                              Center(
+                              const Center(
                                   child: Text(
                                 'Playlist',
                                 style: TextStyle(
@@ -58,12 +58,12 @@ class Playlist extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 hintText: 'Search..',
-                                suffixIcon: Icon(Icons.search)),
+                                suffixIcon: const Icon(Icons.search)),
                           ),
                         ],
                       ),
                     )),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(40),
@@ -79,14 +79,14 @@ class Playlist extends StatelessWidget {
                 children: [
                   IconButton(
                       onPressed: () {},
-                      icon: FaIcon(
+                      icon: const FaIcon(
                         FontAwesomeIcons.shuffle,
                         color: Colors.black,
                         size: 30,
                       )),
                   IconButton(
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.play_circle,
                         color: Colors.black,
                         size: 40,
@@ -94,7 +94,7 @@ class Playlist extends StatelessWidget {
                   IconButton(
                       onPressed: () {
                          showModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
+                                  shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(40),
                                           topRight: Radius.circular(40))),
@@ -102,7 +102,7 @@ class Playlist extends StatelessWidget {
                                   builder: (context) {
                                     return Container(
                                       height: mediaQuerry.size.height * 0.35,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.black,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -122,7 +122,7 @@ class Playlist extends StatelessWidget {
                                                       mediaQuerry.size.width *
                                                           0.06,
                                                 ),
-                                                Icon(
+                                                const Icon(
                                                   Icons.add_circle,
                                                   size: 30,
                                                   color: Colors.white,
@@ -132,7 +132,7 @@ class Playlist extends StatelessWidget {
                                                       mediaQuerry.size.width *
                                                           0.05,
                                                 ),
-                                                Text('Add to playlist',
+                                                const Text('Add to playlist',
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
@@ -152,7 +152,7 @@ class Playlist extends StatelessWidget {
                                                       mediaQuerry.size.width *
                                                           0.06,
                                                 ),
-                                                Icon(
+                                                const Icon(
                                                   Icons.do_not_disturb_on,
                                                   size: 30,
                                                   color: Colors.white,
@@ -162,7 +162,7 @@ class Playlist extends StatelessWidget {
                                                       mediaQuerry.size.width *
                                                           0.05,
                                                 ),
-                                                Text('Remove From PLaylist',
+                                                const Text('Remove From PLaylist',
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
@@ -182,7 +182,7 @@ class Playlist extends StatelessWidget {
                                                       mediaQuerry.size.width *
                                                           0.06,
                                                 ),
-                                                FaIcon(
+                                                const FaIcon(
                                                   FontAwesomeIcons.music,
                                                   color: Colors.white,
                                                 ),
@@ -191,7 +191,7 @@ class Playlist extends StatelessWidget {
                                                       mediaQuerry.size.width *
                                                           0.05,
                                                 ),
-                                                Text('Go to Lyrics',
+                                                const Text('Go to Lyrics',
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
@@ -211,7 +211,7 @@ class Playlist extends StatelessWidget {
                                                       mediaQuerry.size.width *
                                                           0.06,
                                                 ),
-                                                Icon(
+                                                const Icon(
                                                   Icons.queue_music,
                                                   size: 35,
                                                   color: Colors.white,
@@ -221,7 +221,7 @@ class Playlist extends StatelessWidget {
                                                       mediaQuerry.size.width *
                                                           0.05,
                                                 ),
-                                                Text('Go to Playlist',
+                                                const Text('Go to Playlist',
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
@@ -241,7 +241,7 @@ class Playlist extends StatelessWidget {
                         
                           
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.more_horiz,
                         color: Colors.black,
                         size: 40,

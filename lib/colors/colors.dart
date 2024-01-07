@@ -1,7 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 class Colormanager {
-    static Color scaffoldcolor =Color.fromARGB(255, 162, 162, 162);
+    static Color scaffoldcolor =const Color.fromARGB(255, 162, 162, 162);
     static Color container =  Colors.black;
     static Color  maintext=Colors.black;
     static Color text=Colors.white; 

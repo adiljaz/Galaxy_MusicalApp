@@ -1,3 +1,6 @@
+
+// ignore_for_file: sort_child_properties_last, file_names
+
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/Screens/visible.dart';
@@ -21,7 +24,7 @@ class _AllsongsState extends State<Allsongs> {
   void initState() {  
  getAllSongs() ;
 
-    // TODO: implement initState
+  
     super.initState();
   }
 
@@ -39,13 +42,13 @@ class _AllsongsState extends State<Allsongs> {
               child: Center(child: Text('All songs',  style: TextStyle(  color: Colormanager.titleText,  fontWeight: FontWeight.bold,fontSize: 25),),),
               height: mediaQuerry.size.height*0.1,
               width: double.infinity,
-              decoration: BoxDecoration(  color: Colors.black,   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40),bottomRight: Radius.circular(40))),
+              decoration: const BoxDecoration(  color: Colors.black,   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40),bottomRight: Radius.circular(40))),
 
             ),
             Expanded(
               child: FutureBuilder(future: getAllSongs(), builder: (context,item){
                 return  ListView.builder(
-                   physics:BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()), 
+                   physics:const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()), 
                 itemBuilder: (context, index) {
                   return Padding(
                   

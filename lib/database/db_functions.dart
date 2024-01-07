@@ -22,8 +22,13 @@ addSongToDb({required List<SongModel> songs}) async {
 
 Future<List<MusicModel>> getAllSongs() async {
   final songDb = await Hive.openBox<MusicModel>('song_model');
-   print("All Songs: $songDb");// Add this line to print the list of songs
+   print("All Songs: $songDb");
 
   return songDb.values.toList();
   
 }
+
+
+
+
+

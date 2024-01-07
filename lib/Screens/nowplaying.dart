@@ -1,9 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:galaxy/Screens/mianscreens/bodyHome.dart';
 import 'package:galaxy/Screens/home/home.dart';
-import 'package:galaxy/Screens/lyrics.dart';
 import 'package:galaxy/Screens/playlist.dart';
 import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_model.dart';
@@ -11,10 +12,11 @@ import 'package:galaxy/favorite/fav_function.dart';
 import 'package:galaxy/provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
-
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
+  
 // ignore: must_be_immutable
 class Nowplaying extends StatefulWidget {
   Nowplaying(
@@ -34,21 +36,16 @@ class Nowplaying extends StatefulWidget {
 class _NowplayingState extends State<Nowplaying> {
   Duration _duration = const Duration();
   Duration _position = const Duration();
-  
 
   bool _isplaying = false;
 
   @override
   void initState() {
-
-
     // TODO: implement initState
     super.initState();
-      audioplayer.playerStateStream.listen((State) {
-      if(State.processingState==ProcessingState.completed){
-        playnext(); 
-
-
+    audioplayer.playerStateStream.listen((State) {
+      if (State.processingState == ProcessingState.completed) {
+        playnext();
       }
     });
     playSong();
@@ -59,8 +56,6 @@ class _NowplayingState extends State<Nowplaying> {
 
   playSong() {
     try {
-     
-
       audioplayer.setAudioSource(
         AudioSource.uri(Uri.parse(widget.musicModel.uri!)),
       );
@@ -86,6 +81,70 @@ class _NowplayingState extends State<Nowplaying> {
       });
     });
   }
+
+
+
+   Future <String?> fetchLyrics(String  songname ,String artistname ) async{
+
+    String apiKey='42ba0f1657c01eecd1ffa61022e691da';
+    String apiUrl=  'https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_track=$songname&q_artist=$artistname&apikey=$apiKey';
+
+
+    try{
+      final response =await http.get(Uri.parse(apiUrl));
+
+      if( response.statusCode==200){
+        final Map<String,dynamic>data = json.decode(response.body); 
+        final lyrics=data['message']['body']['lyrics']['lyrics_body']; 
+        return lyrics;
+      }else{
+        throw Exception('Failed to load lyrics'); 
+      }
+
+
+
+    } catch (e){
+      print('Error fetching lyrics');
+      return null; 
+
+    }
+
+
+  }
+
+  _showlyricsbottomsheet( String ?lyrics){
+                       showModalBottomSheet(
+
+                         shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(40),
+                                        topRight: Radius.circular(40))),
+                        
+                        
+                        backgroundColor: Colors.black,
+                          context: context,
+                        
+                          builder: (context) {
+                            return Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Expanded(
+                                child: SizedBox(
+      
+                                  height:  400,
+                                  width: double.infinity,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [Text(lyrics??'Lyrics not available',style: GoogleFonts.lato(color: Colormanager.sheetText,fontWeight: FontWeight.bold ,fontSize: 20),)],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+
+                     }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -352,7 +411,8 @@ class _NowplayingState extends State<Nowplaying> {
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: Colors.black,
                   thumbColor: Colors.black,
-                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                  thumbShape:
+                      const RoundSliderThumbShape(enabledThumbRadius: 6.0),
                   trackHeight: 6.0,
                 ),
                 child: Padding(
@@ -481,8 +541,8 @@ class _NowplayingState extends State<Nowplaying> {
               children: [
                 InkWell(
                     onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => const Playlist()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Playlist()));
                     },
                     child: InkWell(
                       onTap: () {
@@ -505,9 +565,14 @@ class _NowplayingState extends State<Nowplaying> {
                       color: Colormanager.BalckText),
                 ),
                 InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => LyricsScreen(  index:widget.index ,songmodel:widget.songmodel , )));
+                    onTap: () async {
+
+                        String? lyrics = await fetchLyrics (
+        widget.musicModel.songname,
+        widget.musicModel.artistname ?? 'no item found', ); 
+                      // second bottomsheet
+                      _showlyricsbottomsheet(lyrics);
+                     
                     },
                     child: Text('    Lyrics ',
                         style: GoogleFonts.lato(
@@ -527,19 +592,15 @@ class _NowplayingState extends State<Nowplaying> {
       List<MusicModel> originalSongs = List.from(widget.songmodel);
 
       if (audioplayer.shuffleModeEnabled) {
-        // If shuffle mode is already enabled, disable it and revert to the original playlist order
         audioplayer.setShuffleModeEnabled(false);
         widget.songmodel = originalSongs;
       } else {
-        // If shuffle mode is disabled, enable it and shuffle the playlist starting from the current song
         audioplayer.setShuffleModeEnabled(true);
         List<MusicModel> shuffledSongs = List.from(originalSongs);
-        shuffledSongs
-            .removeAt(widget.index); // Remove the currently playing song
+        shuffledSongs.removeAt(widget.index);
         shuffledSongs.shuffle();
         widget.songmodel = [widget.musicModel, ...shuffledSongs];
 
-        // Only call playSong if the song is not currently playing
         if (!_isplaying) {
           playSong();
         }
@@ -564,15 +625,15 @@ class _NowplayingState extends State<Nowplaying> {
         widget.musicModel = widget.songmodel[widget.index];
 
         context.read<SongModelProvider>().setId(widget.musicModel.songid);
-       
+
         playSong();
       });
     } else {
       setState(() {
         widget.index = 0;
         widget.musicModel = widget.songmodel[widget.index];
-           context.read<SongModelProvider>().setId(widget.musicModel.songid);
-        
+        context.read<SongModelProvider>().setId(widget.musicModel.songid);
+
         playSong();
       });
     }
@@ -583,14 +644,14 @@ class _NowplayingState extends State<Nowplaying> {
       setState(() {
         widget.index--;
         widget.musicModel = widget.songmodel[widget.index];
-         context.read<SongModelProvider>().setId(widget.musicModel.songid);
+        context.read<SongModelProvider>().setId(widget.musicModel.songid);
         playSong();
       });
     } else {
       setState(() {
         widget.index = widget.songmodel.length - 1;
         widget.musicModel = widget.songmodel[widget.index];
-         context.read<SongModelProvider>().setId(widget.musicModel.songid); 
+        context.read<SongModelProvider>().setId(widget.musicModel.songid);
         playSong();
       });
     }
@@ -610,11 +671,16 @@ class ArtWorkWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return QueryArtworkWidget(
-      
       id: context.watch<SongModelProvider>().id,
       type: ArtworkType.AUDIO,
       artworkFit: BoxFit.cover,
-
     );
   }
+
+ 
+
+
+
+
+
 }

@@ -28,7 +28,7 @@ class _AudioScreenState extends State<AudioScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Recorder',style: TextStyle(color: Colors.white),),
+          title: const Text('Recorder',style: TextStyle(color: Colors.white),),
           backgroundColor: Colors.black,
         ),
         body:Column(

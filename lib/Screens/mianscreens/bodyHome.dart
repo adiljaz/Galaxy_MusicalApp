@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/mianscreens/Library.dart';
 import 'package:galaxy/Screens/mianscreens/audio.dart';
@@ -8,7 +9,7 @@ import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/database/db_model.dart';
-import 'package:galaxy/favorite/fav_function.dart';
+
 
 import 'package:galaxy/provider/provider.dart';
 
@@ -22,7 +23,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
-  Home({super.key});
+  const Home({super.key});
 
   static GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -34,9 +35,9 @@ int _selectedindex = 0;
 
 final pages = [
   MainHome(),
-  Search(),
-  LibraryScreen(),
-  AudioScreen(),
+  const Search(),
+  const LibraryScreen(),
+  const AudioScreen(),
 ];
 
 class _HomeState extends State<Home> {
@@ -47,7 +48,7 @@ class _HomeState extends State<Home> {
   
 
   
-    // TODO: implement initState
+
     super.initState();
   }
 
@@ -72,7 +73,7 @@ class _HomeState extends State<Home> {
         key: Home.scaffoldKey,
         drawer: Drawer(
           child: ListView(
-            children: [
+            children: const [
               ListTile(
                 leading: Text('kjankjfnwekj '),
               ),
@@ -87,7 +88,7 @@ class _HomeState extends State<Home> {
         ),
         body: pages[_selectedindex],
         bottomNavigationBar: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
           ),
@@ -146,7 +147,7 @@ class _HomeState extends State<Home> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     width: mediaQuerry.size.width * 0.35,
                                     height: 15,
                                     child: MarqueeText(
@@ -167,7 +168,7 @@ class _HomeState extends State<Home> {
                                   SizedBox(
                                     height: mediaQuerry.size.height * 0.004,
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width: mediaQuerry.size.width * 0.35,
                                     height: 15,
                                     child: Text(
@@ -221,7 +222,7 @@ class _HomeState extends State<Home> {
               ),
 
               ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(40),
                   topRight: Radius.circular(40),
                 ),
@@ -233,20 +234,20 @@ class _HomeState extends State<Home> {
                       _selectedindex = value;
                     });
                   },
-                  selectedItemColor: Color.fromARGB(255, 105, 105, 105),
+                  selectedItemColor: const Color.fromARGB(255, 105, 105, 105),
                   unselectedItemColor: Colors.black,
                   showUnselectedLabels: true,
                   items: [
-                    BottomNavigationBarItem(
+                    const BottomNavigationBarItem(
                         backgroundColor: Color.fromARGB(255, 236, 236, 236),
                         icon: Icon(
                           Icons.home,
                           size: 25,
                         ),
                         label: 'Home'),
-                    BottomNavigationBarItem(
+                    const BottomNavigationBarItem(
                         icon: Icon(Icons.search, size: 25), label: 'Search'),
-                    BottomNavigationBarItem(
+                    const BottomNavigationBarItem(
                         icon: Icon(Icons.library_music, size: 25),
                         label: 'Library'),
                     BottomNavigationBarItem(

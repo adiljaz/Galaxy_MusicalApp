@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_single_cascade_in_expression_statements
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -19,7 +21,7 @@ class LikedSongs extends StatefulWidget {
 class _LikedSongsState extends State<LikedSongs> {
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
   }
   @override
@@ -47,7 +49,7 @@ class _LikedSongsState extends State<LikedSongs> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                icon:  FaIcon(
+                                icon:  const FaIcon(
                                   FontAwesomeIcons.circleChevronLeft,
                                   color: Colors.white,
                                 )),
@@ -85,7 +87,7 @@ class _LikedSongsState extends State<LikedSongs> {
                   )),
                   decoration: BoxDecoration(
                       color: Colormanager.container,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(40),
                           bottomRight: Radius.circular(40))),
                 ),
@@ -99,12 +101,12 @@ class _LikedSongsState extends State<LikedSongs> {
                     future: showLike(),
                     builder: (context, snapshot) {
                       if (snapshot.data == null) {
-                        return Center(child: const CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.data!.isEmpty) {
                         return const Center(child: Text('Add new songs'));
                       } else {
                         return ListView.builder(
-                          physics: BouncingScrollPhysics(
+                          physics: const BouncingScrollPhysics(
                               parent: AlwaysScrollableScrollPhysics()),
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
@@ -138,7 +140,7 @@ class _LikedSongsState extends State<LikedSongs> {
                                             ifLickd();
                                             setState(() {});
                                           },
-                                          child: Icon(
+                                          child: const Icon(
                                             Icons.favorite,
                                             color: Colors.red,
                                           ),
@@ -150,7 +152,7 @@ class _LikedSongsState extends State<LikedSongs> {
                                             ifLickd();
                                             setState(() {});
                                           },
-                                          child: Icon(
+                                          child: const Icon(
                                             Icons.favorite,
                                             color: Colors.white,
                                           ),

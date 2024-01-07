@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:galaxy/colors/colors.dart';
@@ -29,14 +31,14 @@ class _RecentlyPlayedState extends State<RecentlyPlayed> {
               padding: const EdgeInsets.all(10 ),
               child: GestureDetector(  onTap: (){
                 Navigator.of(context).pop();
-              },  child: FaIcon(FontAwesomeIcons.circleArrowLeft,color: Colors.white,)),
+              },  child: const FaIcon(FontAwesomeIcons.circleArrowLeft,color: Colors.white,)),
             ), Row( 
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
               Text('Recently Played ',style: GoogleFonts.lato(color: Colormanager.titleText,fontWeight: FontWeight.bold,fontSize:20),)
             ],)],
           ),
-          decoration: BoxDecoration( color:Colormanager.container, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50),bottomRight: Radius.circular(50))),
+          decoration: BoxDecoration( color:Colormanager.container, borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(50),bottomRight: Radius.circular(50))),
         ),
 
         

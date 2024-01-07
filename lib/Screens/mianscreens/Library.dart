@@ -28,7 +28,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               width: mediaQuerry.size.width * 1,
               decoration: BoxDecoration(
                   color: Colormanager.container,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(40),
                     bottomLeft: Radius.circular(40),
                   )),
@@ -108,7 +108,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                             );
                           });
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.add_circle,
                       size: 30,
                       color: Colors.black,
@@ -121,8 +121,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 25, right: 25),
                 child: GridView.builder(
-                    physics:BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    physics:const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 14,
                     mainAxisSpacing: 20,
@@ -130,18 +130,18 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   itemBuilder: (context, index) {
                     if(index==0){
                       return InkWell(
-                        onTap: (){ Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LikedSongs()));
+                        onTap: (){ Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const LikedSongs()));
                         
                         },
                         child: Container(
                           
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 246, 205, 205),
+                          color: const Color.fromARGB(255, 246, 205, 205),
                         ),
                         height: 130,
                         width: 130,
-                        child: Icon(Icons.favorite ,color: Color.fromARGB(255, 255, 153, 146),size: 70,),
+                        child: const Icon(Icons.favorite ,color: Color.fromARGB(255, 255, 153, 146),size: 70,),
 
                                           ),
                       );
@@ -149,7 +149,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
                       return  InkWell(
                         onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>RecentlyPlayed()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const RecentlyPlayed()));
                         },
                         child: Container(
                         decoration: BoxDecoration(
@@ -162,7 +162,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                           
                           children: [
                             SizedBox(height: mediaQuerry.size.width*0.02 ,),
-                            Text('Recently played ',style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255),fontWeight: FontWeight.bold ),),
+                            const Text('Recently played ',style: TextStyle(color: Color.fromARGB(255, 255, 255, 255),fontWeight: FontWeight.bold ),),
                             Lottie.asset('assets/rc.json'),
                           ],
                         ),

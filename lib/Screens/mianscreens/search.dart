@@ -9,6 +9,7 @@ import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/database/db_model.dart';
 import 'package:galaxy/favorite/fav_function.dart';
 import 'package:galaxy/provider/provider.dart';
+import 'package:lottie/lottie.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
@@ -32,10 +33,11 @@ class _SearchState extends State<Search> {
 
   Future<void> initializeSongs() async {
     allSongs = await getAllSongs();
-    // Initially, set findmusic to all songs
+   
     findmusic = List.from(allSongs);
     setState(() {});
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +110,14 @@ class _SearchState extends State<Search> {
             ),
             Expanded(
               child:FutureBuilder(future:getAllSongs(), builder: (context,items){
-                return    ListView.builder(
+                if(items.data==null){
+                  return const Center(child: CircularProgressIndicator(),);
+                  
+                  
+                } else if (items.data!.isEmpty) {
+                  return Center(child: Lottie.asset('assets/sr.json'),);
+                } else { 
+                  return  ListView.builder(
                   physics:BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()), 
                 itemCount: findmusic.length,
                 itemBuilder: (context, index) {
@@ -408,7 +417,12 @@ class _SearchState extends State<Search> {
                              ),
                           ],
                         ),
-                        onTap: () {
+                        onTap: () {                   
+
+                        
+                          
+
+
                           context
                               .read<SongModelProvider>()
                               .setId(findmusic[index].songid);
@@ -432,6 +446,7 @@ class _SearchState extends State<Search> {
                   );
                 },
               );
+                }
               })
             ),
           ],
@@ -451,5 +466,6 @@ class _SearchState extends State<Search> {
     setState(() {
       findmusic = suggestion;
     });
+   
   }
 }

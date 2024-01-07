@@ -971,7 +971,7 @@ class _MainHomeState extends State<MainHome> {
                                     .read<SongModelProvider>()
                                     .setId(items.data![index].songid);
                                 context
-                                    .read<SongModelProvider>()
+                                    .read<SongModelProvider>(),
                                     .updateCurrentSong(items.data![index]);
 
                                     MusicModel selectedsong=items.data![index];
@@ -1007,7 +1007,63 @@ class _MainHomeState extends State<MainHome> {
       ),
     );
   }
+}// database_helper.dart
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'recently_played_model.dart';
+
+Future<void> initializeHive() async {
+  await Hive.initFlutter();
 }
+
+Future<void> openRecentlyPlayedBox() async {
+  await Hive.openBox<RecentlyPlayed>('recentlyPlayedBox');
+}
+
+Future<void> addSongToRecentlyPlayed(String songId, String name) async {
+  final recentlyPlayedBox = await Hive.openBox<RecentlyPlayed>('recentlyPlayedBox');
+
+  // Check if the same song is already in the recently played list
+  final existingSong = recentlyPlayedBox.values.firstWhere(
+    (song) => song.songId == songId && song.name == name,
+    orElse: () => null,
+  );
+
+  // If the song is already in the list, move it to the top
+  if (existingSong != null) {
+    existingSong.name = name;
+    recentlyPlayedBox.put(existingSong.key, existingSong);
+  } else {
+    // If the song is not in the list, add it
+    final recentlyPlayed = RecentlyPlayed(songId: songId, name: name);
+    recentlyPlayedBox.add(recentlyPlayed);
+  }
+}
+
+Future<void> deleteSongFromRecentlyPlayed(String songId, String name) async {
+  final recentlyPlayedBox = await Hive.openBox<RecentlyPlayed>('recentlyPlayedBox');
+
+  // Find and delete the song from the recently played list
+  final songToDelete = recentlyPlayedBox.values.firstWhere(
+    (song) => song.songId == songId && song.name == name,
+    orElse: () => null,
+  );
+
+  if (songToDelete != null) {
+    await recentlyPlayedBox.delete(songToDelete.key);
+  }
+}
+
+Future<Box<RecentlyPlayed>> getRecentlyPlayedBox() async {
+  return await Hive.openBox<RecentlyPlayed>('recentlyPlayedBox');
+}
+
+
+
+
+
+//////////
+ 
 
 
     

@@ -69,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   isRepeatingAnimation: true,
 
                   
-                  animatedTexts:[ColorizeAnimatedText(' Galaxy ', textStyle: GoogleFonts.josefinSans( color: Color.fromARGB(255, 190, 188, 188) ,fontSize: 35 ,fontWeight: FontWeight.bold ), colors: [
+                  animatedTexts:[ColorizeAnimatedText(' Galaxy ', textStyle: GoogleFonts.josefinSans( color: const Color.fromARGB(255, 190, 188, 188) ,fontSize: 35 ,fontWeight: FontWeight.bold ), colors: [
                   Colors.white,
                   const Color.fromARGB(255, 65, 162, 242) ,
                   
@@ -87,8 +87,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   gotohome() async {
-   await Timer(Duration(seconds: 2), () { 
-     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Home()));
+   Timer(const Duration(seconds: 2), () { 
+     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>const Home()));
    });
    
   }
