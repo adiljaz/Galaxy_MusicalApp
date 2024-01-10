@@ -9,6 +9,7 @@ import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/database/db_model.dart';
 import 'package:galaxy/favorite/fav_function.dart';
 import 'package:galaxy/provider/provider.dart';
+import 'package:galaxy/recently/refunction.dart';
 import 'package:lottie/lottie.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -145,6 +146,7 @@ class _SearchState extends State<Search> {
                         subtitle: Text(
                           music.artistname,
                           style: TextStyle(color:Colormanager.text ),
+                          
                         ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -417,7 +419,9 @@ class _SearchState extends State<Search> {
                              ),
                           ],
                         ),
-                        onTap: () {                   
+                        onTap: () {      
+
+                          addRecentlyplayedSong(findmusic[index].songid, findmusic[index].songname, findmusic[index].artistname);             
 
                         
                           

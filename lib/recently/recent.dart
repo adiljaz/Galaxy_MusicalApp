@@ -5,12 +5,14 @@ import 'package:hive_flutter/hive_flutter.dart';
   
   
 @HiveType(typeId: 2)
-class Recentlyplayed{
+class Recentmodel{
 
   @HiveField(0)
-  String songId;
+  int songId;
   @HiveField(1)
   String name;
-  Recentlyplayed({required this.songId, required this.name});
+  @HiveField(2)
+  String artistname;
+  Recentmodel({required this.songId, required this.name,required this.artistname});
 
 }

@@ -458,7 +458,7 @@ class _PlayingSongState extends State<PlayingSong> {
 
 
 //////// home 
-///
+
     
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -1062,7 +1062,236 @@ Future<Box<RecentlyPlayed>> getRecentlyPlayedBox() async {
 
 
 
-//////////
+//////////  
+///
+///
+///// re func 
+   
+import 'package:galaxy/recently/recent.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+
+final  String _boxName = 'recent';
+
+Future <void> addRecentlyplayedSong(int songId,String  name ,String artistname) async{
+  final box= await Hive.openBox<Recentmodel>(_boxName);
+  final recentlyplayedsong=Recentmodel(songId: songId, name: name ,artistname: artistname); 
+    int currentindex=box.values.toList().indexWhere((song) => song.songId==songId);
+    if(currentindex!=-1){
+      box.putAt(currentindex, recentlyplayedsong);
+    }else{
+      box.add(recentlyplayedsong);
+    }
+
+    if(box.length>10){
+      box.delete(10);
+    }
+   
+
+}
+
+
+Future <List<Recentmodel>> getallrecentSong()async{
+  final box=await Hive.openBox<Recentmodel>(_boxName);
+  return box.values.toList().reversed.toList(); 
+}
+
+
+Future <void> deleteRecentSong(int songId)async{
+  final box=await Hive.openBox<Recentmodel>(_boxName); 
+  final indexToDelete= box.values.toList().indexWhere((song) => song.songId==songId);
+  if(indexToDelete!=-1){
+    box.deleteAt(indexToDelete); 
+  }
+}
+
+//// re page 
+///
+///import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:galaxy/Screens/nowplaying.dart';
+import 'package:galaxy/colors/colors.dart';
+import 'package:galaxy/database/db_model.dart';
+import 'package:galaxy/provider/provider.dart';
+
+
+import 'package:galaxy/recently/recent.dart';
+import 'package:galaxy/recently/refunction.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
+
+  
+
+
+class RecentlyPlayed extends StatefulWidget {
+ const  RecentlyPlayed({super.key, });
+
+
+ 
+
+  
+
+  @override
+  State<RecentlyPlayed> createState() => _RecentlyPlayedState();
+}
+
+class _RecentlyPlayedState extends State<RecentlyPlayed> {
+  List<Recentmodel> recentSongs = [];
+
+  @override
+  void initState() {
+    loadRecentlyplayedsongs();
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void loadRecentlyplayedsongs() async {
+    recentSongs = await getallrecentSong();
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    MediaQueryData mediaQuerry = MediaQuery.of(context);
+    return SafeArea(
+        child: Scaffold(
+          backgroundColor: Colormanager.scaffoldcolor,
+      body: Column(
+        children: [
+          Container(
+            height: mediaQuerry.size.height * 0.2,
+            decoration: BoxDecoration(
+                color: Colormanager.container,
+                borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(50),
+                    bottomRight: Radius.circular(50))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const FaIcon(
+                        FontAwesomeIcons.circleArrowLeft,
+                        color: Colors.white,
+                      )),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Recently Played ',
+                      style: GoogleFonts.lato(
+                          color: Colormanager.titleText,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+
+              itemCount: recentSongs.length,
+              itemBuilder: (context, index) {
+            
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colormanager.listtile,
+                  child: ListTile(
+                    
+                  
+                    leading: QueryArtworkWidget(
+                        id: recentSongs[index].songId, type: ArtworkType.AUDIO),
+                    title: Text(recentSongs[index].name),
+                    subtitle: Text(recentSongs[index].artistname),
+
+
+                    onTap: (){
+                        
+
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Nowplaying(musicModel:, index: index, songmodel: recentSongs)));
+                    },
+                  ),
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
+    ));
+  }
+}
+
+//// playlist functions 
+  
+
+
+
+  // Import necessary packages
+import 'package:hive/hive.dart';
+
+// Step 1: Create a Hive box for playlists
+class Playlist {
+  final String name;
+  final List<String> songs;
+
+  Playlist(this.name, this.songs);
+}
+
+// Step 2: Initialize Hive and open the box
+void initializeDatabase() async {
+  await Hive.initFlutter();
+  await Hive.openBox<Playlist>('playlists');
+}
+
+// Step 3: Function to add a new playlist
+void addPlaylist(String name) async {
+  var box = await Hive.openBox<Playlist>('playlists');
+  var playlist = Playlist(name, []);
+  await box.add(playlist);
+}
+
+// Step 4: Function to get all playlists
+Future<List<Playlist>> getAllPlaylists() async {
+  var box = await Hive.openBox<Playlist>('playlists');
+  return box.values.toList();
+}
+
+// Step 5: Function to add songs to a playlist
+void addSongsToPlaylist(String playlistName, List<String> songs) async {
+  var box = await Hive.openBox<Playlist>('playlists');
+  var playlist = box.values.firstWhere((p) => p.name == playlistName);
+  playlist.songs.addAll(songs);
+  await box.put(playlist.key, playlist);
+}
+
+// Step 6: Function to delete a playlist
+void deletePlaylist(String playlistName) async {
+  var box = await Hive.openBox<Playlist>('playlists');
+  var playlist = box.values.firstWhere((p) => p.name == playlistName);
+  await box.delete(playlist.key);
+}
+
+// Step 7: Function to edit a playlist name
+void editPlaylistName(String oldName, String newName) async {
+  var box = await Hive.openBox<Playlist>('playlists');
+  var playlist = box.values.firstWhere((p) => p.name == oldName);
+  playlist.name = newName;
+  await box.put(playlist.key, playlist);
+}
+
+
+
+
  
 
 

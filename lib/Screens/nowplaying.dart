@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -10,11 +12,15 @@ import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_model.dart';
 import 'package:galaxy/favorite/fav_function.dart';
 import 'package:galaxy/provider/provider.dart';
+import 'package:galaxy/recently/refunction.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:lottie/lottie.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+
+final GlobalKey<_NowplayingState> nowPlayingKey = GlobalKey<_NowplayingState>();
 
   
 // ignore: must_be_immutable
@@ -352,10 +358,10 @@ class _NowplayingState extends State<Nowplaying> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     height: mediaQuerry.size.height * 0.4,
-                    width: mediaQuerry.size.width * 1.6,
+                    width: mediaQuerry.size.width * 1.6, 
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: const ArtWorkWiget(),
+                      child: const  ArtWorkWiget(),
                     ),
                   ),
                 ),
@@ -621,7 +627,10 @@ class _NowplayingState extends State<Nowplaying> {
   void playnext() {
     if (widget.index < widget.songmodel.length - 1) {
       setState(() {
+
+       
         widget.index++;
+         addRecentlyplayedSong(widget.musicModel.songid, widget.musicModel.songname, widget.musicModel.artistname);
         widget.musicModel = widget.songmodel[widget.index];
 
         context.read<SongModelProvider>().setId(widget.musicModel.songid);
@@ -632,6 +641,7 @@ class _NowplayingState extends State<Nowplaying> {
       setState(() {
         widget.index = 0;
         widget.musicModel = widget.songmodel[widget.index];
+             addRecentlyplayedSong(widget.musicModel.songid, widget.musicModel.songname, widget.musicModel.artistname);
         context.read<SongModelProvider>().setId(widget.musicModel.songid);
 
         playSong();
@@ -643,6 +653,7 @@ class _NowplayingState extends State<Nowplaying> {
     if (widget.index > 0) {
       setState(() {
         widget.index--;
+             addRecentlyplayedSong(widget.musicModel.songid, widget.musicModel.songname, widget.musicModel.artistname);
         widget.musicModel = widget.songmodel[widget.index];
         context.read<SongModelProvider>().setId(widget.musicModel.songid);
         playSong();
@@ -651,6 +662,7 @@ class _NowplayingState extends State<Nowplaying> {
       setState(() {
         widget.index = widget.songmodel.length - 1;
         widget.musicModel = widget.songmodel[widget.index];
+             addRecentlyplayedSong(widget.musicModel.songid, widget.musicModel.songname, widget.musicModel.artistname);
         context.read<SongModelProvider>().setId(widget.musicModel.songid);
         playSong();
       });
@@ -671,16 +683,17 @@ class ArtWorkWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return QueryArtworkWidget(
-      id: context.watch<SongModelProvider>().id,
+      artworkQuality: FilterQuality.high,
+      
+       
+      nullArtworkWidget:SizedBox(  child: Lottie.asset('assets/nowplay.json',  fit:  BoxFit.cover,)), 
+      artworkHeight: 400,
+      artworkWidth: 400,
+      id: context.watch<SongModelProvider>().id, 
       type: ArtworkType.AUDIO,
       artworkFit: BoxFit.cover,
+      
     );
   }
-
- 
-
-
-
-
-
+  
 }

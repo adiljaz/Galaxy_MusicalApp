@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/Splash.dart';
-import 'package:galaxy/Screens/recently.dart';
 import 'package:galaxy/database/db_model.dart';
 import 'package:galaxy/favorite/fav_model.dart';
+import 'package:galaxy/playlist/playlist_model.dart';
 import 'package:galaxy/provider/provider.dart';
 import 'package:galaxy/recently/recent.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -21,9 +21,15 @@ void main() async {
  }
 
 
-if(!Hive.isAdapterRegistered(RecentlyplayedAdapter().typeId)){
-  Hive.registerAdapter(RecentlyplayedAdapter()); 
+if(!Hive.isAdapterRegistered(RecentmodelAdapter().typeId)){
+  Hive.registerAdapter(RecentmodelAdapter()); 
 }
+
+if(!Hive.isAdapterRegistered(PlaylistmodelAdapter().typeId)){
+  Hive.registerAdapter(PlaylistmodelAdapter());
+}
+
+
 
   runApp(ChangeNotifierProvider(
     create: (context) => SongModelProvider(),

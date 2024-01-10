@@ -13,6 +13,7 @@ import 'package:galaxy/provider/provider.dart';
 
 import 'package:galaxy/Screens/visible.dart';
 import 'package:galaxy/database/db_functions.dart';
+import 'package:galaxy/recently/refunction.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
@@ -24,7 +25,6 @@ import 'package:provider/provider.dart';
 final audioplayer = AudioPlayer();
 
 class MainHome extends StatefulWidget {
-
   MainHome({super.key});
 
   @override
@@ -32,9 +32,6 @@ class MainHome extends StatefulWidget {
 }
 
 class _MainHomeState extends State<MainHome> {
-
-
-  
   @override
   void initState() {
     // TODO: implement initState
@@ -68,11 +65,6 @@ class _MainHomeState extends State<MainHome> {
     } on Exception {}
   }
 
-
-
-
-  
-
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuerry = MediaQuery.of(context);
@@ -83,7 +75,8 @@ class _MainHomeState extends State<MainHome> {
         children: [
           Container(
             decoration: BoxDecoration(
-                color:Colormanager.container, border: Border.all(color: Colors.black)),
+                color: Colormanager.container,
+                border: Border.all(color: Colors.black)),
             height: mediaQuerry.size.height * 0.07,
             child: Row(
               children: [
@@ -95,9 +88,9 @@ class _MainHomeState extends State<MainHome> {
                       onTap: () {
                         Home.scaffoldKey.currentState?.openDrawer();
                       },
-                      child:  Icon(
+                      child: Icon(
                         Icons.menu,
-                        color:Colormanager.icons ,
+                        color: Colormanager.icons,
                         size: 30,
                       ));
                 }),
@@ -118,100 +111,102 @@ class _MainHomeState extends State<MainHome> {
           // stack starting
           FutureBuilder(
             future: fetchSongsfromDb(),
-            builder: (context,items){
-              return  Stack(
-  children: [
-    Container(
-      height: mediaQuerry.size.height * 0.2,
-      decoration: BoxDecoration(
-        color: Colormanager.container,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(50),
-          bottomRight: Radius.circular(50),
-        ),
-      ),
-    ),
-    Padding(
-      padding: const EdgeInsets.only(top: 30, left: 35),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        height: mediaQuerry.size.height * 0.3,
-        width: mediaQuerry.size.width * 0.6,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: items.data != null && items.data!.isNotEmpty
-              ? QueryArtworkWidget(
-                  artworkQuality: FilterQuality.high,
-                  quality: 100,
-                  artworkFit: BoxFit.cover,
-                  id: items.data![0].songid,
-                  type: ArtworkType.AUDIO,
-                  artworkBorder: const BorderRadius.all(Radius.circular(5)),
-                )
-              : Placeholder(), // Placeholder or some default widget
-        ),
-      ),
-    ),
-    Positioned(
-      left: 40,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 30, left: 35),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          height: mediaQuerry.size.height * 0.3,
-          width: mediaQuerry.size.width * 0.6,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: items.data != null && items.data!.length > 1
-                ? QueryArtworkWidget(
-                    artworkQuality: FilterQuality.high,
-                    quality: 100,
-                    artworkFit: BoxFit.cover,
-                    id: items.data![1].songid,
-                    type: ArtworkType.AUDIO,
-                    artworkBorder: const BorderRadius.all(Radius.circular(5)),
-                  )
-                : Placeholder(), // Placeholder or some default widget
-          ),
-        ),
-      ),
-    ),
-    Positioned(
-      left: 80,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 30, left: 35),
-        child: Container(
-          decoration: BoxDecoration(    
-            color: Colors.green,
-            borderRadius: BorderRadius.circular(50),
-          ),
-          height: mediaQuerry.size.height * 0.3,
-          width: mediaQuerry.size.width * 0.6,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: items.data != null && items.data!.length > 2
-                ? QueryArtworkWidget(
-                    artworkQuality: FilterQuality.high,
-                    quality: 100,
-                    artworkFit: BoxFit.cover,
-                    id: items.data![2].songid,
-                    type: ArtworkType.AUDIO,
-                    artworkBorder: const BorderRadius.all(Radius.circular(5)),
-                  )
-                : Placeholder(), // Placeholder or some default widget
-          ),
-        ),
-      ),
-    ),
-  ],
-);
-
+            builder: (context, items) {
+              return Stack(
+                children: [
+                  Container(
+                    height: mediaQuerry.size.height * 0.2,
+                    decoration: BoxDecoration(
+                      color: Colormanager.container,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(50),
+                        bottomRight: Radius.circular(50),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30, left: 35),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      height: mediaQuerry.size.height * 0.3,
+                      width: mediaQuerry.size.width * 0.6,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: items.data != null && items.data!.isNotEmpty
+                            ? QueryArtworkWidget(
+                                artworkQuality: FilterQuality.high,
+                                quality: 100,
+                                artworkFit: BoxFit.cover,
+                                id: items.data![0].songid,
+                                type: ArtworkType.AUDIO,
+                                artworkBorder:
+                                    const BorderRadius.all(Radius.circular(5)),
+                              )
+                            : Placeholder(), // Placeholder or some default widget
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 40,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 30, left: 35),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        height: mediaQuerry.size.height * 0.3,
+                        width: mediaQuerry.size.width * 0.6,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: items.data != null && items.data!.length > 1
+                              ? QueryArtworkWidget(
+                                  artworkQuality: FilterQuality.high,
+                                  quality: 100,
+                                  artworkFit: BoxFit.cover,
+                                  id: items.data![1].songid,
+                                  type: ArtworkType.AUDIO,
+                                  artworkBorder: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                )
+                              : Placeholder(), // Placeholder or some default widget
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 80,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 30, left: 35),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        height: mediaQuerry.size.height * 0.3,
+                        width: mediaQuerry.size.width * 0.6,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: items.data != null && items.data!.length > 2
+                              ? QueryArtworkWidget(
+                                  artworkQuality: FilterQuality.high,
+                                  quality: 100,
+                                  artworkFit: BoxFit.cover,
+                                  id: items.data![2].songid,
+                                  type: ArtworkType.AUDIO,
+                                  artworkBorder: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                )
+                              : Placeholder(), // Placeholder or some default widget
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
             },
           ),
           Padding(
@@ -227,7 +222,7 @@ class _MainHomeState extends State<MainHome> {
                         style: GoogleFonts.lato(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color:Colormanager.maintext),
+                            color: Colormanager.maintext),
                       ),
                       SizedBox(width: mediaQuerry.size.width * 0.1),
                       InkWell(
@@ -258,14 +253,15 @@ class _MainHomeState extends State<MainHome> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: ListView.builder(
-                      physics:BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                      physics: BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color:Colormanager.listtile,
+                              color: Colormanager.listtile,
                             ),
                             child: ListTile(
                               leading: ClipRRect(
@@ -283,13 +279,14 @@ class _MainHomeState extends State<MainHome> {
                                 items.data![index].songname,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style:  TextStyle(
+                                style: TextStyle(
                                     color: Colormanager.text,
                                     fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
+                                maxLines: 1, 
                                 items.data![index].artistname ?? 'No Artist',
-                                style:  TextStyle(
+                                style: TextStyle(
                                     color: Colormanager.text,
                                     fontWeight: FontWeight.w300),
                               ),
@@ -331,7 +328,8 @@ class _MainHomeState extends State<MainHome> {
                                                       Icon(
                                                         Icons.add_circle,
                                                         size: 30,
-                                                        color: Colormanager.sheeticon,
+                                                        color: Colormanager
+                                                            .sheeticon,
                                                       ),
                                                       SizedBox(
                                                         width: mediaQuerry
@@ -340,7 +338,8 @@ class _MainHomeState extends State<MainHome> {
                                                       ),
                                                       Text('Add to playlist',
                                                           style: TextStyle(
-                                                            color:Colormanager.sheetText,
+                                                            color: Colormanager
+                                                                .sheetText,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 20,
@@ -362,7 +361,8 @@ class _MainHomeState extends State<MainHome> {
                                                       Icon(
                                                         Icons.do_not_disturb_on,
                                                         size: 30,
-                                                        color: Colormanager.sheeticon,
+                                                        color: Colormanager
+                                                            .sheeticon,
                                                       ),
                                                       SizedBox(
                                                         width: mediaQuerry
@@ -372,7 +372,8 @@ class _MainHomeState extends State<MainHome> {
                                                       Text(
                                                           'Remove From PLaylist',
                                                           style: TextStyle(
-                                                            color: Colormanager.sheetText,
+                                                            color: Colormanager
+                                                                .sheetText,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 20,
@@ -393,7 +394,8 @@ class _MainHomeState extends State<MainHome> {
                                                       ),
                                                       FaIcon(
                                                         FontAwesomeIcons.music,
-                                                        color: Colormanager.sheeticon,
+                                                        color: Colormanager
+                                                            .sheeticon,
                                                       ),
                                                       SizedBox(
                                                         width: mediaQuerry
@@ -402,7 +404,8 @@ class _MainHomeState extends State<MainHome> {
                                                       ),
                                                       Text('Go to Lyrics',
                                                           style: TextStyle(
-                                                            color: Colormanager.sheetText,
+                                                            color: Colormanager
+                                                                .sheetText,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 20,
@@ -424,7 +427,8 @@ class _MainHomeState extends State<MainHome> {
                                                       Icon(
                                                         Icons.queue_music,
                                                         size: 35,
-                                                        color: Colormanager.sheeticon,
+                                                        color: Colormanager
+                                                            .sheeticon,
                                                       ),
                                                       SizedBox(
                                                         width: mediaQuerry
@@ -433,7 +437,8 @@ class _MainHomeState extends State<MainHome> {
                                                       ),
                                                       Text('Go to Playlist',
                                                           style: TextStyle(
-                                                            color: Colormanager.sheetText,
+                                                            color: Colormanager
+                                                                .sheetText,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             fontSize: 20,
@@ -445,85 +450,104 @@ class _MainHomeState extends State<MainHome> {
                                                             .size.height *
                                                         0.03,
                                                   ),
-                                                  favSongs.contains(items.data![index].songid)?
-                                                  InkWell(
-                                                    onTap: (){
-                                                      removeLikedSong(items.data![index].songid);
-                                                      ifLickd();
+                                                  favSongs.contains(items
+                                                          .data![index].songid)
+                                                      ? InkWell(
+                                                          onTap: () {
+                                                            removeLikedSong(
+                                                                items
+                                                                    .data![
+                                                                        index]
+                                                                    .songid);
+                                                            ifLickd();
 
-                                                      
-
-
-                                                      setState(() {
-                                                        
-                                                      });
-                                                      Navigator.of(context).pop();
-                                                      
-                                                    },
-                                                    child: Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.06,
+                                                            setState(() {});
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: Row(
+                                                            children: [
+                                                              SizedBox(
+                                                                width: mediaQuerry
+                                                                        .size
+                                                                        .width *
+                                                                    0.06,
+                                                              ),
+                                                              Icon(
+                                                                Icons.favorite,
+                                                                size: 30,
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                              SizedBox(
+                                                                width: mediaQuerry
+                                                                        .size
+                                                                        .width *
+                                                                    0.05,
+                                                              ),
+                                                              Text(
+                                                                  'remove from favorite',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colormanager
+                                                                        .sheetText,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        20,
+                                                                  ))
+                                                            ],
+                                                          ),
+                                                        )
+                                                      : InkWell(
+                                                          onTap: () {
+                                                            addlikedSong(items
+                                                                .data![index]
+                                                                .songid);
+                                                            ifLickd();
+                                                            setState(() {});
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: Row(
+                                                            children: [
+                                                              SizedBox(
+                                                                width: mediaQuerry
+                                                                        .size
+                                                                        .width *
+                                                                    0.06,
+                                                              ),
+                                                              Icon(
+                                                                Icons
+                                                                    .favorite_border,
+                                                                size: 30,
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                              SizedBox(
+                                                                width: mediaQuerry
+                                                                        .size
+                                                                        .width *
+                                                                    0.05,
+                                                              ),
+                                                              Text(
+                                                                  'Add to favorite',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colormanager
+                                                                        .sheetText,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        20,
+                                                                  ))
+                                                            ],
+                                                          ),
                                                         ),
-                                                        Icon(
-                                                          Icons.favorite,
-                                                          size: 30,
-                                                          color: Colors.red,
-                                                        ),
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.05,
-                                                        ),
-                                                        Text('remove from favorite',
-                                                            style: TextStyle(
-                                                              color: Colormanager.sheetText,
-                                                              fontWeight:
-                                                                  FontWeight.bold,
-                                                              fontSize: 20,
-                                                            ))
-                                                      ],
-                                                    ),
-                                                  ):InkWell(
-                                                    onTap: (){
-                                                      addlikedSong(items.data![index].songid);
-                                                      ifLickd();
-                                                      setState(() {
-                                                        
-                                                      });
-                                                      Navigator.of(context).pop();
-                                                      
-                                                    },
-                                                    child: Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.06,
-                                                        ),
-                                                        Icon(
-                                                          Icons.favorite_border,
-                                                          size: 30,
-                                                          color: Colors.red, 
-                                                          
-                                                        ),
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.05,
-                                                        ),
-                                                        Text('Add to favorite',
-                                                            style: TextStyle(
-                                                              color: Colormanager.sheetText,
-                                                              fontWeight:
-                                                                  FontWeight.bold,
-                                                              fontSize: 20,
-                                                            ))
-                                                      ],
-                                                    ),
-                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -537,7 +561,7 @@ class _MainHomeState extends State<MainHome> {
                                     width: 25,
                                   )),
                               onTap: () {
-                                VisibilityManager.isVisible =true;
+                                VisibilityManager.isVisible = true;
 
                                 // for my song container ,
 
@@ -548,23 +572,25 @@ class _MainHomeState extends State<MainHome> {
                                     .read<SongModelProvider>()
                                     .updateCurrentSong(items.data![index]);
 
-                                    MusicModel selectedsong=items.data![index];
-                                    int selectedIndex=index;
-                                    List<MusicModel>songlist=items.data!;
+                                MusicModel selectedsong = items.data![index];
+                                int selectedIndex = index;
+                                List<MusicModel> songlist = items.data!;
 
                                 Navigator.of(context).push(PageTransition(
-                                  type: PageTransitionType.bottomToTop,
-                                  childCurrent: widget,
-                                  duration:Duration(milliseconds: 200),
-
-                                   child:  Nowplaying(
-                                          musicModel: items.data![index],
-                                          index: index,
-                                          songmodel: items.data!,
-                                          
-                                          
-                                        )));
+                                    type: PageTransitionType.bottomToTop,
+                                    childCurrent: widget,
+                                    duration: Duration(milliseconds: 200),
+                                    child: Nowplaying(
+                                      musicModel: items.data![index],
+                                      index: index,
+                                      songmodel: items.data!,
+                                    )));
                                 playSong(items.data![index].uri);
+
+                                addRecentlyplayedSong(
+                                    items.data![index].songid,
+                                    items.data![index].songname,
+                                    items.data![index].artistname);
                               },
                             ),
                           ),

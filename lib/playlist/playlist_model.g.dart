@@ -1,38 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'recent.dart';
+part of 'playlist_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class RecentmodelAdapter extends TypeAdapter<Recentmodel> {
+class PlaylistmodelAdapter extends TypeAdapter<Playlistmodel> {
   @override
-  final int typeId = 2;
+  final int typeId = 3;
 
   @override
-  Recentmodel read(BinaryReader reader) {
+  Playlistmodel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Recentmodel(
-      songId: fields[0] as int,
-      name: fields[1] as String,
-      artistname: fields[2] as String,
+    return Playlistmodel(
+      name: fields[0] as String,
+      song: (fields[1] as List).cast<String>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, Recentmodel obj) {
+  void write(BinaryWriter writer, Playlistmodel obj) {
     writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.songId)
-      ..writeByte(1)
-      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.artistname);
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.song);
   }
 
   @override
@@ -41,7 +38,7 @@ class RecentmodelAdapter extends TypeAdapter<Recentmodel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is RecentmodelAdapter &&
+      other is PlaylistmodelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

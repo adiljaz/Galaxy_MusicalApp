@@ -3,22 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/mianscreens/Library.dart';
 import 'package:galaxy/Screens/mianscreens/audio.dart';
 import 'package:galaxy/Screens/home/home.dart';
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/database/db_model.dart';
-
-
 import 'package:galaxy/provider/provider.dart';
-
 import 'package:galaxy/Screens/mianscreens/search.dart';
 import 'package:galaxy/Screens/visible.dart';
-
 import 'package:lottie/lottie.dart';
 import 'package:marquee_text/marquee_text.dart';
-
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
@@ -41,35 +35,23 @@ final pages = [
 ];
 
 class _HomeState extends State<Home> {
-
   @override
   void initState() {
-  
-  
-
-  
-
     super.initState();
   }
 
 
-     
-     
   @override
   Widget build(BuildContext context) {
-
-
-      
-
+    
 
     getAllSongs();
     MediaQueryData mediaQuerry = MediaQuery.of(context);
 
     return SafeArea(
       child: Scaffold(
-        extendBody: true, 
-
- backgroundColor: Colors.transparent,
+        extendBody: true,
+        backgroundColor: Colors.transparent,
         key: Home.scaffoldKey,
         drawer: Drawer(
           child: ListView(
@@ -112,6 +94,8 @@ class _HomeState extends State<Home> {
                       musicModel: currentSong,
                       songmodel: songList,
                     );
+
+                    
                   }));
                 },
                 child: Visibility(
@@ -195,12 +179,16 @@ class _HomeState extends State<Home> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  context.read<SongModelProvider>().togglePlayPause();
+                                  context
+                                      .read<SongModelProvider>()
+                                      .togglePlayPause();
                                 },
                                 child: Icon(
-                                  
-                                  context.read<SongModelProvider>().isPlaying?Icons.play_circle  :Icons.pause_circle ,size: 42, color: Colors.white, 
-
+                                  context.read<SongModelProvider>().isPlaying
+                                      ? Icons.play_circle
+                                      : Icons.pause_circle,
+                                  size: 42,
+                                  color: Colors.white,
                                 ),
                               ),
                               SizedBox(
@@ -267,3 +255,24 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
+
+
+
+
+
+// GNav(
+//                   tabBackgroundColor: Color.fromARGB(255, 231, 231, 231),
+//                   color: Colors.black,
+//                   backgroundColor: Color.fromARGB(255, 204, 204, 204),
+//                   gap: 4,
+//                   padding: EdgeInsets.all(22),
+//                   tabs: [
+//                   GButton(icon: Icons.home,
+//                   text: 'Home',
+//                   ),
+//                    GButton(icon: Icons.search,text: 'Search',),
+//                     GButton(icon: Icons.playlist_add,text: 'Playlist',),
+//                      GButton(icon: Icons.mic,text: 'Record ',) , 
+//                 ]),

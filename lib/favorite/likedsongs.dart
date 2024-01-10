@@ -8,8 +8,12 @@ import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/colors/colors.dart';
 
 import 'package:galaxy/favorite/fav_function.dart';
+import 'package:galaxy/provider/provider.dart';
+import 'package:galaxy/recently/refunction.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
 class LikedSongs extends StatefulWidget {
   const LikedSongs({super.key});
@@ -19,9 +23,11 @@ class LikedSongs extends StatefulWidget {
 }
 
 class _LikedSongsState extends State<LikedSongs> {
+ 
   @override
   void initState() {
-    
+    showLike(); 
+    // TODO: implement initState
     super.initState();
   }
   @override
@@ -103,7 +109,13 @@ class _LikedSongsState extends State<LikedSongs> {
                       if (snapshot.data == null) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.data!.isEmpty) {
-                        return const Center(child: Text('Add new songs'));
+                        return  Center(child:Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Lottie.asset('assets/likecount.json',height:200,width: 200),
+                            
+                          ],
+                        ) );
                       } else {
                         return ListView.builder(
                           physics: const BouncingScrollPhysics(
@@ -158,9 +170,25 @@ class _LikedSongsState extends State<LikedSongs> {
                                           ),
                                         ),
                                   onTap: () {
+
+
+
+                                      context
+                                  .read<SongModelProvider>() 
+                                  .setId(snapshot.data![index].songid);
+                                    context
+                                  .read<SongModelProvider>()
+                                  .updateCurrentSong(snapshot.data![index]); 
+
+
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
+                                          
                                             builder: (context) => Nowplaying(
+
+
+                                                
+
                                                 musicModel:
                                                     snapshot.data![index],
                                                 index: index,
@@ -169,6 +197,8 @@ class _LikedSongsState extends State<LikedSongs> {
                                                     
                                                   });
                                                 });
+
+                                                addRecentlyplayedSong(snapshot.data![index].songid,snapshot.data![index].songname,snapshot.data![index].artistname);
                                   },
                                 ),
                               ),
