@@ -8,6 +8,7 @@ import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_model.dart';
 import 'package:galaxy/favorite/fav_function.dart';
+import 'package:galaxy/playlist/playlist_func.dart';
 
 import 'package:galaxy/provider/provider.dart';
 
@@ -284,7 +285,7 @@ class _MainHomeState extends State<MainHome> {
                                     fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
-                                maxLines: 1, 
+                                maxLines: 1,
                                 items.data![index].artistname ?? 'No Artist',
                                 style: TextStyle(
                                     color: Colormanager.text,
@@ -336,14 +337,19 @@ class _MainHomeState extends State<MainHome> {
                                                                 .size.width *
                                                             0.05,
                                                       ),
-                                                      Text('Add to playlist',
-                                                          style: TextStyle(
-                                                            color: Colormanager
-                                                                .sheetText,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 20,
-                                                          ))
+                                                      InkWell(
+                                                        onTap: () {},
+                                                        child: Text(
+                                                            'Add to playlist',
+                                                            style: TextStyle(
+                                                              color: Colormanager
+                                                                  .sheetText,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 20,
+                                                            )),
+                                                      )
                                                     ],
                                                   ),
                                                   SizedBox(

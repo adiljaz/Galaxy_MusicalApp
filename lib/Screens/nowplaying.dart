@@ -22,7 +22,6 @@ import 'package:http/http.dart' as http;
 
 final GlobalKey<_NowplayingState> nowPlayingKey = GlobalKey<_NowplayingState>();
 
-  
 // ignore: must_be_immutable
 class Nowplaying extends StatefulWidget {
   Nowplaying(
@@ -88,69 +87,59 @@ class _NowplayingState extends State<Nowplaying> {
     });
   }
 
+  Future<String?> fetchLyrics(String songname, String artistname) async {
+    String apiKey = '42ba0f1657c01eecd1ffa61022e691da';
+    String apiUrl =
+        'https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_track=$songname&q_artist=$artistname&apikey=$apiKey';
 
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
 
-   Future <String?> fetchLyrics(String  songname ,String artistname ) async{
-
-    String apiKey='42ba0f1657c01eecd1ffa61022e691da';
-    String apiUrl=  'https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_track=$songname&q_artist=$artistname&apikey=$apiKey';
-
-
-    try{
-      final response =await http.get(Uri.parse(apiUrl));
-
-      if( response.statusCode==200){
-        final Map<String,dynamic>data = json.decode(response.body); 
-        final lyrics=data['message']['body']['lyrics']['lyrics_body']; 
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        final lyrics = data['message']['body']['lyrics']['lyrics_body'];
         return lyrics;
-      }else{
-        throw Exception('Failed to load lyrics'); 
+      } else {
+        throw Exception('Failed to load lyrics');
       }
-
-
-
-    } catch (e){
+    } catch (e) {
       print('Error fetching lyrics');
-      return null; 
-
+      return null;
     }
-
-
   }
 
-  _showlyricsbottomsheet( String ?lyrics){
-                       showModalBottomSheet(
-
-                         shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(40),
-                                        topRight: Radius.circular(40))),
-                        
-                        
-                        backgroundColor: Colors.black,
-                          context: context,
-                        
-                          builder: (context) {
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Expanded(
-                                child: SizedBox(
-      
-                                  height:  400,
-                                  width: double.infinity,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [Text(lyrics??'Lyrics not available',style: GoogleFonts.lato(color: Colormanager.sheetText,fontWeight: FontWeight.bold ,fontSize: 20),)],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
-
-                     }
-
-
+  _showlyricsbottomsheet(String? lyrics) {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40), topRight: Radius.circular(40))),
+        backgroundColor: Colors.black,
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Expanded(
+              child: SizedBox(
+                height: 400,
+                width: double.infinity,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        lyrics ?? 'Lyrics not available',
+                        style: GoogleFonts.lato(
+                            color: Colormanager.sheetText,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -358,10 +347,10 @@ class _NowplayingState extends State<Nowplaying> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     height: mediaQuerry.size.height * 0.4,
-                    width: mediaQuerry.size.width * 1.6, 
+                    width: mediaQuerry.size.width * 1.6,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: const  ArtWorkWiget(),
+                      child: const ArtWorkWiget(),
                     ),
                   ),
                 ),
@@ -545,24 +534,19 @@ class _NowplayingState extends State<Nowplaying> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const Playlist()));
-                    },
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => Home()));
-                      },
-                      child: Text(
-                        'Home  ',
-                        style: GoogleFonts.lato(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colormanager.BalckText),
-                      ),
-                    )),
+                  InkWell(
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => Home()));
+                  },
+                  child: Text(
+                    'Home  ',
+                    style: GoogleFonts.lato(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colormanager.BalckText),
+                  ),
+                ),
                 Text(
                   '|',
                   style: TextStyle(
@@ -572,13 +556,12 @@ class _NowplayingState extends State<Nowplaying> {
                 ),
                 InkWell(
                     onTap: () async {
-
-                        String? lyrics = await fetchLyrics (
-        widget.musicModel.songname,
-        widget.musicModel.artistname ?? 'no item found', ); 
+                      String? lyrics = await fetchLyrics(
+                        widget.musicModel.songname,
+                        widget.musicModel.artistname ?? 'no item found',
+                      );
                       // second bottomsheet
                       _showlyricsbottomsheet(lyrics);
-                     
                     },
                     child: Text('    Lyrics ',
                         style: GoogleFonts.lato(
@@ -627,10 +610,9 @@ class _NowplayingState extends State<Nowplaying> {
   void playnext() {
     if (widget.index < widget.songmodel.length - 1) {
       setState(() {
-
-       
         widget.index++;
-         addRecentlyplayedSong(widget.musicModel.songid, widget.musicModel.songname, widget.musicModel.artistname);
+        addRecentlyplayedSong(widget.musicModel.songid,
+            widget.musicModel.songname, widget.musicModel.artistname);
         widget.musicModel = widget.songmodel[widget.index];
 
         context.read<SongModelProvider>().setId(widget.musicModel.songid);
@@ -641,7 +623,8 @@ class _NowplayingState extends State<Nowplaying> {
       setState(() {
         widget.index = 0;
         widget.musicModel = widget.songmodel[widget.index];
-             addRecentlyplayedSong(widget.musicModel.songid, widget.musicModel.songname, widget.musicModel.artistname);
+        addRecentlyplayedSong(widget.musicModel.songid,
+            widget.musicModel.songname, widget.musicModel.artistname);
         context.read<SongModelProvider>().setId(widget.musicModel.songid);
 
         playSong();
@@ -653,7 +636,8 @@ class _NowplayingState extends State<Nowplaying> {
     if (widget.index > 0) {
       setState(() {
         widget.index--;
-             addRecentlyplayedSong(widget.musicModel.songid, widget.musicModel.songname, widget.musicModel.artistname);
+        addRecentlyplayedSong(widget.musicModel.songid,
+            widget.musicModel.songname, widget.musicModel.artistname);
         widget.musicModel = widget.songmodel[widget.index];
         context.read<SongModelProvider>().setId(widget.musicModel.songid);
         playSong();
@@ -662,7 +646,8 @@ class _NowplayingState extends State<Nowplaying> {
       setState(() {
         widget.index = widget.songmodel.length - 1;
         widget.musicModel = widget.songmodel[widget.index];
-             addRecentlyplayedSong(widget.musicModel.songid, widget.musicModel.songname, widget.musicModel.artistname);
+        addRecentlyplayedSong(widget.musicModel.songid,
+            widget.musicModel.songname, widget.musicModel.artistname);
         context.read<SongModelProvider>().setId(widget.musicModel.songid);
         playSong();
       });
@@ -684,16 +669,16 @@ class ArtWorkWiget extends StatelessWidget {
   Widget build(BuildContext context) {
     return QueryArtworkWidget(
       artworkQuality: FilterQuality.high,
-      
-       
-      nullArtworkWidget:SizedBox(  child: Lottie.asset('assets/nowplay.json',  fit:  BoxFit.cover,)), 
+      nullArtworkWidget: SizedBox(
+          child: Lottie.asset(
+        'assets/nowplay.json',
+        fit: BoxFit.cover,
+      )),
       artworkHeight: 400,
       artworkWidth: 400,
-      id: context.watch<SongModelProvider>().id, 
+      id: context.watch<SongModelProvider>().id,
       type: ArtworkType.AUDIO,
       artworkFit: BoxFit.cover,
-      
     );
   }
-  
 }

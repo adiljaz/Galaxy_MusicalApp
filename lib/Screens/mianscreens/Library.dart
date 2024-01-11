@@ -19,6 +19,7 @@ class LibraryScreen extends StatefulWidget {
 
 class _LibraryScreenState extends State<LibraryScreen> {
   final TextEditingController _playlistnamecontroller = TextEditingController();
+   final TextEditingController _editingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +134,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
             Expanded(
               child: Padding(
                   padding: const EdgeInsets.only(left: 25, right: 25),
-                  child:  FutureBuilder <List<Playlistmodel>>(
+                  child: FutureBuilder<List<Playlistmodel>>(
                       future: getallPlaylist(),
                       builder: (context, items) {
                         if (items.connectionState == ConnectionState.waiting) {
@@ -144,117 +145,223 @@ class _LibraryScreenState extends State<LibraryScreen> {
                           return Text('No playlist available ');
                         } else {
                           return GridView.builder(
-                          physics: const BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 14,
-                            mainAxisSpacing: 20,
-                          ),
-                          itemBuilder: (context, index) {
-                            
-                            final playlist = items.data![index];
-                              print('Playlist Name: ${playlist.name}'); // Print playlist name for debugging
+                            physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 14,
+                              mainAxisSpacing: 20,
+                            ),
+                            itemBuilder: (context, index) {
+                              final playlist = items.data![index];
+                              print(
+                                  'Playlist Name: ${playlist.name}'); // Print playlist name for debugging
 
-                            if (index == 0) {
-                              return InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const LikedSongs()));
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color.fromARGB(
-                                        255, 246, 205, 205),
+                              if (index == 0) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LikedSongs()));
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color.fromARGB(
+                                          255, 246, 205, 205),
+                                    ),
+                                    height: 130,
+                                    width: 130,
+                                    child: const Icon(
+                                      Icons.favorite,
+                                      color: Color.fromARGB(255, 255, 153, 146),
+                                      size: 70,
+                                    ),
                                   ),
-                                  height: 130,
-                                  width: 130,
-                                  child: const Icon(
-                                    Icons.favorite,
-                                    color: Color.fromARGB(255, 255, 153, 146),
-                                    size: 70,
+                                );
+                              } else if (index == 1) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                RecentlyPlayed()));
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colormanager.container,
+                                    ),
+                                    height: 130,
+                                    width: 130,
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: mediaQuerry.size.width * 0.02,
+                                        ),
+                                        const Text(
+                                          'Recently played ',
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Lottie.asset('assets/rc.json'),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            } else if (index == 1) {
+                                );
+                              } else if (index == 2) {
+                                return InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colormanager.container,
+                                    ),
+                                    height: 130,
+                                    width: 130,
+                                    child: Lottie.asset(
+                                      'assets/an1.json',
+                                    ),
+                                  ),
+                                );
+                              }
+
                               return InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => RecentlyPlayed()));
+                                onTap: (){
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Playlist(playlistname: playlist.name,)));
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colormanager.container,
                                   ),
-                                  height: 130,
-                                  width: 130,
+                                  height: mediaQuerry.size.height,
+                                  width: mediaQuerry.size.width,
                                   child: Column(
                                     children: [
-                                      SizedBox(
-                                        height: mediaQuerry.size.width * 0.02,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                playlist.name,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: const Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            width:
+                                                40, // Set a specific width for the PopupMenuButton container
+                                            child: PopupMenuButton(
+                                              color: Colormanager.listtile,
+                                              elevation: 0,
+                                              icon: Icon(Icons.more_vert,
+                                                  color: Colors.white),
+                                              itemBuilder: (context) => [
+                                                PopupMenuItem(
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      showDialog(context: context, builder: (context){
+                                                        
+                                                        return AlertDialog(title: Text('Edit playlist',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                                                        content: TextFormField(controller: _editingController,),
+                                                        actions: [ TextButton(onPressed: (){
+                                                          Navigator.of(context).pop();
+                                                        }, child: Text('Cancel',style: TextStyle(color: Colormanager.text),)),TextButton(onPressed: (){
+                                                          editPLaylistName(playlist.name,_editingController.text );
+                                                          Navigator.of(context).pop();
+                                                        }, child: Text('Save',style: TextStyle(color: Colormanager.text)))]
+                                                        ,
+                                
+                                                        backgroundColor: Colormanager.container,
+                                                        );
+                                                      });
+                                                    },
+                                                    child: Text(
+                                                      'Edit',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                      setState(() {});
+                                                      deletePlaylist(
+                                                          playlist.name,
+                                                          playlist.song);
+                                                    },
+                                                    child: Text(
+                                                      'Delete',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const Text(
-                                        'Recently played ',
-                                        style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Lottie.asset('assets/rc.json'),
+                                      Lottie.asset('assets/sing.json',
+                                          height: 100,
+                                          width: 100,
+                                          fit: BoxFit.fill),
                                     ],
                                   ),
                                 ),
                               );
-                            } else if (index == 2) {
-                              return InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colormanager.container,
-                                  ),
-                                  height: 130,
-                                  width: 130,
-                                  child: Lottie.asset(
-                                    'assets/an1.json',
-                                  ),
-                                ),
-                              );
-                            }
 
-                            return Container(
-                              
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colormanager.container,
-                              ),
-                              height: 130,
-                              width: 130,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  
-                                  InkWell( onTap: (){
-                                    setState(() {
-                                       
-                                    });
-                                    deletePlaylist(playlist.name, playlist.song);
-                                  },  child: Icon(Icons.delete,color: Colors.red,)),
-                                  Center(
-                                    child: Text(playlist.name, style: TextStyle(color: Colors.white),),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          itemCount:items.data!.length,
-                        );
+                              // Container(
+
+                              //   decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.circular(10),
+                              //     color: Colormanager.container,
+                              //   ),
+                              //   height: 130,
+                              //   width: 130,
+                              //   child: Column(
+                              //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              //     children: [
+
+                              //       InkWell( onTap: (){
+                              //         setState(() {
+
+                              //         });
+                              //         deletePlaylist(playlist.name, playlist.song);
+                              //       },  child: Icon(Icons.delete,color: Colors.red,)),
+                              //       Center(
+                              //         child: Text(playlist.name, style: TextStyle(color: Colors.white),),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // );
+                            },
+                            itemCount: items.data!.length,
+                          );
                         }
-                        
                       })),
             )
           ],
