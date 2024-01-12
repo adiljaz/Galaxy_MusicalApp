@@ -18,7 +18,7 @@ class PlaylistmodelAdapter extends TypeAdapter<Playlistmodel> {
     };
     return Playlistmodel(
       name: fields[0] as String,
-      song: (fields[1] as List).cast<String>(),
+      song: (fields[1] as List).cast<int>(),
     );
   }
 

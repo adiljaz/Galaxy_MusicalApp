@@ -7,7 +7,6 @@ import 'package:galaxy/recently/recently.dart';
 import 'package:galaxy/colors/colors.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -232,7 +231,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
                               return InkWell(
                                 onTap: (){
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Playlist(playlistname: playlist.name,)));
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Playlist(playlistId: playlist.key,playlistname: playlist.name,)));
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -282,7 +281,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                                         actions: [ TextButton(onPressed: (){
                                                           Navigator.of(context).pop();
                                                         }, child: Text('Cancel',style: TextStyle(color: Colormanager.text),)),TextButton(onPressed: (){
-                                                          editPLaylistName(playlist.name,_editingController.text );
+                                                          editPlaylistName(playlist.name,_editingController.text );
                                                           Navigator.of(context).pop();
                                                         }, child: Text('Save',style: TextStyle(color: Colormanager.text)))]
                                                         ,

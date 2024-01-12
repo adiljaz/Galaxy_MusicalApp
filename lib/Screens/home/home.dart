@@ -9,6 +9,7 @@ import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_model.dart';
 import 'package:galaxy/favorite/fav_function.dart';
 import 'package:galaxy/playlist/playlist_func.dart';
+import 'package:galaxy/playlist/playlist_model.dart';
 
 import 'package:galaxy/provider/provider.dart';
 
@@ -18,6 +19,7 @@ import 'package:galaxy/recently/refunction.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:lottie/lottie.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -63,7 +65,9 @@ class _MainHomeState extends State<MainHome> {
       audioplayer.play();
 
       audioplayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
-    } on Exception {}
+    } on Exception {
+
+    }
   }
 
   @override
@@ -338,7 +342,75 @@ class _MainHomeState extends State<MainHome> {
                                                             0.05,
                                                       ),
                                                       InkWell(
-                                                        onTap: () {},
+                                                       onTap: () {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (context) {
+                                                                return AlertDialog(
+                                                                  title: Text(
+                                                                      'Playlists'),
+                                                                  content:
+                                                                      Container(
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.5,
+                                                                    height: MediaQuery.of(context)
+                                                                            .size
+                                                                            .height *
+                                                                        0.3,
+                                                                    child: FutureBuilder<
+                                                                        List<
+                                                                            Playlistmodel>>(
+                                                                      future:
+                                                                          getallPlaylist(),
+                                                                      builder:
+                                                                          (context,
+                                                                              items) {
+                                                                        if (items.connectionState ==
+                                                                            ConnectionState
+                                                                                .waiting) {
+                                                                          return Center(
+                                                                              child: CircularProgressIndicator());
+                                                                        } else if (items
+                                                                            .hasError) {
+                                                                          return Text(
+                                                                              'Error: ${items.error}');
+                                                                        } else if (!items.hasData ||
+                                                                            items.data!.isEmpty) {
+                                                                          return Text(
+                                                                              'No data available');
+                                                                        } else {
+                                                                          return ListView
+                                                                              .builder(
+                                                                            itemCount:
+                                                                                items.data!.length,
+                                                                            itemBuilder:
+                                                                                (context, index) {
+                                                                              return Padding(
+                                                                                padding: const EdgeInsets.all(4.0),
+                                                                                child: Container(
+                                                                                  decoration: BoxDecoration(color: Colormanager.container,borderRadius: BorderRadius.circular(5)),
+                                                                                  
+                                                                                  child: ListTile(
+                                                                                    leading: Lottie.asset('assets/sing.json', fit: BoxFit.fill),
+                                                                                    title: Text(items.data![index].name,style: TextStyle(color: Colors.white),),
+                                                                                  
+                                                                                  ),
+                                                                                ),
+                                                                              );
+                                                                            },
+                                                                          );
+                                                                        }
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                            );
+                                                            
+                                                          },
                                                         child: Text(
                                                             'Add to playlist',
                                                             style: TextStyle(

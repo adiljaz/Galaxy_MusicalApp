@@ -15,6 +15,5 @@ class MusicModel {
   String artistname;
   @HiveField(3)
   String uri;
-
   MusicModel({required this.artistname,required this.songid,required this.songname,required this.uri});
 }

@@ -7,6 +7,6 @@ class Playlistmodel extends HiveObject{
   @HiveField(0)
    String  name ;
   @HiveField(1)
-   List<String> song ;
+   List<int> song ;
   Playlistmodel({required this.name, required this.song}); 
 }

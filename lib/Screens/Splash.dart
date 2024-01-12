@@ -10,10 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 
 class SplashScreen extends StatefulWidget {
-  
-
-  
-    
 
   const SplashScreen({super.key,});
  
@@ -27,9 +23,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-
-   
-
 
     gotohome();
 

@@ -13,7 +13,6 @@ class Colormanager {
     static Color icons=Colors.white;
     static Color sheeticon=Colors.white; 
     static Color sheetcolor=Colors.black;
- 
     static Color BalckText=Colors.black;
     static Color blackicon=Colors.black;
     
