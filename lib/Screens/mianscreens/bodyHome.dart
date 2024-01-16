@@ -40,11 +40,8 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    
-
     getAllSongs();
     MediaQueryData mediaQuerry = MediaQuery.of(context);
 
@@ -70,6 +67,7 @@ class _HomeState extends State<Home> {
         ),
         body: pages[_selectedindex],
         bottomNavigationBar: ClipRRect(
+                
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
@@ -89,13 +87,10 @@ class _HomeState extends State<Home> {
                         context.watch<SongModelProvider>().songList;
 
                     return Nowplaying(
-                      
                       index: currentIndex,
                       musicModel: currentSong,
                       songmodel: songList,
                     );
-
-                    
                   }));
                 },
                 child: Visibility(
@@ -218,8 +213,19 @@ class _HomeState extends State<Home> {
                   backgroundColor: Colors.white,
                   currentIndex: _selectedindex,
                   onTap: (value) {
+
+                     
+
+                    
+
+
                     setState(() {
+
+
+                   
                       _selectedindex = value;
+
+
                     });
                   },
                   selectedItemColor: const Color.fromARGB(255, 105, 105, 105),
@@ -234,6 +240,7 @@ class _HomeState extends State<Home> {
                         ),
                         label: 'Home'),
                     const BottomNavigationBarItem(
+
                         icon: Icon(Icons.search, size: 25), label: 'Search'),
                     const BottomNavigationBarItem(
                         icon: Icon(Icons.library_music, size: 25),

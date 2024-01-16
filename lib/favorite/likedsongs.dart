@@ -23,13 +23,13 @@ class LikedSongs extends StatefulWidget {
 }
 
 class _LikedSongsState extends State<LikedSongs> {
- 
   @override
   void initState() {
-    showLike(); 
+    showLike();
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuerry = MediaQuery.of(context);
@@ -55,7 +55,7 @@ class _LikedSongsState extends State<LikedSongs> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                icon:  const FaIcon(
+                                icon: const FaIcon(
                                   FontAwesomeIcons.circleChevronLeft,
                                   color: Colors.white,
                                 )),
@@ -109,13 +109,14 @@ class _LikedSongsState extends State<LikedSongs> {
                       if (snapshot.data == null) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.data!.isEmpty) {
-                        return  Center(child:Column(
+                        return Center(
+                            child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Lottie.asset('assets/likecount.json',height:200,width: 200),
-                            
+                            Lottie.asset('assets/likecount.json',
+                                height: 200, width: 200),
                           ],
-                        ) );
+                        ));
                       } else {
                         return ListView.builder(
                           physics: const BouncingScrollPhysics(
@@ -170,35 +171,29 @@ class _LikedSongsState extends State<LikedSongs> {
                                           ),
                                         ),
                                   onTap: () {
-
-
-
-                                      context
-                                  .read<SongModelProvider>() 
-                                  .setId(snapshot.data![index].songid);
                                     context
-                                  .read<SongModelProvider>()
-                                  .updateCurrentSong(snapshot.data![index]); 
-
+                                        .read<SongModelProvider>()
+                                        .setId(snapshot.data![index].songid);
+                                    context
+                                        .read<SongModelProvider>()
+                                        .updateCurrentSong(
+                                            snapshot.data![index]);
 
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          
                                             builder: (context) => Nowplaying(
-
-
-                                                
-
                                                 musicModel:
                                                     snapshot.data![index],
                                                 index: index,
-                                                songmodel: snapshot.data!)))..then((value) {
-                                                  setState(() {
-                                                    
-                                                  });
-                                                });
+                                                songmodel: snapshot.data!)))
+                                      ..then((value) {
+                                        setState(() {});
+                                      });
 
-                                                addRecentlyplayedSong(snapshot.data![index].songid,snapshot.data![index].songname,snapshot.data![index].artistname);
+                                    addRecentlyplayedSong(
+                                        snapshot.data![index].songid,
+                                        snapshot.data![index].songname,
+                                        snapshot.data![index].artistname);
                                   },
                                 ),
                               ),

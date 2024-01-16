@@ -1,21 +1,25 @@
 // ignore_for_file: sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:galaxy/Screens/nowplaying.dart';
 import 'package:galaxy/colors/colors.dart';
+import 'package:galaxy/playlist/addplaylist.dart';
 import 'package:galaxy/playlist/playlist_func.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../database/db_model.dart';
 
-// ignore: must_be_immutable,
-class Playlist extends StatelessWidget {
-
-  Playlist({super.key, required this.playlistId, required this.playlistname});
+class Playlist extends StatefulWidget {
+  Playlist({Key? key, required this.playlistId, required this.playlistname});
 
   final int playlistId;
-
   final String playlistname;
 
+  @override
+  State<Playlist> createState() => _PlaylistState();
+}
+
+class _PlaylistState extends State<Playlist> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuerry = MediaQuery.of(context);
@@ -29,43 +33,48 @@ class Playlist extends StatelessWidget {
                 Container(
                   height: mediaQuerry.size.height * 0.2,
                   child: Center(
-                      child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            IconButton(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              IconButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
                                 icon: const FaIcon(
                                   FontAwesomeIcons.circleChevronLeft,
                                   color: Colors.white,
-                                )),
-                            SizedBox(
-                              width: mediaQuerry.size.width * 0.25,
-                            ),
-                          ],
-                        ),
-                        Center(
-                          child: Text(
-                            playlistname.toString(),
-                            style: const TextStyle(
+                                ),
+                              ),
+                              SizedBox(
+                                width: mediaQuerry.size.width * 0.25,
+                              ),
+                            ],
+                          ),
+                          Center(
+                            child: Text(
+                              widget.playlistname.toString(),
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                                fontSize: 20,
+                              ),
+                            ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
-                  )),
+                  ),
                   decoration: const BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(40),
-                          bottomRight: Radius.circular(40))),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(40),
+                      bottomRight: Radius.circular(40),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -74,22 +83,21 @@ class Playlist extends StatelessWidget {
             ),
             Expanded(
               child: FutureBuilder<List<MusicModel>>(
-                // Update this to get playlist songs instead of all songs
-                future: getPlaylistSong(
-                    playlistId), // Replace 'playlistId' with the actual playlist ID
+                future: getPlaylistSongs(widget.playlistId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  } else if (snapshot.data == null) {
                     return Center(child: Text('No data available'));
+                  } else if (snapshot.data!.isEmpty) {
+                    return Center(child: Text('No songs in the playlist'));
                   } else {
-                    // Use ListView.separated to show a separator between items
-                    return ListView.separated(
+                    // Use ListView.builder to show a list without a separator
+                    return ListView.builder(
                       physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics(),
                       ),
+                      itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -98,54 +106,58 @@ class Playlist extends StatelessWidget {
                               color: Colormanager.listtile,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: ListTile(
-                              // ... your ListTile content here ...
+                            child:
+                               ListTile(
+                                onTap: (){
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                                    return  Nowplaying(
+                                    musicModel: snapshot.data![index],
+                                    index: index,
+                                    songmodel: snapshot.data!);
+                                  }));
 
-                              // You can directly access snapshot.data for the list of songs
-                              leading: ClipRRect(
-                                child: QueryArtworkWidget(
-                                  id: snapshot.data![index].songid,
-                                  type: ArtworkType.AUDIO,
-                                  artworkFit: BoxFit.cover,
-                                  artworkBorder: BorderRadius.circular(5),
-                                ),
-                              ),
-                              title: Text(
-                                snapshot.data![index].songname,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colormanager.text,
-                                ),
-                              ),
-                              subtitle: Text(
-                                snapshot.data![index].artistname,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  color: Colormanager.text,
-                                ),
-                              ),
-                              onTap: () {
-                                // ... your onTap logic here ...
-                              },
-                              trailing: GestureDetector(
-                                onTap: () {
-                                  // ... your onTap logic here ...
                                 },
-                                child: Image.asset(
-                                  'assets/more.png',
-                                  color: Colors.white,
-                                  height: 25,
-                                  width: 25,
+                                leading: ClipRRect(
+                                  child: QueryArtworkWidget(
+                                    id: snapshot.data![index].songid,
+                                    type: ArtworkType.AUDIO,
+                                    artworkFit: BoxFit.cover,
+                                    artworkBorder: BorderRadius.circular(5),
+                                  ),
                                 ),
+                                title: Text(
+                                  snapshot.data![index].songname,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colormanager.text,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  snapshot.data![index].artistname,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    color: Colormanager.text,
+                                  ),
+                                ),
+                                trailing: GestureDetector(
+                                  onTap: () {
+                                    
+                                  deleteSongFromPlaylist(widget.playlistId,snapshot.data![index].songid);
+
+                                  setState(() {
+                                    
+                                  });
+                                  
+                                  },
+                                  child: Icon(Icons.close,size: 25,)
+                                ),
+                               
                               ),
-                            ),
+                            
                           ),
                         );
                       },
-                      separatorBuilder: (context, index) =>
-                          Divider(), // Add a divider
-                      itemCount: snapshot.data!.length,
                     );
                   }
                 },
@@ -153,6 +165,18 @@ class Playlist extends StatelessWidget {
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton( backgroundColor: Colormanager.BalckText,  onPressed: (){
+
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddtoPlaylist(playlistid:widget.playlistId,)))..then((value) {
+            setState(() {
+               
+            });
+          });
+
+          
+        }, child: Icon(Icons.add ,color: Colormanager.text,),),
+
+        
       ),
     );
   }

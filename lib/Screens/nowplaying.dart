@@ -7,10 +7,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:galaxy/Screens/mianscreens/bodyHome.dart';
 import 'package:galaxy/Screens/home/home.dart';
-import 'package:galaxy/Screens/playlist.dart';
+
 import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/database/db_model.dart';
 import 'package:galaxy/favorite/fav_function.dart';
+import 'package:galaxy/playlist/playlist_func.dart';
+import 'package:galaxy/playlist/playlist_model.dart';
 import 'package:galaxy/provider/provider.dart';
 import 'package:galaxy/recently/refunction.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -125,12 +127,14 @@ class _NowplayingState extends State<Nowplaying> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Text(
-                        lyrics ?? 'Lyrics not available',
-                        style: GoogleFonts.lato(
-                            color: Colormanager.sheetText,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                      Center(
+                        child: Text(
+                          lyrics ?? 'Lyrics not available',
+                          style: GoogleFonts.lato(
+                              color: Colormanager.sheetText,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
                       )
                     ],
                   ),
@@ -176,155 +180,126 @@ class _NowplayingState extends State<Nowplaying> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                          left: 40,
-                        ),
-                        child: IconButton(
-                          onPressed: () {
-                            showModalBottomSheet(
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(40),
-                                        topRight: Radius.circular(40))),
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                            left: 40,
+                          ),
+                          child: IconButton(
+                            onPressed: () async {
+                              showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return Container(
-                                    height: mediaQuerry.size.height * 0.35,
-                                    decoration: BoxDecoration(
-                                        color: Colormanager.sheetcolor,
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(40),
-                                            topRight: Radius.circular(40))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height:
-                                                mediaQuerry.size.height * 0.05,
-                                          ),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: mediaQuerry.size.width *
-                                                    0.06,
-                                              ),
-                                              Icon(
-                                                Icons.add_circle,
-                                                size: 30,
-                                                color: Colormanager.sheeticon,
-                                              ),
-                                              SizedBox(
-                                                width: mediaQuerry.size.width *
-                                                    0.05,
-                                              ),
-                                              Text('Add to playlist',
-                                                  style: TextStyle(
-                                                    color:
-                                                        Colormanager.sheetText,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                  ))
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                mediaQuerry.size.height * 0.03,
-                                          ),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: mediaQuerry.size.width *
-                                                    0.06,
-                                              ),
-                                              Icon(
-                                                Icons.do_not_disturb_on,
-                                                size: 30,
-                                                color: Colormanager.sheeticon,
-                                              ),
-                                              SizedBox(
-                                                width: mediaQuerry.size.width *
-                                                    0.05,
-                                              ),
-                                              Text('Remove From PLaylist',
-                                                  style: TextStyle(
-                                                    color:
-                                                        Colormanager.sheetText,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                  ))
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                mediaQuerry.size.height * 0.03,
-                                          ),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: mediaQuerry.size.width *
-                                                    0.06,
-                                              ),
-                                              FaIcon(
-                                                FontAwesomeIcons.music,
-                                                color: Colormanager.sheeticon,
-                                              ),
-                                              SizedBox(
-                                                width: mediaQuerry.size.width *
-                                                    0.05,
-                                              ),
-                                              Text('Go to Lyrics',
-                                                  style: TextStyle(
-                                                    color:
-                                                        Colormanager.sheetText,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                  ))
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                mediaQuerry.size.height * 0.03,
-                                          ),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: mediaQuerry.size.width *
-                                                    0.06,
-                                              ),
-                                              Icon(
-                                                Icons.queue_music,
-                                                size: 35,
-                                                color: Colormanager.sheeticon,
-                                              ),
-                                              SizedBox(
-                                                width: mediaQuerry.size.width *
-                                                    0.05,
-                                              ),
-                                              Text('Add to Playlist',
-                                                  style: TextStyle(
-                                                    color:
-                                                        Colormanager.sheetText,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
-                                                  ))
-                                            ],
-                                          ),
-                                        ],
+                                  return AlertDialog(
+                                    title: Text('Playlists'),
+                                    content: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.3,
+                                      child: FutureBuilder<List<Playlistmodel>>(
+                                        future: getallPlaylist(),
+                                        builder: (context, items) {
+                                          if (items.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          } else if (items.hasError) {
+                                            return Text(
+                                                'Error: ${items.error}');
+                                          } else if (!items.hasData ||
+                                              items.data!.isEmpty) {
+                                            return Text('No data available');
+                                          } else {
+                                            return ListView.builder(
+                                              itemCount: items.data!.length,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colormanager
+                                                            .container,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5)),
+                                                    child: ListTile(
+                                                      leading: Lottie.asset(
+                                                        'assets/sing.json',
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                      title: Text(
+                                                        items.data![index].name,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      onTap: () async {
+                                                        int playsongid = widget
+                                                            .musicModel.songid;
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        addSongToPlaylist(
+                                                          items
+                                                              .data![index].key,
+                                                          playsongid,
+                                                        );
+
+                                                        bool
+                                                            songAlreadyinPlaylist =
+                                                            await ifSongContain(
+                                                          widget.musicModel,
+                                                          items
+                                                              .data![index].key,
+                                                        );
+                                                        if (songAlreadyinPlaylist) {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                  'Song is already in the playlist'),
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          await addSongToPlaylist(
+                                                            widget.musicModel
+                                                                .songid,
+                                                            items.data![index]
+                                                                .key,
+                                                          );
+
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                  'Song added to playlist'),
+                                                            ),
+                                                          );
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          }
+                                        },
                                       ),
                                     ),
                                   );
-                                });
-                          },
-                          icon: Icon(
-                            Icons.more_horiz,
-                            color: Colormanager.sheetText,
-                            size: 29,
-                          ),
-                          color: Colormanager.icons,
-                        ),
-                      )
+                                },
+                              );
+                            },
+                            icon: Icon(
+                              Icons.playlist_add,
+                              size: 35,
+                              color: Colormanager.sheeticon,
+                            ),
+                          ))
                     ],
                   ),
                   height: mediaQuerry.size.height * 0.37,
@@ -534,7 +509,7 @@ class _NowplayingState extends State<Nowplaying> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                  InkWell(
+                InkWell(
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) => Home()));

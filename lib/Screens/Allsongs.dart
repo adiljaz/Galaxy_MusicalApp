@@ -118,6 +118,7 @@ class _AllsongsState extends State<Allsongs> {
                                   },
                                   trailing: GestureDetector(
                                     onTap: () {
+                                      int playsongid = item.data![index].songid;
                                       showModalBottomSheet(
                                           shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.only(
@@ -128,7 +129,7 @@ class _AllsongsState extends State<Allsongs> {
                                           builder: (context) {
                                             return Container(
                                               height: mediaQuerry.size.height *
-                                                  0.40,
+                                                  0.30,
                                               decoration: BoxDecoration(
                                                   color: Colors.black,
                                                   borderRadius:
@@ -169,9 +170,6 @@ class _AllsongsState extends State<Allsongs> {
                                                         ),
                                                         InkWell(
                                                           onTap: () {
-
-
-
                                                             showDialog(
                                                               context: context,
                                                               builder:
@@ -218,15 +216,13 @@ class _AllsongsState extends State<Allsongs> {
                                                                             itemBuilder:
                                                                                 (context, index) {
                                                                               return ListTile(
-                                                                                onTap: () async{
-                                                                                  var playlistId=items.data![index].key;
-                                                                                  var songId=items.data![index].song; 
+                                                                                onTap: () async {
+                                                                                  var playlistId = items.data![index].key;
+                                                                                  var songId = items.data![index].song;
 
-                                                                                  setState(() {
-                                                                                     
-                                                                                  });
+                                                                                  setState(() {});
 
-                                                                                  addSongToPlaylist(playlistId,songId);
+                                                                                  addSongToPlaylist(playlistId, playsongid);
 
                                                                                   Navigator.of(context).pop();
                                                                                 },
@@ -244,7 +240,6 @@ class _AllsongsState extends State<Allsongs> {
                                                             );
                                                           },
                                                           child: Text(
-
                                                               'Add to playlist',
                                                               style: TextStyle(
                                                                 color: Colormanager
@@ -255,42 +250,6 @@ class _AllsongsState extends State<Allsongs> {
                                                                 fontSize: 20,
                                                               )),
                                                         )
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      height: mediaQuerry
-                                                              .size.height *
-                                                          0.03,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.06,
-                                                        ),
-                                                        Icon(
-                                                          Icons
-                                                              .do_not_disturb_on,
-                                                          size: 30,
-                                                          color: Colormanager
-                                                              .sheeticon,
-                                                        ),
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.05,
-                                                        ),
-                                                        Text(
-                                                            'Remove From PLaylist',
-                                                            style: TextStyle(
-                                                              color: Colormanager
-                                                                  .sheetText,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 20,
-                                                            ))
                                                       ],
                                                     ),
                                                     SizedBox(
@@ -316,50 +275,35 @@ class _AllsongsState extends State<Allsongs> {
                                                                   .size.width *
                                                               0.05,
                                                         ),
-                                                        Text('Go to Lyrics',
-                                                            style: TextStyle(
-                                                              color: Colormanager
-                                                                  .sheetText,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 20,
-                                                            ))
+                                                        InkWell(
+                                                          onTap: () {
+                                                            Navigator.of(context).push(MaterialPageRoute(
+                                                                builder: (context) => Nowplaying(
+                                                                    musicModel:
+                                                                        item.data![
+                                                                            index],
+                                                                    index:
+                                                                        index,
+                                                                    songmodel: item
+                                                                        .data!)));
+                                                          },
+                                                          child: Text(
+                                                              'Go to  song',
+                                                              style: TextStyle(
+                                                                color: Colormanager
+                                                                    .sheetText,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 20,
+                                                              )),
+                                                        )
                                                       ],
                                                     ),
                                                     SizedBox(
                                                       height: mediaQuerry
                                                               .size.height *
                                                           0.03,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.06,
-                                                        ),
-                                                        Icon(
-                                                          Icons.queue_music,
-                                                          size: 35,
-                                                          color: Colormanager
-                                                              .sheeticon,
-                                                        ),
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.05,
-                                                        ),
-                                                        Text('Go to Playlist',
-                                                            style: TextStyle(
-                                                              color: Colormanager
-                                                                  .sheetText,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 20,
-                                                            ))
-                                                      ],
                                                     ),
                                                     SizedBox(
                                                       height: mediaQuerry

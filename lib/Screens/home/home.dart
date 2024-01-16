@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:galaxy/Screens/Allsongs.dart';
 
+
 import 'package:galaxy/Screens/mianscreens/bodyHome.dart';
 
 import 'package:galaxy/Screens/nowplaying.dart';
@@ -65,9 +66,7 @@ class _MainHomeState extends State<MainHome> {
       audioplayer.play();
 
       audioplayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
-    } on Exception {
-
-    }
+    } on Exception {}
   }
 
   @override
@@ -297,6 +296,7 @@ class _MainHomeState extends State<MainHome> {
                               ),
                               trailing: InkWell(
                                   onTap: () {
+                                    int playsongid = items.data![index].songid;
                                     showModalBottomSheet(
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.only(
@@ -306,7 +306,7 @@ class _MainHomeState extends State<MainHome> {
                                         builder: (context) {
                                           return Container(
                                             height:
-                                                mediaQuerry.size.height * 0.40,
+                                                mediaQuerry.size.height * 0.30,
                                             decoration: BoxDecoration(
                                                 color: Colors.black,
                                                 borderRadius: BorderRadius.only(
@@ -342,75 +342,86 @@ class _MainHomeState extends State<MainHome> {
                                                             0.05,
                                                       ),
                                                       InkWell(
-                                                       onTap: () {
-                                                            showDialog(
-                                                              context: context,
-                                                              builder:
-                                                                  (context) {
-                                                                return AlertDialog(
-                                                                  title: Text(
-                                                                      'Playlists'),
-                                                                  content:
-                                                                      Container(
-                                                                    width: MediaQuery.of(context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.5,
-                                                                    height: MediaQuery.of(context)
-                                                                            .size
-                                                                            .height *
-                                                                        0.3,
-                                                                    child: FutureBuilder<
-                                                                        List<
-                                                                            Playlistmodel>>(
-                                                                      future:
-                                                                          getallPlaylist(),
-                                                                      builder:
-                                                                          (context,
-                                                                              items) {
-                                                                        if (items.connectionState ==
-                                                                            ConnectionState
-                                                                                .waiting) {
-                                                                          return Center(
-                                                                              child: CircularProgressIndicator());
-                                                                        } else if (items
-                                                                            .hasError) {
-                                                                          return Text(
-                                                                              'Error: ${items.error}');
-                                                                        } else if (!items.hasData ||
-                                                                            items.data!.isEmpty) {
-                                                                          return Text(
-                                                                              'No data available');
-                                                                        } else {
-                                                                          return ListView
-                                                                              .builder(
-                                                                            itemCount:
-                                                                                items.data!.length,
-                                                                            itemBuilder:
-                                                                                (context, index) {
-                                                                              return Padding(
-                                                                                padding: const EdgeInsets.all(4.0),
-                                                                                child: Container(
-                                                                                  decoration: BoxDecoration(color: Colormanager.container,borderRadius: BorderRadius.circular(5)),
-                                                                                  
-                                                                                  child: ListTile(
-                                                                                    leading: Lottie.asset('assets/sing.json', fit: BoxFit.fill),
-                                                                                    title: Text(items.data![index].name,style: TextStyle(color: Colors.white),),
-                                                                                  
+                                                        onTap: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return AlertDialog(
+                                                                title: Text(
+                                                                    'Playlists'),
+                                                                content:
+                                                                    Container(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.5,
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.3,
+                                                                  child: FutureBuilder<
+                                                                      List<
+                                                                          Playlistmodel>>(
+                                                                    future:
+                                                                        getallPlaylist(),
+                                                                    builder:
+                                                                        (context,
+                                                                            items) {
+                                                                      if (items
+                                                                              .connectionState ==
+                                                                          ConnectionState
+                                                                              .waiting) {
+                                                                        return Center(
+                                                                            child:
+                                                                                CircularProgressIndicator());
+                                                                      } else if (items
+                                                                          .hasError) {
+                                                                        return Text(
+                                                                            'Error: ${items.error}');
+                                                                      } else if (!items
+                                                                              .hasData ||
+                                                                          items
+                                                                              .data!
+                                                                              .isEmpty) {
+                                                                        return Text(
+                                                                            'No data available');
+                                                                      } else {
+                                                                        return ListView
+                                                                            .builder(
+                                                                          itemCount: items
+                                                                              .data!
+                                                                              .length,
+                                                                          itemBuilder:
+                                                                              (context, index) {
+                                                                            return Padding(
+                                                                              padding: const EdgeInsets.all(4.0),
+                                                                              child: Container(
+                                                                                decoration: BoxDecoration(color: Colormanager.container, borderRadius: BorderRadius.circular(5)),
+                                                                                child: ListTile(
+                                                                                  leading: Lottie.asset('assets/sing.json', fit: BoxFit.fill),
+                                                                                  title: Text(
+                                                                                    items.data![index].name,
+                                                                                    style: TextStyle(color: Colors.white),
                                                                                   ),
+                                                                                  onTap: () {
+                                                                                    Navigator.of(context).pop();
+                                                                                    addSongToPlaylist(items.data![index].key, playsongid);
+                                                                                  },
                                                                                 ),
-                                                                              );
-                                                                            },
-                                                                          );
-                                                                        }
-                                                                      },
-                                                                    ),
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                        );
+                                                                      }
+                                                                    },
                                                                   ),
-                                                                );
-                                                              },
-                                                            );
-                                                            
-                                                          },
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                        },
                                                         child: Text(
                                                             'Add to playlist',
                                                             style: TextStyle(
@@ -424,40 +435,9 @@ class _MainHomeState extends State<MainHome> {
                                                       )
                                                     ],
                                                   ),
-                                                  SizedBox(
-                                                    height: mediaQuerry
-                                                            .size.height *
-                                                        0.03,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: mediaQuerry
-                                                                .size.width *
-                                                            0.06,
-                                                      ),
-                                                      Icon(
-                                                        Icons.do_not_disturb_on,
-                                                        size: 30,
-                                                        color: Colormanager
-                                                            .sheeticon,
-                                                      ),
-                                                      SizedBox(
-                                                        width: mediaQuerry
-                                                                .size.width *
-                                                            0.05,
-                                                      ),
-                                                      Text(
-                                                          'Remove From PLaylist',
-                                                          style: TextStyle(
-                                                            color: Colormanager
-                                                                .sheetText,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 20,
-                                                          ))
-                                                    ],
-                                                  ),
+
+                                                  /////
+
                                                   SizedBox(
                                                     height: mediaQuerry
                                                             .size.height *
@@ -480,49 +460,32 @@ class _MainHomeState extends State<MainHome> {
                                                                 .size.width *
                                                             0.05,
                                                       ),
-                                                      Text('Go to Lyrics',
-                                                          style: TextStyle(
-                                                            color: Colormanager
-                                                                .sheetText,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 20,
-                                                          ))
+                                                      InkWell(
+                                                        onTap: () {
+                                                          Navigator.of(context).push(MaterialPageRoute(
+                                                              builder: (context) => Nowplaying(
+                                                                  musicModel:
+                                                                      items.data![
+                                                                          index],
+                                                                  index: index,
+                                                                  songmodel: items
+                                                                      .data!)));
+                                                        },
+                                                        child: Text(
+                                                            'Go to  song',
+                                                            style: TextStyle(
+                                                              color: Colormanager
+                                                                  .sheetText,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 20,
+                                                            )),
+                                                      )
                                                     ],
                                                   ),
-                                                  SizedBox(
-                                                    height: mediaQuerry
-                                                            .size.height *
-                                                        0.03,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: mediaQuerry
-                                                                .size.width *
-                                                            0.06,
-                                                      ),
-                                                      Icon(
-                                                        Icons.queue_music,
-                                                        size: 35,
-                                                        color: Colormanager
-                                                            .sheeticon,
-                                                      ),
-                                                      SizedBox(
-                                                        width: mediaQuerry
-                                                                .size.width *
-                                                            0.05,
-                                                      ),
-                                                      Text('Go to Playlist',
-                                                          style: TextStyle(
-                                                            color: Colormanager
-                                                                .sheetText,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 20,
-                                                          ))
-                                                    ],
-                                                  ),
+                                                  
+                                                  
                                                   SizedBox(
                                                     height: mediaQuerry
                                                             .size.height *
