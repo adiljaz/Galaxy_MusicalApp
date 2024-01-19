@@ -55,9 +55,12 @@ class _RecentlyPlayedState extends State<RecentlyPlayed> {
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: const FaIcon(
-                        FontAwesomeIcons.circleArrowLeft,
-                        color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15,top: 15),
+                        child: const FaIcon(
+                          FontAwesomeIcons.circleArrowLeft,
+                          color: Colors.white,
+                        ),
                       )),
                 ),
                 Row(
@@ -94,6 +97,7 @@ class _RecentlyPlayedState extends State<RecentlyPlayed> {
                                       BorderRadius.all(Radius.circular(10))),
                               child: ListTile(
                                 leading: QueryArtworkWidget(
+                                  nullArtworkWidget: FaIcon(FontAwesomeIcons.headphonesSimple ,size: 40,color: Colormanager.container,), 
                                     id: items.data![index].songid,
                                     type: ArtworkType.AUDIO,
                                     artworkBorder: BorderRadius.circular(2)),

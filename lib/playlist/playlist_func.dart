@@ -21,7 +21,9 @@ Future<List<Playlistmodel>> getallPlaylist() async {
 void deletePlaylist(String playlistName, List<int> song) async {
   var box = await Hive.openBox<Playlistmodel>(_boxname);
   var playlist = box.values.firstWhere((sng) => sng.name == playlistName);
-  playlist.song.addAll(song);
+
+  playlist.song.clear();
+
   await box.delete(playlist.key);
 }
 
@@ -48,7 +50,6 @@ Future<bool> addSongToPlaylist(int playlistId, int songId) async {
 
   return false; // Playlist not found
 }
-
 
 Future<List<MusicModel>> getPlaylistSongs(int playlistkey) async {
   print('justin');

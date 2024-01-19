@@ -42,16 +42,15 @@ class SongModelProvider with ChangeNotifier {
   bool get isPlaying => _isPlaying;
 
   void togglePlayPause() {
-    if (_isPlaying) {
-     
-      audioplayer.play();
-    } else {
-       audioplayer.pause();
-      
-    }
-    _isPlaying = !_isPlaying;
-    notifyListeners();
+  if (_isPlaying) {
+    audioplayer.pause();
+  } else {
+    audioplayer.play();
   }
+  _isPlaying = !_isPlaying;
+  notifyListeners();
+}
+
   
 
 }

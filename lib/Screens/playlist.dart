@@ -119,6 +119,8 @@ class _PlaylistState extends State<Playlist> {
                                 },
                                 leading: ClipRRect(
                                   child: QueryArtworkWidget(
+
+                                    nullArtworkWidget: FaIcon(FontAwesomeIcons.headphonesSimple ,size: 40,color: Colormanager.container,), 
                                     id: snapshot.data![index].songid,
                                     type: ArtworkType.AUDIO,
                                     artworkFit: BoxFit.cover,

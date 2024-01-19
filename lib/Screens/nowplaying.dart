@@ -17,6 +17,7 @@ import 'package:galaxy/provider/provider.dart';
 import 'package:galaxy/recently/refunction.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:lottie/lottie.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +57,9 @@ class _NowplayingState extends State<Nowplaying> {
       }
     });
     playSong();
+
+    ifLickd();
+    showLike();
   }
 
   //  try{
@@ -63,9 +67,24 @@ class _NowplayingState extends State<Nowplaying> {
 
   playSong() {
     try {
-      audioplayer.setAudioSource(
-        AudioSource.uri(Uri.parse(widget.musicModel.uri!)),
+       audioplayer.setAudioSource(
+        
+        AudioSource.uri(Uri.parse(widget.musicModel.uri!), 
+          tag: MediaItem(
+    // Specify a unique ID for each media item:
+    id: '${widget.musicModel.songid}',
+    // Metadata to display in the notification:
+    album: "${widget.musicModel.artistname}",
+    title: "${widget.musicModel.songname}",
+    artUri: Uri.parse('https://example.com/albumart.jpg'),
+  ),
+        
+        
+         
+        ),
+        
       );
+
 
       audioplayer.play();
 
@@ -126,6 +145,7 @@ class _NowplayingState extends State<Nowplaying> {
                 width: double.infinity,
                 child: SingleChildScrollView(
                   child: Column(
+                   
                     children: [
                       Center(
                         child: Text(
@@ -170,7 +190,7 @@ class _NowplayingState extends State<Nowplaying> {
                                 color: Colormanager.icons,
                               ))),
                       Padding(
-                        padding: const EdgeInsets.only(left: 70, top: 20),
+                        padding: const EdgeInsets.only(left: 60, top: 20),
                         child: Text(
                           'Playing Now',
                           style: GoogleFonts.lato(
@@ -182,15 +202,17 @@ class _NowplayingState extends State<Nowplaying> {
                       Padding(
                           padding: const EdgeInsets.only(
                             top: 10,
-                            left: 40,
+                            left: 55 ,
                           ),
                           child: IconButton(
                             onPressed: () async {
                               showDialog(
+                                
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: Text('Playlists'),
+                                    backgroundColor: Colormanager.scaffoldcolor ,
+                                    title: Text('Playlists',style: GoogleFonts.lato(fontWeight: FontWeight.bold, color: Colors.black),),
                                     content: Container(
                                       width: MediaQuery.of(context).size.width *
                                           0.5,
@@ -255,14 +277,8 @@ class _NowplayingState extends State<Nowplaying> {
                                                               .data![index].key,
                                                         );
                                                         if (songAlreadyinPlaylist) {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                            SnackBar(
-                                                              content: Text(
-                                                                  'Song is already in the playlist'),
-                                                            ),
-                                                          );
+                                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(  backgroundColor: Colors.black,  content:  Text('Song added to playlist'),
+                                                                                       margin:EdgeInsets.all(10), behavior: SnackBarBehavior.floating,));
                                                         } else {
                                                           await addSongToPlaylist(
                                                             widget.musicModel
@@ -644,11 +660,7 @@ class ArtWorkWiget extends StatelessWidget {
   Widget build(BuildContext context) {
     return QueryArtworkWidget(
       artworkQuality: FilterQuality.high,
-      nullArtworkWidget: SizedBox(
-          child: Lottie.asset(
-        'assets/nowplay.json',
-        fit: BoxFit.cover,
-      )),
+      nullArtworkWidget:Lottie.asset('assets/fill.json',fit: BoxFit.cover),
       artworkHeight: 400,
       artworkWidth: 400,
       id: context.watch<SongModelProvider>().id,
@@ -657,3 +669,8 @@ class ArtWorkWiget extends StatelessWidget {
     );
   }
 }
+
+
+
+
+ 

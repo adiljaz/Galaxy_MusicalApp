@@ -12,6 +12,7 @@ import 'package:galaxy/playlist/playlist_model.dart';
 
 import 'package:galaxy/provider/provider.dart';
 import 'package:galaxy/recently/refunction.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +40,25 @@ class _AllsongsState extends State<Allsongs> {
         backgroundColor: Colormanager.scaffoldcolor,
         body: Column(
           children: [
+            
             Container(
-              child: Center(
+              child:Column(  
+                
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20,top: 20),
+                        child: const FaIcon(
+                          FontAwesomeIcons.circleArrowLeft,
+                          color: Colors.white,
+                        ),
+                      )),
+                 Center(
                 child: Text(
                   'All songs',
                   style: TextStyle(
@@ -48,10 +66,12 @@ class _AllsongsState extends State<Allsongs> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20),
                 ),
-              ),
-              height: mediaQuerry.size.height * 0.1,
+              ) , 
+              ],),
+              height: mediaQuerry.size.height * 0.25,
               width: double.infinity,
               decoration: const BoxDecoration(
+                image: DecorationImage(image: AssetImage('assets/pexels6.jpg'),fit: BoxFit.cover ),
                   color: Colors.black,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(40),
@@ -74,6 +94,7 @@ class _AllsongsState extends State<Allsongs> {
                               child: ListTile(
                                   leading: ClipRRect(
                                       child: QueryArtworkWidget(
+                                       nullArtworkWidget: FaIcon(FontAwesomeIcons.headphonesSimple ,size: 40,color: Colormanager.container,),
                                     id: item.data![index].songid,
                                     type: ArtworkType.AUDIO,
                                     artworkFit: BoxFit.cover,
@@ -170,13 +191,15 @@ class _AllsongsState extends State<Allsongs> {
                                                         ),
                                                         InkWell(
                                                           onTap: () {
+                                                            Navigator.of(context).pop();
                                                             showDialog(
                                                               context: context,
                                                               builder:
                                                                   (context) {
                                                                 return AlertDialog(
+                                                                  backgroundColor: Colormanager.scaffoldcolor,
                                                                   title: Text(
-                                                                      'Playlists'),
+                                                                      'Playlists',style: GoogleFonts.lato(fontWeight: FontWeight.bold, color: Colors.black),),
                                                                   content:
                                                                       Container(
                                                                     width: MediaQuery.of(context)
@@ -215,19 +238,28 @@ class _AllsongsState extends State<Allsongs> {
                                                                                 items.data!.length,
                                                                             itemBuilder:
                                                                                 (context, index) {
-                                                                              return ListTile(
-                                                                                onTap: () async {
-                                                                                  var playlistId = items.data![index].key;
-                                                                                  var songId = items.data![index].song;
-
-                                                                                  setState(() {});
-
-                                                                                  addSongToPlaylist(playlistId, playsongid);
-
-                                                                                  Navigator.of(context).pop();
-                                                                                },
-                                                                                leading: Lottie.asset('assets/sing.json', fit: BoxFit.fill),
-                                                                                title: Text(items.data![index].name),
+                                                                              return Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Container(
+                                                                                  decoration: BoxDecoration( color: Colormanager.container,borderRadius: BorderRadius.circular(5)),
+                                                                                 
+                                                                                  child: ListTile(
+                                                                                    onTap: () async {
+                                                                                      var playlistId = items.data![index].key;
+                                                                                      var songId = items.data![index].song;
+                                                                                  
+                                                                                      setState(() {});
+                                                                                  
+                                                                                      addSongToPlaylist(playlistId, playsongid);
+                                                                                  
+                                                                                      Navigator.of(context).pop();
+                                                                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(  backgroundColor: Colors.black,  content:  Text('Song added to playlist'),
+                                                                                       margin:EdgeInsets.all(10), behavior: SnackBarBehavior.floating,));
+                                                                                    },
+                                                                                    leading: Lottie.asset('assets/sing.json', fit: BoxFit.fill),
+                                                                                    title: Text(items.data![index].name,style: TextStyle(color: Colors.white),),
+                                                                                  ),
+                                                                                ),
                                                                               );
                                                                             },
                                                                           );
@@ -305,11 +337,7 @@ class _AllsongsState extends State<Allsongs> {
                                                               .size.height *
                                                           0.03,
                                                     ),
-                                                    SizedBox(
-                                                      height: mediaQuerry
-                                                              .size.height *
-                                                          0.03,
-                                                    ),
+                                                  
                                                     favSongs.contains(item
                                                             .data![index]
                                                             .songid)

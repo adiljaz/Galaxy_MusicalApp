@@ -51,10 +51,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
           ],
         ),
       ),
-      _buildPermanentGridView(
-        onTap: () {},
-        child: Lottie.asset('assets/an1.json'),
-      ),
+      // _buildPermanentGridView(
+      //   onTap: () {},
+      //   child: Lottie.asset('assets/an1.json'),
+      // ),
     ];
   }
 
@@ -73,7 +73,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         ),
         height: 130,
         width: 130,
-        child: child ?? Icon(icon, size: 70, color: Colors.black),
+        child: child ?? Icon(icon, size: 70, color: Color.fromARGB(255, 255, 121, 121)),
       ),
     );
   }
@@ -166,6 +166,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                 ),
                                 TextButton(
                                   onPressed: () {
+
+                                   
+
+
                                     addPlaylist(_playlistnamecontroller.text);
                                     Navigator.of(context).pop();
                                   },
@@ -282,16 +286,31 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                                     showDialog(context: context, builder: (context) {
                                                       return AlertDialog(
                                                         title: Text('Edit playlist', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                                                        content: TextFormField(controller: _editingController,),
+                                                        content: TextFormField(
+                              controller: _editingController,
+                              style: GoogleFonts.lato(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                              ),
+                            ),
                                                         actions: [
                                                           TextButton(
                                                             onPressed: () {
                                                               Navigator.of(context).pop();
                                                             },
-                                                            child: Text('Cancel', style: TextStyle(color: Colormanager.text),),
+                                                            child: Text('Cancel', style: TextStyle(color: Colormanager.text),), 
                                                           ),
                                                           TextButton(
                                                             onPressed: () {
+                                                                                                                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(  backgroundColor: Colors.black,  content:  Text('new name saved '),
+                                                                                       margin:EdgeInsets.all(10), behavior: SnackBarBehavior.floating,));
                                                               editPlaylistName(playlist.name, _editingController.text);
                                                               Navigator.of(context).pop();
                                                             },

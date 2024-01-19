@@ -11,6 +11,7 @@ import 'package:galaxy/playlist/playlist_func.dart';
 import 'package:galaxy/playlist/playlist_model.dart';
 import 'package:galaxy/provider/provider.dart';
 import 'package:galaxy/recently/refunction.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,9 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuerry = MediaQuery.of(context);
     return SafeArea(
+      
       child: Scaffold(
+         
         backgroundColor: Colormanager.scaffoldcolor,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,10 +123,7 @@ class _SearchState extends State<Search> {
                       // If `findmusic` is empty, display "No songs found"
                       if (findmusic.isEmpty) {
                         return Center(
-                          child: Text(
-                            'Item not found',
-                            style: TextStyle(color: Colors.black),
-                          ),
+                          child: Lottie.asset('assets/search.json',)
                         );
                       }
                       return ListView.builder(
@@ -140,6 +140,7 @@ class _SearchState extends State<Search> {
                                   borderRadius: BorderRadius.circular(10)),
                               child: ListTile(
                                 leading: QueryArtworkWidget(
+                                  nullArtworkWidget: FaIcon(FontAwesomeIcons.headphonesSimple ,size: 40,color: Colormanager.container,),
                                   artworkBorder: BorderRadius.circular(5),
                                   id: music.songid,
                                   type: ArtworkType.AUDIO,
@@ -242,51 +243,47 @@ class _SearchState extends State<Search> {
                                                           ),
                                                           InkWell(
                                                             onTap: () {
+                                                              Navigator.of(context).pop();
                                                               showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (context) {
-                                                                  return AlertDialog(
-                                                                    title: Text(
-                                                                        'Playlists'),
-                                                                    content:
-                                                                        Container(
-                                                                      width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width *
-                                                                          0.5,
-                                                                      height: MediaQuery.of(context)
-                                                                              .size
-                                                                              .height *
-                                                                          0.3,
-                                                                      child: FutureBuilder<
-                                                                          List<
-                                                                              Playlistmodel>>(
-                                                                        future:
-                                                                            getallPlaylist(),
-                                                                        builder:
-                                                                            (context,
-                                                                                items) {
-                                                                          if (items.connectionState ==
-                                                                              ConnectionState
-                                                                                  .waiting) {
-                                                                            return Center(child: CircularProgressIndicator());
-                                                                          } else if (items.data == null ||
-                                                                              items.data!.isEmpty) {
-                                                                            return Center(
-                                                                                child: Text(
-                                                                              'No songs found',
-                                                                              style: TextStyle(color: Colors.red),
-                                                                            ));
-                                                                          }
-
-                                                                          // If `findmusic` is empty, display "No songs found"
-                                                                          if (findmusic
-                                                                              .isEmpty) {
-                                                                            return Center(child: Text('No songs found'));
-                                                                          }
-
+                                                              context: context,
+                                                              builder:
+                                                                  (context) {
+                                                                return AlertDialog(
+                                                                  backgroundColor: Colormanager.scaffoldcolor,
+                                                                  title: Text(
+                                                                      'Playlists',style: GoogleFonts.lato(fontWeight: FontWeight.bold, color: Colors.black),),
+                                                                  content:
+                                                                      Container(
+                                                                    width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.5,
+                                                                    height: MediaQuery.of(context)
+                                                                            .size
+                                                                            .height *
+                                                                        0.3,
+                                                                    child: FutureBuilder<
+                                                                        List<
+                                                                            Playlistmodel>>(
+                                                                      future:
+                                                                          getallPlaylist(),
+                                                                      builder:
+                                                                          (context,
+                                                                              items) {
+                                                                        if (items.connectionState ==
+                                                                            ConnectionState
+                                                                                .waiting) {
+                                                                          return Center(
+                                                                              child: CircularProgressIndicator());
+                                                                        } else if (items
+                                                                            .hasError) {
+                                                                          return Text(
+                                                                              'Error: ${items.error}');
+                                                                        } else if (!items.hasData ||
+                                                                            items.data!.isEmpty) {
+                                                                          return Text(
+                                                                              'No data available');
+                                                                        } else {
                                                                           return ListView
                                                                               .builder(
                                                                             itemCount:
@@ -294,30 +291,37 @@ class _SearchState extends State<Search> {
                                                                             itemBuilder:
                                                                                 (context, index) {
                                                                               return Padding(
-                                                                                padding: const EdgeInsets.all(4.0),
+                                                                                padding: const EdgeInsets.all(8.0),
                                                                                 child: Container(
-                                                                                  decoration: BoxDecoration(color: Colormanager.container, borderRadius: BorderRadius.circular(5)),
+                                                                                  decoration: BoxDecoration( color: Colormanager.container,borderRadius: BorderRadius.circular(5)),
+                                                                                 
                                                                                   child: ListTile(
-                                                                                    leading: Lottie.asset('assets/sing.json', fit: BoxFit.fill),
-                                                                                    title: Text(
-                                                                                      items.data![index].name,
-                                                                                      style: TextStyle(color: Colors.white),
-                                                                                    ),
-                                                                                    onTap: () {
+                                                                                    onTap: () async {
+                                                                                      var playlistId = items.data![index].key;
+                                                                                      var songId = items.data![index].song;
+                                                                                  
+                                                                                      setState(() {});
+                                                                                  
+                                                                                      addSongToPlaylist(playlistId, playsongid);
+                                                                                  
                                                                                       Navigator.of(context).pop();
-                                                                                      addSongToPlaylist(items.data![index].key, playsongid);
+                                                                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(  backgroundColor: Colors.black,  content:  Text('Song added to playlist'),
+                                                                                       margin:EdgeInsets.all(10), behavior: SnackBarBehavior.floating,));
                                                                                     },
+                                                                                    leading: Lottie.asset('assets/sing.json', fit: BoxFit.fill),
+                                                                                    title: Text(items.data![index].name,style: TextStyle(color: Colors.white),),
                                                                                   ),
                                                                                 ),
                                                                               );
                                                                             },
                                                                           );
-                                                                        },
-                                                                      ),
+                                                                        }
+                                                                      },
                                                                     ),
-                                                                  );
-                                                                },
-                                                              );
+                                                                  ),
+                                                                );
+                                                              },
+                                                            );
                                                             },
                                                             child: Text(
                                                                 'Add to playlist',
@@ -358,7 +362,20 @@ class _SearchState extends State<Search> {
                                                                     .width *
                                                                 0.05,
                                                           ),
-                                                          Text('Go to Lyrics',
+                                                           InkWell(
+                                                          onTap: () {
+                                                            Navigator.of(context).push(MaterialPageRoute(
+                                                                builder: (context) => Nowplaying(
+                                                                    musicModel:
+                                                                        items.data![
+                                                                            index],
+                                                                    index:
+                                                                        index,
+                                                                    songmodel: items
+                                                                        .data!)));
+                                                          },
+                                                          child: Text(
+                                                              'Go to  song',
                                                               style: TextStyle(
                                                                 color: Colormanager
                                                                     .sheetText,
@@ -366,7 +383,8 @@ class _SearchState extends State<Search> {
                                                                     FontWeight
                                                                         .bold,
                                                                 fontSize: 20,
-                                                              ))
+                                                              )),
+                                                        )
                                                         ],
                                                       ),
                                                       SizedBox(

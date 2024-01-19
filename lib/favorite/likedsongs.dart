@@ -26,6 +26,8 @@ class _LikedSongsState extends State<LikedSongs> {
   @override
   void initState() {
     showLike();
+    ifLickd(); 
+    
     // TODO: implement initState
     super.initState();
   }
@@ -41,7 +43,11 @@ class _LikedSongsState extends State<LikedSongs> {
             Stack(
               children: [
                 Container(
-                  height: mediaQuerry.size.height * 0.25,
+                
+
+                  
+                  
+                  height: mediaQuerry.size.height * 0.27,
                   // ignore: sort_child_properties_last
                   child: Center(
                       child: Padding(
@@ -75,23 +81,12 @@ class _LikedSongsState extends State<LikedSongs> {
                         SizedBox(
                           height: mediaQuerry.size.height * 0.04,
                         ),
-                        TextField(
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              hintText: 'Search..',
-                              suffixIcon: const Icon(
-                                Icons.search,
-                                color: Colors.black,
-                              )),
-                        ),
+                       
                       ],
                     ),
                   )),
                   decoration: BoxDecoration(
+                    image: DecorationImage(image: AssetImage('assets/pexels3.jpg',),fit: BoxFit.cover),
                       color: Colormanager.container,
                       borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(40),
@@ -130,7 +125,8 @@ class _LikedSongsState extends State<LikedSongs> {
                                     color: Colormanager.listtile,
                                     borderRadius: BorderRadius.circular(10)),
                                 child: ListTile(
-                                  leading: QueryArtworkWidget(
+                                  leading: QueryArtworkWidget(nullArtworkWidget: FaIcon(FontAwesomeIcons.headphonesSimple ,size: 40,color: Colormanager.container,), 
+
                                     artworkBorder: BorderRadius.circular(4),
                                     id: snapshot.data![index].songid,
                                     type: ArtworkType.AUDIO,
@@ -167,7 +163,7 @@ class _LikedSongsState extends State<LikedSongs> {
                                           },
                                           child: const Icon(
                                             Icons.favorite,
-                                            color: Colors.white,
+                                            color: Colors.white ,
                                           ),
                                         ),
                                   onTap: () {
