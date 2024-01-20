@@ -167,6 +167,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                 TextButton(
                                   onPressed: () {
 
+                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(  backgroundColor: Colors.black,  content:  Text('New playlist added'),
+                                                                                       margin:EdgeInsets.all(10), behavior: SnackBarBehavior.floating,));
+
                                    
 
 
@@ -333,6 +336,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                               PopupMenuItem(
                                                 child: TextButton(
                                                   onPressed: () {
+                                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(  backgroundColor: Color.fromARGB(255, 255, 0, 0),  content:  Text('Playlist deleted'),
+                                                                                       margin:EdgeInsets.all(10), behavior: SnackBarBehavior.floating,));
                                                     Navigator.of(context).pop();
                                                     setState(() {});
                                                     deletePlaylist(playlist.name, playlist.song);

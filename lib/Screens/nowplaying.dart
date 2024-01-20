@@ -67,24 +67,19 @@ class _NowplayingState extends State<Nowplaying> {
 
   playSong() {
     try {
-       audioplayer.setAudioSource(
-        
-        AudioSource.uri(Uri.parse(widget.musicModel.uri!), 
+      audioplayer.setAudioSource(
+        AudioSource.uri(
+          Uri.parse(widget.musicModel.uri!),
           tag: MediaItem(
-    // Specify a unique ID for each media item:
-    id: '${widget.musicModel.songid}',
-    // Metadata to display in the notification:
-    album: "${widget.musicModel.artistname}",
-    title: "${widget.musicModel.songname}",
-    artUri: Uri.parse('https://example.com/albumart.jpg'),
-  ),
-        
-        
-         
+            // Specify a unique ID for each media item:
+            id: '${widget.musicModel.songid}',
+            // Metadata to display in the notification:
+            album: "${widget.musicModel.artistname}",
+            title: "${widget.musicModel.songname}",
+            artUri: Uri.parse('https://example.com/albumart.jpg'),
+          ),
         ),
-        
       );
-
 
       audioplayer.play();
 
@@ -145,7 +140,6 @@ class _NowplayingState extends State<Nowplaying> {
                 width: double.infinity,
                 child: SingleChildScrollView(
                   child: Column(
-                   
                     children: [
                       Center(
                         child: Text(
@@ -202,17 +196,21 @@ class _NowplayingState extends State<Nowplaying> {
                       Padding(
                           padding: const EdgeInsets.only(
                             top: 10,
-                            left: 55 ,
+                            left: 55,
                           ),
                           child: IconButton(
                             onPressed: () async {
                               showDialog(
-                                
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    backgroundColor: Colormanager.scaffoldcolor ,
-                                    title: Text('Playlists',style: GoogleFonts.lato(fontWeight: FontWeight.bold, color: Colors.black),),
+                                    backgroundColor: Colormanager.scaffoldcolor,
+                                    title: Text(
+                                      'Playlists',
+                                      style: GoogleFonts.lato(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
                                     content: Container(
                                       width: MediaQuery.of(context).size.width *
                                           0.5,
@@ -277,8 +275,21 @@ class _NowplayingState extends State<Nowplaying> {
                                                               .data![index].key,
                                                         );
                                                         if (songAlreadyinPlaylist) {
-                                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(  backgroundColor: Colors.black,  content:  Text('Song added to playlist'),
-                                                                                       margin:EdgeInsets.all(10), behavior: SnackBarBehavior.floating,));
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  SnackBar(
+                                                            backgroundColor:
+                                                                Colors.black,
+                                                            content: Text(
+                                                                'Song added to playlist'),
+                                                            margin:
+                                                                EdgeInsets.all(
+                                                                    10),
+                                                            behavior:
+                                                                SnackBarBehavior
+                                                                    .floating,
+                                                          ));
                                                         } else {
                                                           await addSongToPlaylist(
                                                             widget.musicModel
@@ -660,7 +671,7 @@ class ArtWorkWiget extends StatelessWidget {
   Widget build(BuildContext context) {
     return QueryArtworkWidget(
       artworkQuality: FilterQuality.high,
-      nullArtworkWidget:Lottie.asset('assets/fill.json',fit: BoxFit.cover),
+      nullArtworkWidget: Lottie.asset('assets/fill.json', fit: BoxFit.cover),
       artworkHeight: 400,
       artworkWidth: 400,
       id: context.watch<SongModelProvider>().id,
@@ -669,8 +680,3 @@ class ArtWorkWiget extends StatelessWidget {
     );
   }
 }
-
-
-
-
- 

@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
         
           child: Container(
             decoration: BoxDecoration(gradient: LinearGradient(colors: [
-              Colors.white,Color.fromARGB(255, 77, 77, 77) 
+              Colors.white,Color.fromARGB(255, 255, 255, 255)
             ])),
             child: ListView(
               children: [
@@ -114,6 +114,8 @@ class _HomeState extends State<Home> {
                      GestureDetector(         onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>About()));
                      },  child: Row(     children:[     SizedBox(width: mediaQuerry.size.width*0.06 ,),    Icon(Icons.report,size: 30,),SizedBox(width: mediaQuerry.size.width*0.07 ,),Text('About',style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 27 ),)    ],)),
+                          SizedBox(height: mediaQuerry.size.height*0.16,),
+                     Center(child: Text('V.1.0.0',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500 ),))
               ],
             ),
           ),
