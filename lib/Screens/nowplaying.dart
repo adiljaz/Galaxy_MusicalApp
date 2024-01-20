@@ -49,7 +49,7 @@ class _NowplayingState extends State<Nowplaying> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     audioplayer.playerStateStream.listen((State) {
       if (State.processingState == ProcessingState.completed) {
@@ -69,7 +69,7 @@ class _NowplayingState extends State<Nowplaying> {
     try {
       audioplayer.setAudioSource(
         AudioSource.uri(
-          Uri.parse(widget.musicModel.uri!),
+          Uri.parse(widget.musicModel.uri),
           tag: MediaItem(
             // Specify a unique ID for each media item:
             id: '${widget.musicModel.songid}',
@@ -373,7 +373,7 @@ class _NowplayingState extends State<Nowplaying> {
                         color: Colormanager.BalckText,
                       )),
                   subtitle: Text(
-                      widget.musicModel.artistname ?? 'no artist found',
+                      widget.musicModel.artistname,
                       maxLines: 1,
                       style: GoogleFonts.lato(
                           fontWeight: FontWeight.bold,
@@ -560,7 +560,7 @@ class _NowplayingState extends State<Nowplaying> {
                     onTap: () async {
                       String? lyrics = await fetchLyrics(
                         widget.musicModel.songname,
-                        widget.musicModel.artistname ?? 'no item found',
+                        widget.musicModel.artistname,
                       );
                       // second bottomsheet
                       _showlyricsbottomsheet(lyrics);

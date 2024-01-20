@@ -62,7 +62,7 @@ Future<List<MusicModel>> getPlaylistSongs(int playlistkey) async {
   final playlistId = await box.get(playlistkey);
   print("hallo${playlistId!.song.length}");
 
-  for (int i = 0; i < playlistId!.song.length; i++) {
+  for (int i = 0; i < playlistId.song.length; i++) {
     for (int j = 0; j < sng.length; j++) {
       if (sng[j].songid == playlistId.song[i]) {
         song.add(sng[j]);

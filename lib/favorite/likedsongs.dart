@@ -10,7 +10,7 @@ import 'package:galaxy/colors/colors.dart';
 import 'package:galaxy/favorite/fav_function.dart';
 import 'package:galaxy/provider/provider.dart';
 import 'package:galaxy/recently/refunction.dart';
-import 'package:lottie/lottie.dart';
+
 
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +28,7 @@ class _LikedSongsState extends State<LikedSongs> {
     showLike();
     ifLickd(); 
     
-    // TODO: implement initState
+  
     super.initState();
   }
 
@@ -105,13 +105,7 @@ class _LikedSongsState extends State<LikedSongs> {
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.data!.isEmpty) {
                         return Center(
-                            child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Lottie.asset('assets/likecount.json',
-                                height: 200, width: 200),
-                          ],
-                        ));
+                            child: Text('No songs here'));
                       } else {
                         return ListView.builder(
                           physics: const BouncingScrollPhysics(

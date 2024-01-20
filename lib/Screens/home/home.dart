@@ -18,13 +18,12 @@ import 'package:galaxy/database/db_functions.dart';
 import 'package:galaxy/recently/refunction.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+
 
 final audioplayer = AudioPlayer();
 
@@ -41,12 +40,10 @@ class _MainHomeState extends State<MainHome> {
   @override
   void initState() {
     super.initState();
-    requestPermission();
+   
   }
 
-  void requestPermission() {
-    Permission.storage.request();
-  }
+  
 
   Future<List<MusicModel>> fetchSongsfromDb() async {
     List<SongModel> songlist = await _audioQuery.querySongs(
@@ -128,10 +125,10 @@ class _MainHomeState extends State<MainHome> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 32.4 , top: 5),
+                padding: const EdgeInsets.only(left: 32.4, top: 5),
                 child: Container(
                   height: mediaQuerry.size.height * 0.35,
-                        width: mediaQuerry.size.width * 0.79,
+                  width: mediaQuerry.size.width * 0.79,
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(20),
@@ -149,7 +146,9 @@ class _MainHomeState extends State<MainHome> {
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
                                 return QueryArtworkWidget(
-                                  nullArtworkWidget:Lottie.asset('assets/fill.json',fit: BoxFit.cover),
+                                  nullArtworkWidget: Lottie.asset(
+                                      'assets/fill.json',
+                                      fit: BoxFit.cover),
                                   artworkQuality: FilterQuality.high,
                                   quality: 100,
                                   artworkFit: BoxFit.cover,
@@ -160,9 +159,23 @@ class _MainHomeState extends State<MainHome> {
                                 );
                               },
                             );
+                          } else {
+                            // Data is empty
+                            return Center(
+                              child: Text('No data available'),
+                            );
                           }
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          // Data is still loading
+                          return Center(
+                            child:
+                                CircularProgressIndicator(), // Circular progress indicator
+                          );
+                        } else {
+                          // Handle other connection states if needed
+                          return Placeholder();
                         }
-                        return Placeholder();
                       },
                     ),
                   ),
@@ -230,7 +243,11 @@ class _MainHomeState extends State<MainHome> {
                               leading: ClipRRect(
                                   borderRadius: BorderRadius.circular(3),
                                   child: QueryArtworkWidget(
-                                    nullArtworkWidget: FaIcon(FontAwesomeIcons.headphonesSimple ,size: 40,color: Colormanager.container,),
+                                    nullArtworkWidget: FaIcon(
+                                      FontAwesomeIcons.headphonesSimple,
+                                      size: 40,
+                                      color: Colormanager.container,
+                                    ),
                                     artworkQuality: FilterQuality.high,
                                     quality: 100,
                                     artworkFit: BoxFit.cover,
@@ -249,7 +266,7 @@ class _MainHomeState extends State<MainHome> {
                               ),
                               subtitle: Text(
                                 maxLines: 1,
-                                items.data![index].artistname ?? 'No Artist',
+                                items.data![index].artistname,
                                 style: TextStyle(
                                     color: Colormanager.text,
                                     fontWeight: FontWeight.w300),
@@ -259,315 +276,323 @@ class _MainHomeState extends State<MainHome> {
                                     int playsongid = items.data![index].songid;
 
                                     showModalBottomSheet(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(40),
-                                                  topRight:
-                                                      Radius.circular(40))),
-                                          context: context,
-                                          builder: (context) {
-                                            return Container(
-                                              height: mediaQuerry.size.height *
-                                                  0.30,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.black,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  40),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  40))),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                child: Column(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: mediaQuerry
-                                                              .size.height *
-                                                          0.05,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.06,
-                                                        ),
-                                                        Icon(
-                                                          Icons.add_circle,
-                                                          size: 30,
-                                                          color: Colormanager
-                                                              .sheeticon,
-                                                        ),
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.05,
-                                                        ),
-                                                        InkWell(
-                                                          onTap: () {
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(40),
+                                                topRight: Radius.circular(40))),
+                                        context: context,
+                                        builder: (context) {
+                                          return Container(
+                                            height:
+                                                mediaQuerry.size.height * 0.30,
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(40),
+                                                    topRight:
+                                                        Radius.circular(40))),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(10),
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: mediaQuerry
+                                                            .size.height *
+                                                        0.05,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.06,
+                                                      ),
+                                                      Icon(
+                                                        Icons.add_circle,
+                                                        size: 30,
+                                                        color: Colormanager
+                                                            .sheeticon,
+                                                      ),
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.05,
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          Navigator.of(context)
+                                                              .pop();
 
-                                                              Navigator.of(context).pop();
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return AlertDialog(
+                                                                backgroundColor:
+                                                                    Colormanager
+                                                                        .scaffoldcolor,
+                                                                title: Text(
+                                                                  'Playlists',
+                                                                  style: GoogleFonts.lato(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Colors
+                                                                          .black),
+                                                                ),
+                                                                content:
+                                                                    Container(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.5,
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height *
+                                                                      0.3,
+                                                                  child: FutureBuilder<
+                                                                      List<
+                                                                          Playlistmodel>>(
+                                                                    future:
+                                                                        getallPlaylist(),
+                                                                    builder:
+                                                                        (context,
+                                                                            items) {
+                                                                      if (items
+                                                                              .connectionState ==
+                                                                          ConnectionState
+                                                                              .waiting) {
+                                                                        return Center(
+                                                                            child:
+                                                                                CircularProgressIndicator());
+                                                                      } else if (items
+                                                                          .hasError) {
+                                                                        return Text(
+                                                                            'Error: ${items.error}');
+                                                                      } else if (!items
+                                                                              .hasData ||
+                                                                          items
+                                                                              .data!
+                                                                              .isEmpty) {
+                                                                        return Text(
+                                                                            'No data available');
+                                                                      } else {
+                                                                        return ListView
+                                                                            .builder(
+                                                                          itemCount: items
+                                                                              .data!
+                                                                              .length,
+                                                                          itemBuilder:
+                                                                              (context, index) {
+                                                                            return Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Container(
+                                                                                decoration: BoxDecoration(color: Colormanager.container, borderRadius: BorderRadius.circular(5)),
+                                                                                child: ListTile(
+                                                                                  onTap: () async {
+                                                                                    var playlistId = items.data![index].key;
 
+                                                                                    setState(() {});
 
-                                                            showDialog(
-                                                              context: context,
-                                                              builder:
-                                                                  (context) {
-                                                                return AlertDialog(
-                                                                  backgroundColor: Colormanager.scaffoldcolor,
-                                                                  title: Text(
-                                                                      'Playlists',style: GoogleFonts.lato(fontWeight: FontWeight.bold, color: Colors.black),),
-                                                                  content:
-                                                                      Container(
-                                                                    width: MediaQuery.of(context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.5,
-                                                                    height: MediaQuery.of(context)
-                                                                            .size
-                                                                            .height *
-                                                                        0.3,
-                                                                    child: FutureBuilder<
-                                                                        List<
-                                                                            Playlistmodel>>(
-                                                                      future:
-                                                                          getallPlaylist(),
-                                                                      builder:
-                                                                          (context,
-                                                                              items) {
-                                                                        if (items.connectionState ==
-                                                                            ConnectionState
-                                                                                .waiting) {
-                                                                          return Center(
-                                                                              child: CircularProgressIndicator());
-                                                                        } else if (items
-                                                                            .hasError) {
-                                                                          return Text(
-                                                                              'Error: ${items.error}');
-                                                                        } else if (!items.hasData ||
-                                                                            items.data!.isEmpty) {
-                                                                          return Text(
-                                                                              'No data available');
-                                                                        } else {
-                                                                          return ListView
-                                                                              .builder(
-                                                                            itemCount:
-                                                                                items.data!.length,
-                                                                            itemBuilder:
-                                                                                (context, index) {
-                                                                              return Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Container(
-                                                                                  decoration: BoxDecoration( color: Colormanager.container,borderRadius: BorderRadius.circular(5)),
-                                                                                 
-                                                                                  child: ListTile(
-                                                                                    onTap: () async {
-                                                                                      var playlistId = items.data![index].key;
-                                                                                      var songId = items.data![index].song;
-                                                                                  
-                                                                                      setState(() {});
-                                                                                  
-                                                                                      addSongToPlaylist(playlistId, playsongid);
-                                                                                  
-                                                                                      Navigator.of(context).pop();
-                                                                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(  backgroundColor: Colors.black,  content:  Text('Song added to playlist'),
-                                                                                       margin:EdgeInsets.all(10), behavior: SnackBarBehavior.floating,));
-                                                                                    },
-                                                                                    leading: Lottie.asset('assets/sing.json', fit: BoxFit.fill),
-                                                                                    title: Text(items.data![index].name,style: TextStyle(color: Colors.white),),
+                                                                                    addSongToPlaylist(playlistId, playsongid);
+
+                                                                                    Navigator.of(context).pop();
+                                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                                      backgroundColor: Colors.black,
+                                                                                      content: Text('Song added to playlist'),
+                                                                                      margin: EdgeInsets.all(10),
+                                                                                      behavior: SnackBarBehavior.floating,
+                                                                                    ));
+                                                                                  },
+                                                                                  leading: Lottie.asset('assets/sing.json', fit: BoxFit.fill),
+                                                                                  title: Text(
+                                                                                    items.data![index].name,
+                                                                                    style: TextStyle(color: Colors.white),
                                                                                   ),
                                                                                 ),
-                                                                              );
-                                                                            },
-                                                                          );
-                                                                        }
-                                                                      },
-                                                                    ),
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                        );
+                                                                      }
+                                                                    },
                                                                   ),
-                                                                );
-                                                              },
-                                                            );
-                                                          },
-                                                          child: Text(
-                                                              'Add to playlist',
-                                                              style: TextStyle(
-                                                                color: Colormanager
-                                                                    .sheetText,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 20,
-                                                              )),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      height: mediaQuerry
-                                                              .size.height *
-                                                          0.03,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.06,
-                                                        ),
-                                                        FaIcon(
-                                                          FontAwesomeIcons
-                                                              .music,
-                                                          color: Colormanager
-                                                              .sheeticon,
-                                                        ),
-                                                        SizedBox(
-                                                          width: mediaQuerry
-                                                                  .size.width *
-                                                              0.05,
-                                                        ),
-                                                        InkWell(
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        child: Text(
+                                                            'Add to playlist',
+                                                            style: TextStyle(
+                                                              color: Colormanager
+                                                                  .sheetText,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 20,
+                                                            )),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: mediaQuerry
+                                                            .size.height *
+                                                        0.03,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.06,
+                                                      ),
+                                                      FaIcon(
+                                                        FontAwesomeIcons.music,
+                                                        color: Colormanager
+                                                            .sheeticon,
+                                                      ),
+                                                      SizedBox(
+                                                        width: mediaQuerry
+                                                                .size.width *
+                                                            0.05,
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          Navigator.of(context).push(MaterialPageRoute(
+                                                              builder: (context) => Nowplaying(
+                                                                  musicModel:
+                                                                      items.data![
+                                                                          index],
+                                                                  index: index,
+                                                                  songmodel: items
+                                                                      .data!)));
+                                                        },
+                                                        child: Text(
+                                                            'Go to  song',
+                                                            style: TextStyle(
+                                                              color: Colormanager
+                                                                  .sheetText,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 20,
+                                                            )),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: mediaQuerry
+                                                            .size.height *
+                                                        0.03,
+                                                  ),
+                                                  favSongs.contains(items
+                                                          .data![index].songid)
+                                                      ? InkWell(
                                                           onTap: () {
-                                                            Navigator.of(context).push(MaterialPageRoute(
-                                                                builder: (context) => Nowplaying(
-                                                                    musicModel:
-                                                                        items.data![
-                                                                            index],
-                                                                    index:
-                                                                        index,
-                                                                    songmodel: items
-                                                                        .data!)));
+                                                            removeLikedSong(
+                                                                items
+                                                                    .data![
+                                                                        index]
+                                                                    .songid);
+                                                            ifLickd();
+
+                                                            setState(() {});
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
                                                           },
-                                                          child: Text(
-                                                              'Go to  song',
-                                                              style: TextStyle(
-                                                                color: Colormanager
-                                                                    .sheetText,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 20,
-                                                              )),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      height: mediaQuerry
-                                                              .size.height *
-                                                          0.03,
-                                                    ),
-                                                    
-                                                    favSongs.contains(items
-                                                            .data![index]
-                                                            .songid)
-                                                        ? InkWell(
-                                                            onTap: () {
-                                                              removeLikedSong(
-                                                                  items
-                                                                      .data![
-                                                                          index]
-                                                                      .songid);
-                                                              ifLickd();
-
-                                                              setState(() {});
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Row(
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: mediaQuerry
-                                                                          .size
-                                                                          .width *
-                                                                      0.06,
-                                                                ),
-                                                                Icon(
-                                                                  Icons
-                                                                      .favorite,
-                                                                  size: 30,
-                                                                  color: Colors
-                                                                      .red,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: mediaQuerry
-                                                                          .size
-                                                                          .width *
-                                                                      0.05,
-                                                                ),
-                                                                Text(
-                                                                    'remove from favorite',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colormanager
-                                                                          .sheetText,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          20,
-                                                                    ))
-                                                              ],
-                                                            ),
-                                                          )
-                                                        : InkWell(
-                                                            onTap: () {
-                                                              addlikedSong(items
-                                                                  .data![index]
-                                                                  .songid);
-                                                              ifLickd();
-                                                              setState(() {});
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Row(
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: mediaQuerry
-                                                                          .size
-                                                                          .width *
-                                                                      0.06,
-                                                                ),
-                                                                Icon(
-                                                                  Icons
-                                                                      .favorite_border,
-                                                                  size: 30,
-                                                                  color: Colors
-                                                                      .red,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: mediaQuerry
-                                                                          .size
-                                                                          .width *
-                                                                      0.05,
-                                                                ),
-                                                                Text(
-                                                                    'Add to favorite',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colormanager
-                                                                          .sheetText,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          20,
-                                                                    ))
-                                                              ],
-                                                            ),
+                                                          child: Row(
+                                                            children: [
+                                                              SizedBox(
+                                                                width: mediaQuerry
+                                                                        .size
+                                                                        .width *
+                                                                    0.06,
+                                                              ),
+                                                              Icon(
+                                                                Icons.favorite,
+                                                                size: 30,
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                              SizedBox(
+                                                                width: mediaQuerry
+                                                                        .size
+                                                                        .width *
+                                                                    0.05,
+                                                              ),
+                                                              Text(
+                                                                  'remove from favorite',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colormanager
+                                                                        .sheetText,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        20,
+                                                                  ))
+                                                            ],
                                                           ),
-                                                  ],
-                                                ),
+                                                        )
+                                                      : InkWell(
+                                                          onTap: () {
+                                                            addlikedSong(items
+                                                                .data![index]
+                                                                .songid);
+                                                            ifLickd();
+                                                            setState(() {});
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: Row(
+                                                            children: [
+                                                              SizedBox(
+                                                                width: mediaQuerry
+                                                                        .size
+                                                                        .width *
+                                                                    0.06,
+                                                              ),
+                                                              Icon(
+                                                                Icons
+                                                                    .favorite_border,
+                                                                size: 30,
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                              SizedBox(
+                                                                width: mediaQuerry
+                                                                        .size
+                                                                        .width *
+                                                                    0.05,
+                                                              ),
+                                                              Text(
+                                                                  'Add to favorite',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colormanager
+                                                                        .sheetText,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        20,
+                                                                  ))
+                                                            ],
+                                                          ),
+                                                        ),
+                                                 
+                                                  
+                                                ],
                                               ),
-                                            );
-                                          });
-
-
-
-                                   
+                                            ),
+                                          );
+                                        });
                                   },
                                   child: Image.asset(
                                     'assets/more.png',
@@ -576,8 +601,6 @@ class _MainHomeState extends State<MainHome> {
                                     width: 25,
                                   )),
                               onTap: () {
-
-
                                 VisibilityManager.isVisible = true;
 
                                 // for my song container ,
@@ -589,11 +612,6 @@ class _MainHomeState extends State<MainHome> {
                                     .read<SongModelProvider>()
                                     .updateCurrentSong(items.data![index]);
 
-                                MusicModel selectedsong = items.data![index];
-                                int selectedIndex = index;
-                                List<MusicModel> songlist = items.data!;
-
-                               
                                 playSong(items.data![index].uri);
 
                                 addRecentlyplayedSong(
@@ -601,17 +619,13 @@ class _MainHomeState extends State<MainHome> {
                                     items.data![index].songname,
                                     items.data![index].artistname);
 
-
-                                      Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (context) => Nowplaying(
-                                                  musicModel: items.data![index],
-                                                  index: index,
-                                                  songmodel: items.data!,
-                                                )));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => Nowplaying(
+                                          musicModel: items.data![index],
+                                          index: index,
+                                          songmodel: items.data!,
+                                        )));
                               },
-
-                              
                             ),
                           ),
                         );

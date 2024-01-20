@@ -1,7 +1,6 @@
 // ignore: file_names
 import 'dart:developer';
 
-import 'package:android_intent/android_intent.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'package:flutter/material.dart';
@@ -22,7 +21,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});

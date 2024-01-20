@@ -56,6 +56,9 @@ dependencies:
   url_launcher: ^6.2.1
   android_intent: ^2.0.0
   flutter_launcher_icons: ^0.13.1
+  share: ^2.0.4
+  share_plus: ^7.2.1
+  flutter_share_me: ^1.4.0
 
 dev_dependencies:
   flutter_test:

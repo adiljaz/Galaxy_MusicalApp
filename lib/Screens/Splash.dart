@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:galaxy/Screens/mianscreens/bodyHome.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -26,10 +27,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
     gotohome();
 
-    // TODO: implement initState
+requestPermission();
+  
     super.initState();
   }
 
+
+void requestPermission() {
+    Permission.storage.request();
+  }
     
 
   @override

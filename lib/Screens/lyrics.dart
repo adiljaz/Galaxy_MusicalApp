@@ -33,7 +33,7 @@ class _LyricsScreenState extends State<LyricsScreen> {
 @override
   void initState() {
    
-    // TODO: implement initState
+   
     super.initState();
      audioplayer.playerStateStream.listen((state) { 
       if(state.processingState==ProcessingState.completed);
@@ -47,7 +47,7 @@ class _LyricsScreenState extends State<LyricsScreen> {
     try{
 
       
-      audioplayer.setAudioSource(AudioSource.uri(Uri.parse(widget.musicmodel.uri!)));
+      audioplayer.setAudioSource(AudioSource.uri(Uri.parse(widget.musicmodel.uri)));
         audioplayer.play(); 
 
         

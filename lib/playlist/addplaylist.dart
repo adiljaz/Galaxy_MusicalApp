@@ -12,6 +12,7 @@ import 'package:galaxy/recently/refunction.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class AddtoPlaylist extends StatefulWidget {
     AddtoPlaylist({super.key , required this.playlistid});
 
@@ -30,7 +31,7 @@ class _AddtoPlaylistState extends State<AddtoPlaylist> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
 
     songsFuture=getAllSongs();
     super.initState();

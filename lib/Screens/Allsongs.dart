@@ -246,7 +246,6 @@ class _AllsongsState extends State<Allsongs> {
                                                                                   child: ListTile(
                                                                                     onTap: () async {
                                                                                       var playlistId = items.data![index].key;
-                                                                                      var songId = items.data![index].song;
                                                                                   
                                                                                       setState(() {});
                                                                                   
