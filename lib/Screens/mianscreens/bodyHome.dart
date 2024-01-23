@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
                 SizedBox(height: mediaQuerry.size.height*0.07,),
             
             
-                GestureDetector(child: Row(     children:[     SizedBox(width: mediaQuerry.size.width*0.07 ,),    FaIcon(FontAwesomeIcons.shareNodes,size: 30,)  ,SizedBox(width: mediaQuerry.size.width*0.07 ,),Text('Share',style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 27 ),)    ],)),
+                GestureDetector(   onTap: (){},  child: Row(     children:[     SizedBox(width: mediaQuerry.size.width*0.07 ,),    FaIcon(FontAwesomeIcons.shareNodes,size: 30,)  ,SizedBox(width: mediaQuerry.size.width*0.07 ,),Text('Share',style:GoogleFonts.lato(fontWeight: FontWeight.bold ,fontSize: 27 ),)    ],)),
                 SizedBox(height:mediaQuerry.size.height*0.02,),
             
                      GestureDetector(       onTap: (){
