@@ -401,7 +401,7 @@ class _AllsongsState extends State<Allsongs> {
                                                                       context)
                                                                   .pop();
                                                             },
-                                                            child: Row(
+                                                              child: Row(
                                                               children: [
                                                                 SizedBox(
                                                                   width: mediaQuerry
