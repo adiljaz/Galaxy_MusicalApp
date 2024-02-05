@@ -339,6 +339,7 @@ class _HomeState extends State<Home> {
                     topRight: Radius.circular(40),
                   ),
                   child: SnakeNavigationBar.color(
+                    
                     height: 70, snakeViewColor: Colormanager.listtile,
 
                     // Set to the desired color
@@ -370,6 +371,8 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       BottomNavigationBarItem(
+                        
+
                         icon: Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
